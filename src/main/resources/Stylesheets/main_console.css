@@ -1,0 +1,19 @@
+.parent {
+    -fx-background-color: #fff;
+}
+.sidebar {
+    -fx-background-color: #333645;
+}
+.masthead {
+    -fx-background-color: #00B5FF;
+}
+.btns {
+    -fx-background-color: transparent;
+    -fx-cursor: hand;
+}
+.btns:hover {
+    -fx-background-color: #252732;
+}
+.action-btn {
+    -fx-border-radius: 5px;
+}

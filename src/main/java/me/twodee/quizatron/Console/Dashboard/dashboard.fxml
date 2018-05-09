@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="760.0" prefWidth="1366.0" stylesheets="@../../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.Dashboard.DashboardPresenter">
+   <children>
+      <VBox layoutX="-8.0" layoutY="-7.0" prefHeight="768.0" prefWidth="280.0" style="-:#000;" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css">
+         <children>
+            <Label prefHeight="80.0" prefWidth="300.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
+               <font>
+                  <Font name="Open Sans Light" size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="10.0" />
+               </padding></Label>
+            <HBox alignment="CENTER_LEFT" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="DASHBOARD" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label fx:id="panelList" text="Control Panel" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox onMouseReleased="#openMedia" alignment="CENTER_LEFT" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label text="Media player" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="scoreBox" alignment="CENTER_LEFT" onMouseReleased="#showScore" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LIST_UL" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label text="Scoreboard" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USERS" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label text="Participants" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="SIGN_IN" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label text="Open Interstitial" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" styleClass="btns">
+               <children>
+                  <FontAwesomeIconView fill="WHITE" glyphName="DOWNLOAD" glyphStyle="-fx-fill:#7c8184" size="16px" />
+                  <Label text="Save" textFill="#7c8184">
+                     <font>
+                        <Font name="Open Sans Regular" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <padding>
+                        <Insets left="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <VBox prefHeight="442.0" prefWidth="270.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefHeight="46.0" prefWidth="270.0">
+                           <children>
+                              <Label text="Quiz loaded:" textFill="#d3d3d3">
+                                 <font>
+                                    <Font name="Open Sans Regular" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label text="{{ Quiz.Name }}" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="Open Sans Regular" size="13.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox fx:id="startButton" onMouseClicked="#startQuiz" prefHeight="66.0" prefWidth="270.0" style="-fx-background-color: #91CC41; -fx-border-radius: 10px;" styleClass="action-btn">
+                           <children>
+                              <FontAwesomeIconView fill="WHITE" glyphName="PLAY" size="20">
+                                 <HBox.margin>
+                                    <Insets bottom="20.0" left="20.0" top="20.0" />
+                                 </HBox.margin>
+                              </FontAwesomeIconView>
+                              <Label alignment="CENTER" contentDisplay="CENTER" text="START QUIZ" textFill="WHITE">
+                                 <HBox.margin>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="18.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="San Francisco Display Regular" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </VBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets left="10.0" />
+         </padding></VBox>
+   </children>
+</AnchorPane>
