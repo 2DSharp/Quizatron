@@ -6,7 +6,7 @@ import me.twodee.quizatron.Presentation.IView;
 
 import java.awt.*;
 
-public class HomeView extends IView {
+    public class HomeView extends IView {
 
     @FXML
     private Label score;

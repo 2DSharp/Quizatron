@@ -5,8 +5,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.inject.Inject;
+
 public class PresentationFactory {
 
+    private FXMLLoader fxmlLoader;
+
+    @Inject
+    public PresentationFactory(FXMLLoader fxmlLoader) {
+        this.fxmlLoader = fxmlLoader;
+    }
     public Presentation create() throws Exception {
 
         FXMLLoader fxmlLoader = this.loaderBuilder("home");
@@ -37,7 +45,8 @@ public class PresentationFactory {
 
     private FXMLLoader loaderBuilder(String viewFile) throws Exception {
 
-        return new FXMLLoader(getClass().getResource("View/" + viewFile + ".fxml" ));
+        fxmlLoader.setLocation(getClass().getResource("View/" + viewFile + ".fxml" ));
+        return fxmlLoader;
     }
 
     private IView getView(FXMLLoader loader) throws Exception {

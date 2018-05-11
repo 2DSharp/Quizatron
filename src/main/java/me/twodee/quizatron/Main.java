@@ -11,10 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import me.twodee.quizatron.Model.Score;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main extends Application {
 
@@ -23,7 +19,7 @@ public class Main extends Application {
 
 
         final Injector injector = Guice.createInjector(new QuizatronModule());
-        FXMLLoader loader =  new FXMLLoader(getClass().getResource("Console/Dashboard/dashboard.fxml"));
+        FXMLLoader loader =  new FXMLLoader(getClass().getResource("Console/console.fxml"));
         loader.setControllerFactory(injector::getInstance);
 
         Parent root = loader.load();
@@ -57,7 +53,7 @@ public class Main extends Application {
         primaryStage.show();
 
         /*
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("me/twodee/quizatron/Console/Dashboard/dashboard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("me/twodee/quizatron/Console/Dashboard/console.fxml"));
 
         primaryStage.setTitle("Quizatron Console");
 
