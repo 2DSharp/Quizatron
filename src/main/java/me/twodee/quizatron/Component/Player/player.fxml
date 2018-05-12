@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+
+<?import javafx.scene.control.ToggleButton?>
+<AnchorPane fx:id="playerNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="605.0" stylesheets="@../../../../../../resources/Stylesheets/media.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Component.Player.Player">
+
+    <children>
+      <VBox fx:id="openMedia" prefHeight="200.0" prefWidth="600.0">
+         <children>
+            <MediaView fx:id="mediaBox" fitHeight="200.0" fitWidth="200.0" />
+         </children>
+      </VBox>
+      <VBox layoutX="-1.0" layoutY="200.0" prefHeight="170.0" prefWidth="607.0" style="-fx-background-color: #282828;">
+         <children>
+            <Slider fx:id="seekerSlider" prefWidth="544.0" style="-fx-cursor: hand;" styleClass="timeSeeker">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" />
+               </padding>
+            </Slider>
+            <BorderPane prefHeight="6.0" prefWidth="567.0">
+               <left>
+                  <Label text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Label text="04:30" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+               </right>
+            </BorderPane>
+            <HBox prefHeight="51.0" prefWidth="567.0" spacing="20.0">
+               <padding>
+                  <Insets left="103.0" right="40.0" top="5.0" />
+               </padding>
+               <children>
+                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFile">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtn" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="LIST" size="18" styleClass="trackBtn" />
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#back">
+                     <graphic>
+                        <FontAwesomeIconView fx:id="backBtn" glyphName="STEP_BACKWARD" size="18" styleClass="trackBtn" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" style="-fx-padding: 20px;" styleClass="playBtn">
+                     <graphic>
+                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="16" strokeType="INSIDE" strokeWidth="2.0" styleClass="trackBtn" textAlignment="CENTER">
+                           <fill>
+                              <LinearGradient endX="0.9038461538461539" endY="0.298076923076923" startY="1.0">
+                                 <stops>
+                                    <Stop color="BLACK" />
+                                    <Stop color="#a9ab37" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </fill>
+                        </FontAwesomeIconView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#next">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="STEP_FORWARD" size="18" styleClass="trackBtn" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stop">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="STOP" size="18" styleClass="trackBtn" />
+                     </graphic>
+                  </Button>
+                  <HBox prefHeight="52.0" prefWidth="98.0">
+                     <children>
+                        <Button mnemonicParsing="false">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="muteBtn" fill="#cdc7c7" glyphName="VOLUME_OFF" size="18.0" />
+                           </graphic>
+                        </Button>
+                        <Slider fx:id="volumeSlider" majorTickUnit="100.0" style="-fx-max-width: 100px;" styleClass="volSeeker">
+                           <HBox.margin>
+                              <Insets top="11.0" />
+                           </HBox.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </Slider>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="44.0" prefWidth="533.0">
+               <children>
+                  <Label text="File loaded:" textFill="#797878" />
+                  <Label fx:id="loadedFile" text="Somefile.mp3" textFill="#a7d9e0" textOverrun="WORD_ELLIPSIS" wrapText="true">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

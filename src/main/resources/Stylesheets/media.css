@@ -1,0 +1,76 @@
+.button {
+    -fx-background-color: transparent;
+
+}
+.timeSeeker {
+}
+.timeSeeker .track {
+    -fx-background-color: #00B5FF;
+    -fx-pref-height: 4px;
+    -fx-opacity: 0.7;
+}
+.timeSeeker .thumb {
+    -fx-background-color: #282828;
+    -fx-border-color: #00B5FF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-padding: 12px;
+}
+
+.timeSeeker .thumb:pressed {
+    -fx-padding: 16px;
+}
+.volSeeker .track {
+    -fx-background-color: orangered;
+    -fx-pref-height: 3px;
+}
+
+.volSeeker .thumb {
+    -fx-background-color: #282828;
+    -fx-border-color: orangered;
+    -fx-border-width: 1px;
+    -fx-border-radius: 50%;
+    -fx-padding: 6px;
+}
+
+
+.trackBtn {
+    -fx-fill: palegreen;
+}
+.playBtn {
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-border-radius: 100%;
+    -fx-border-color: palegreen;
+    -fx-border-width: 1px;
+}
+.playBtn:hover {
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-height: 38px;
+    -fx-min-height: 38px;
+
+}
+.button {
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+    -fx-opacity: 0.6;
+}
+.button:hover {
+    -fx-opacity: 1;
+}
+.toggle-button {
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+    -fx-opacity: 0.6;
+    -fx-background-color: transparent;
+}
+.toggle-button:hover {
+    -fx-opacity: 1;
+}
+
+#pauseBtn {
+
+}

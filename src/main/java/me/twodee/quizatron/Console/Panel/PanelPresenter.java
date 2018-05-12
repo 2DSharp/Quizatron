@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Console.Panel;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
@@ -54,9 +55,10 @@ public class PanelPresenter {
         FXMLLoader loader = this.fxmlLoader;
         loader.setLocation(getClass().getResource("../Dashboard/media-player.fxml"));
         AnchorPane mediaPlayerPane = loader.load();
+        dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
 
-        MediaPlayer mediaPlayer = loader.getController();
-        mediaPlayer.setPresentation(presentation);
+        //MediaPlayer mediaPlayer = loader.getController();
+        //mediaPlayer.setPresentation(presentation);
 
         dashboard.getChildren().add(mediaPlayerPane);
     }

@@ -2,8 +2,6 @@ package me.twodee.quizatron;
 
 import com.google.inject.*;
 import javafx.fxml.FXMLLoader;
-import me.twodee.quizatron.Console.Panel.PanelPresenter;
-import me.twodee.quizatron.Model.Person;
 import me.twodee.quizatron.Model.Score;
 
 public class QuizatronModule extends AbstractModule {
