@@ -17,3 +17,15 @@
 .action-btn {
     -fx-border-radius: 5px;
 }
+
+.quizStartBtn {
+    -jfx-button-type: RAISED;
+    -fx-background-color: #91CC41;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+.quizStartBtn:hover {
+    -fx-background-color: #7AB12F;
+    -fx-text-fill: #fff;
+
+}

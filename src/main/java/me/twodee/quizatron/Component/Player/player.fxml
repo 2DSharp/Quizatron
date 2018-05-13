@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXSlider?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -13,7 +15,6 @@
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 
-<?import javafx.scene.control.ToggleButton?>
 <AnchorPane fx:id="playerNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="605.0" stylesheets="@../../../../../../resources/Stylesheets/media.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Component.Player.Player">
 
     <children>
@@ -24,20 +25,13 @@
       </VBox>
       <VBox layoutX="-1.0" layoutY="200.0" prefHeight="170.0" prefWidth="607.0" style="-fx-background-color: #282828;">
          <children>
-            <Slider fx:id="seekerSlider" prefWidth="544.0" style="-fx-cursor: hand;" styleClass="timeSeeker">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" />
-               </padding>
-            </Slider>
+            <JFXSlider fx:id="timeSlider" styleClass="specialSlider" />
             <BorderPane prefHeight="6.0" prefWidth="567.0">
                <left>
-                  <Label text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+                  <Label fx:id="currTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
                </left>
                <right>
-                  <Label text="04:30" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+                  <Label fx:id="endTimeLbl" text="04:30" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
                </right>
             </BorderPane>
             <HBox prefHeight="51.0" prefWidth="567.0" spacing="20.0">
@@ -45,24 +39,24 @@
                   <Insets left="103.0" right="40.0" top="5.0" />
                </padding>
                <children>
-                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFile">
+                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFile" styleClass="trackBtn">
                      <graphic>
-                        <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtn" />
+                        <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtnIcon" />
                      </graphic>
                   </Button>
-                  <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist">
+                  <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist" styleClass="trackBtn">
                      <graphic>
-                        <FontAwesomeIconView glyphName="LIST" size="18" styleClass="trackBtn" />
+                        <MaterialDesignIconView glyphName="PLAYLIST_PLAY" size="22" styleClass="trackBtnIcon" />
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#back">
+                  <Button mnemonicParsing="false" onAction="#back" styleClass="trackBtn">
                      <graphic>
-                        <FontAwesomeIconView fx:id="backBtn" glyphName="STEP_BACKWARD" size="18" styleClass="trackBtn" />
+                        <FontAwesomeIconView fx:id="backBtn" glyphName="STEP_BACKWARD" size="18" styleClass="trackBtnIcon" />
                      </graphic>
                   </Button>
-                  <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" style="-fx-padding: 20px;" styleClass="playBtn">
+                  <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" style="-fx-padding: 20px;">
                      <graphic>
-                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="16" strokeType="INSIDE" strokeWidth="2.0" styleClass="trackBtn" textAlignment="CENTER">
+                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="16" strokeType="INSIDE" strokeWidth="2.0" styleClass="trackBtnIcon" textAlignment="CENTER">
                            <fill>
                               <LinearGradient endX="0.9038461538461539" endY="0.298076923076923" startY="1.0">
                                  <stops>
@@ -73,32 +67,33 @@
                            </fill>
                         </FontAwesomeIconView>
                      </graphic>
+                     <styleClass>
+                        <String fx:value="playBtn" />
+                        <String fx:value="trackBtn" />
+                     </styleClass>
                   </Button>
-                  <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#next">
+                  <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#next" styleClass="trackBtn">
                      <graphic>
-                        <FontAwesomeIconView glyphName="STEP_FORWARD" size="18" styleClass="trackBtn" />
+                        <FontAwesomeIconView glyphName="STEP_FORWARD" size="18" styleClass="trackBtnIcon" />
                      </graphic>
                   </Button>
-                  <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stop">
+                  <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stop" styleClass="trackBtn">
                      <graphic>
-                        <FontAwesomeIconView glyphName="STOP" size="18" styleClass="trackBtn" />
+                        <FontAwesomeIconView glyphName="STOP" size="18" styleClass="trackBtnIcon" />
                      </graphic>
                   </Button>
                   <HBox prefHeight="52.0" prefWidth="98.0">
                      <children>
-                        <Button mnemonicParsing="false">
+                        <Button mnemonicParsing="false" styleClass="trackBtn">
                            <graphic>
                               <FontAwesomeIconView fx:id="muteBtn" fill="#cdc7c7" glyphName="VOLUME_OFF" size="18.0" />
                            </graphic>
                         </Button>
-                        <Slider fx:id="volumeSlider" majorTickUnit="100.0" style="-fx-max-width: 100px;" styleClass="volSeeker">
+                        <JFXSlider styleClass="volSeeker">
                            <HBox.margin>
-                              <Insets top="11.0" />
+                              <Insets top="12.0" />
                            </HBox.margin>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </Slider>
+                        </JFXSlider>
                      </children>
                   </HBox>
                </children>

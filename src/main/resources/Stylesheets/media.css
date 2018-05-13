@@ -1,6 +1,5 @@
-.button {
+.trackBtn {
     -fx-background-color: transparent;
-
 }
 .timeSeeker {
 }
@@ -20,21 +19,53 @@
 .timeSeeker .thumb:pressed {
     -fx-padding: 16px;
 }
-.volSeeker .track {
+
+.specialSlider:focused {
+    -fx-opacity: 1;
+    -fx-cursor: hand;
+}
+.specialSlider > .track {
+    -fx-background-color: gray;
+    -fx-opacity: 0.7;
+}
+.specialSlider > .thumb {
+    -fx-background-color: #282828;
+    -fx-border-color: #00B5FF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-padding: 12px;
+}
+
+/* Styling the filled track */
+.specialSlider > .colored-track {
+    -fx-background-color: #00B5FF;
+    -fx-opacity: 0.7;
+}
+
+/* Styling the animated thumb */
+.specialSlider > .animated-thumb {
+    -fx-background-color: orange;
+}
+
+/* Styling the slider value text inside animated thumb */
+.specialSlider .slider-value {
+    -fx-fill: white;
+    -fx-stroke: white;
+}
+
+.volSeeker > .colored-track {
     -fx-background-color: orangered;
     -fx-pref-height: 3px;
 }
 
-.volSeeker .thumb {
-    -fx-background-color: #282828;
-    -fx-border-color: orangered;
-    -fx-border-width: 1px;
-    -fx-border-radius: 50%;
-    -fx-padding: 6px;
+.volSeeker > .thumb {
+    -fx-background-color: orangered;
 }
 
-
-.trackBtn {
+.volSeeker > .animated-thumb {
+    -fx-background-color: orangered;
+}
+.trackBtnIcon {
     -fx-fill: palegreen;
 }
 .playBtn {
@@ -53,12 +84,12 @@
     -fx-min-height: 38px;
 
 }
-.button {
+.trackBtn {
     -fx-cursor: hand;
     -fx-padding: 10px;
     -fx-opacity: 0.6;
 }
-.button:hover {
+.trackBtn:hover {
     -fx-opacity: 1;
 }
 .toggle-button {
