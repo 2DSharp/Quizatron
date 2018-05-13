@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
@@ -27,6 +28,7 @@ import javafx.util.Duration;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 
 public class Player {
@@ -35,7 +37,7 @@ public class Player {
     private MediaPlayer mediaPlayer;
     private Pane parentContainer;
     private FileChooser fileChooser;
-
+    private double currentPos;
     private boolean playerState;
 
     @FXML private AnchorPane playerNode;
@@ -45,6 +47,8 @@ public class Player {
     @FXML private Label currTimeLbl;
     @FXML private Label endTimeLbl;
     @FXML private JFXSlider timeSlider;
+    @FXML private Label mediaInfo;
+    @FXML private Label sourceFile;
 
     @Inject
     public Player(FileChooser fileChooser) {
@@ -53,6 +57,7 @@ public class Player {
     }
     @FXML
     public void initialize() {
+        timeSlider.setValue(0);
     }
     public MediaView getMediaView() {
         return mediaView;
@@ -76,6 +81,16 @@ public class Player {
 
                 @Override
                 public void run() {
+
+                    String artistName = (String) mediaPlayer.getMedia().getMetadata().get("artist");
+                    String title = (String)mediaPlayer.getMedia().getMetadata().get("title");
+                    String album = (String)mediaPlayer.getMedia().getMetadata().get("album");
+                    String mediaSource = mediaPlayer.getMedia().getSource();
+                    mediaSource = mediaSource.replace("%20", " ");
+                    mediaInfo.setText(title+ " - " + artistName + " - " + album);
+                    sourceFile.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
+                            mediaSource.length()));
+
                     int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
                     endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
                             String.format("%02d", duration  % 60));
@@ -84,21 +99,24 @@ public class Player {
 
             this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
 
-                timeSlider.setValue((newDuration.toSeconds() / this.mediaPlayer.getTotalDuration().toSeconds())
-                        * 100.0);
-                String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
-                        String.format("%02d", (int) (newDuration.toSeconds() % 60));
+                if (!timeSlider.isValueChanging()) {
 
-                int timeLeft = (int) (this.mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                    timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
+                                * 100.0);
+                    String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
+                            String.format("%02d", (int) (newDuration.toSeconds() % 60));
 
-                endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
-                        String.format("%02d", timeLeft  % 60));
+                    double realTimeLeft = (this.mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                    int timeLeft = (int) realTimeLeft;
 
-                currTimeLbl.setText(currentTime);
+                    endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
+                            String.format("%02d", timeLeft  % 60));
 
-                if (timeLeft == 0) {
-                    this.stop();
-                    timeSlider.setValue(1);
+                    currTimeLbl.setText(currentTime);
+                    if (newDuration.toMillis() == this.mediaPlayer.getTotalDuration().toMillis()) {
+                        this.stop();
+                        timeSlider.setValue(1);
+                    }
                 }
 
             });
@@ -148,6 +166,12 @@ public class Player {
         pauseIcon.setGlyphSize(16);
         playBtn.setGraphic(pauseIcon);
         playBtn.setOnAction(this::pause);
+    }
+    @FXML
+    public void seek(MouseEvent event) {
+        //System.out.println(timeSlider.getValue());
+        this.mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
+                mediaPlayer.getTotalDuration().toMillis() / 100.0));
     }
     public void openPlaylist() {
 

@@ -43,7 +43,7 @@ public class PanelPresenter {
     }
 
     @FXML
-    public void startQuiz(MouseEvent event) {
+    public void startQuiz(ActionEvent event) {
 
         presentation.show();
         this.view = presentation.getView();

@@ -1,0 +1,107 @@
+.trackBtn {
+    -fx-background-color: transparent;
+}
+.timeSeeker {
+}
+.timeSeeker .track {
+    -fx-background-color: #00B5FF;
+    -fx-pref-height: 4px;
+    -fx-opacity: 0.7;
+}
+.timeSeeker .thumb {
+    -fx-background-color: #282828;
+    -fx-border-color: #00B5FF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-padding: 12px;
+}
+
+.timeSeeker .thumb:pressed {
+    -fx-padding: 16px;
+}
+
+.specialSlider:focused {
+    -fx-opacity: 1;
+    -fx-cursor: hand;
+}
+.specialSlider > .track {
+    -fx-background-color: gray;
+    -fx-opacity: 0.7;
+}
+.specialSlider > .thumb {
+    -fx-background-color: #282828;
+    -fx-border-color: #00B5FF;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+    -fx-padding: 12px;
+}
+
+/* Styling the filled track */
+.specialSlider > .colored-track {
+    -fx-background-color: #00B5FF;
+    -fx-opacity: 0.7;
+}
+
+/* Styling the animated thumb */
+.specialSlider > .animated-thumb {
+    -fx-background-color: orange;
+}
+
+/* Styling the slider value text inside animated thumb */
+.specialSlider .slider-value {
+    -fx-fill: white;
+    -fx-stroke: white;
+}
+
+.volSeeker > .colored-track {
+    -fx-background-color: orangered;
+    -fx-pref-height: 3px;
+}
+
+.volSeeker > .thumb {
+    -fx-background-color: orangered;
+}
+
+.volSeeker > .animated-thumb {
+    -fx-background-color: orangered;
+}
+.trackBtnIcon {
+    -fx-fill: palegreen;
+}
+.playBtn {
+    -fx-min-width: 36px;
+    -fx-min-height: 36px;
+    -fx-max-width: 36px;
+    -fx-max-height: 36px;
+    -fx-border-radius: 100%;
+    -fx-border-color: palegreen;
+    -fx-border-width: 1px;
+}
+.playBtn:hover {
+    -fx-min-width: 38px;
+    -fx-min-height: 38px;
+    -fx-max-height: 38px;
+    -fx-min-height: 38px;
+
+}
+.trackBtn {
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+    -fx-opacity: 0.6;
+}
+.trackBtn:hover {
+    -fx-opacity: 1;
+}
+.toggle-button {
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+    -fx-opacity: 0.6;
+    -fx-background-color: transparent;
+}
+.toggle-button:hover {
+    -fx-opacity: 1;
+}
+
+#pauseBtn {
+
+}
