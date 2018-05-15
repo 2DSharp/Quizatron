@@ -28,7 +28,7 @@
          <children>
             <VBox prefHeight="38.0" prefWidth="567.0">
                <children>
-                  <Label fx:id="sourceFile" textFill="#8a8888">
+                  <Label fx:id="sourceFileLbl" textFill="#8a8888">
                      <font>
                         <Font size="11.0" />
                      </font>

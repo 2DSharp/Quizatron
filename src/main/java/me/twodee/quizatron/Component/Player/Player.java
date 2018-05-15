@@ -45,7 +45,7 @@ public class Player {
     @FXML private Label endTimeLbl;
     @FXML private JFXSlider timeSlider;
     @FXML private Label mediaInfo;
-    @FXML private Label sourceFile;
+    @FXML private Label sourceFileLbl;
 
     @Inject
     public Player(FileChooser fileChooser, MediaView mediaView, PresentationFactory presentationFactory) {
@@ -57,6 +57,7 @@ public class Player {
     public void initialize() {
 
         timeSlider.setValue(0);
+        prepareMediaView();
     }
     public MediaView getMediaView() {
 
@@ -73,33 +74,36 @@ public class Player {
             mediaPlayer.dispose();
         }
         this.setMediaPlayer(new MediaPlayer(new Media(source)));
+    }
+
+    public void prepareMediaView() {
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
 
         width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
     }
-
     public void chooseMediaFile() {
 
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog((Stage)playerNode.getScene().getWindow());
         try {
-
             String source = file.toURI().toURL().toExternalForm();
-            this.loadMedia(source);
-
-            timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
-
-            initializePlayer();
-            initializeSlider();
-            playMedia();
+            play(source);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void play(String source) {
+
+        this.loadMedia(source);
+        timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
+        initializePlayer();
+        initializeSlider();
+        playMedia();
+    }
     private void initializePlayer() {
 
         mediaPlayer.setOnReady(new Runnable() {
@@ -114,7 +118,7 @@ public class Player {
 
                 mediaSource = mediaSource.replace("%20", " ");
                 mediaInfo.setText(title+ " - " + artistName + " - " + album);
-                sourceFile.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
+                sourceFileLbl.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
                         mediaSource.length()));
 
                 int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
@@ -125,6 +129,7 @@ public class Player {
     }
 
     private void initializeSlider() {
+
         this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
 
             if (!timeSlider.isValueChanging()) {
@@ -160,35 +165,36 @@ public class Player {
 
     @FXML
     public void play(ActionEvent event) {
-
         playMedia();
     }
 
-    public void playMedia() {
+    private void preparePresentation() {
+
+        mediaView.setMediaPlayer(this.mediaPlayer);
+        try {
+            if (!(presentation.getView() instanceof MediaPresentationView)) {
+
+                presentation = presentationFactory.create(presentation.getStage(),
+                        presentation.getScene(),
+                        "media-view");
+            }
+            MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
+            mediaViewController.embedMediaView(mediaView);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playMedia() {
         if (mediaView.getMediaPlayer() != this.mediaPlayer) {
-            mediaView.setMediaPlayer(this.mediaPlayer);
-
-            try {
-                if (!(presentation.getView() instanceof MediaPresentationView)) {
-
-                    presentation = presentationFactory.create(presentation.getStage(),
-                            presentation.getScene(),
-                            "media-view");
-                    presentation.show();
-                }
-
-                MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
-                mediaViewController.embedMediaView(mediaView);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            preparePresentation();
         }
         this.setPauseIcon();
         mediaPlayer.play();
     }
 
-    @FXML public void pause(ActionEvent event) {
+    @FXML private void pause(ActionEvent event) {
 
         this.setPlayIcon();
         mediaPlayer.pause();
