@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.media.MediaView?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: lightgray;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Presentation.View.Media">
-   <children>
-      <Label layoutX="237.0" layoutY="175.0" text="Welcome to the second view!">
-         <font>
-            <Font name="Open Sans Regular" size="18.0" />
-         </font>
-      </Label>
-      <Label fx:id="score" layoutX="282.0" layoutY="212.0" />
-   </children>
-</AnchorPane>
+<BorderPane fx:id="rootNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Presentation.View.Media">
+   <center>
+      <MediaView fitHeight="200.0" fitWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

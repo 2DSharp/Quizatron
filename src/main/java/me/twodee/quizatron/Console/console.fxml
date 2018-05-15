@@ -161,7 +161,7 @@
                      </children></VBox>
                   <VBox prefHeight="174.0" prefWidth="250.0">
                      <children>
-                        <JFXToggleButton text="Full screen" textFill="WHITE" />
+                        <JFXToggleButton fx:id="fullScreenToggleBtn" onAction="#toggleFullScreen" text="Full screen" textFill="WHITE" />
                         <HBox prefHeight="30.0" prefWidth="250.0">
                            <children>
                               <Label text="Quiz loaded:" textFill="#d3d3d3">
@@ -196,7 +196,7 @@
                               <Font size="12.0" />
                            </font>
                         </Label>
-                        <Label text="Quizatron " textFill="#bfbfbf">
+                        <Label text="Quizatron 1.0" textFill="#bfbfbf">
                            <VBox.margin>
                               <Insets top="5.0" />
                            </VBox.margin>

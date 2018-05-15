@@ -28,7 +28,7 @@ public class PresentationFactory {
         stage.setMaximized(true);
         stage.setScene(scene);
 
-        Presentation presentation = new Presentation(stage, scene, view);
+        Presentation presentation = new Presentation(stage, scene, view, fxmlLoader);
         return presentation;
     }
 
@@ -40,7 +40,7 @@ public class PresentationFactory {
         IView view = this.getView(fxmlLoader);
         scene.setRoot(root);
 
-        return new Presentation(stage, scene, view);
+        return new Presentation(stage, scene, view, fxmlLoader);
     }
 
     private FXMLLoader loaderBuilder(String viewFile) throws Exception {

@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Console.Panel;
 
+import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -31,6 +32,7 @@ public class PanelPresenter {
     private IView view;
     private FXMLLoader fxmlLoader;
 
+    @FXML private JFXToggleButton fullScreenToggleBtn;
     @FXML private AnchorPane rootNode;
     @FXML private AnchorPane dashboard;
 
@@ -50,17 +52,26 @@ public class PanelPresenter {
     }
 
     @FXML
+    public void toggleFullScreen(ActionEvent event) {
+        if (fullScreenToggleBtn.isSelected()) {
+            presentation.getStage().setFullScreenExitHint("");
+            presentation.getStage().setFullScreen(true);
+        }
+        else {
+            presentation.getStage().setFullScreen(false);
+        }
+    }
+    @FXML
     public void openMedia(MouseEvent event) throws Exception {
 
         FXMLLoader loader = this.fxmlLoader;
         loader.setLocation(getClass().getResource("../Dashboard/media-player.fxml"));
         AnchorPane mediaPlayerPane = loader.load();
         dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
-
-        //MediaPlayer mediaPlayer = loader.getController();
-        //mediaPlayer.setPresentation(presentation);
-
         dashboard.getChildren().add(mediaPlayerPane);
+
+        MediaPlayer mediaPlayerController = loader.getController();
+        mediaPlayerController.setPresentation(presentation);
     }
 
 

@@ -20,7 +20,7 @@
         </rowConstraints>
          <children>
             <AnchorPane prefHeight="583.0" prefWidth="605.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <fx:include source="../../Component/Player/player.fxml" />
+               <fx:include fx:id="player" source="../../Component/Player/player.fxml" />
             </AnchorPane>
          </children>
       </GridPane>

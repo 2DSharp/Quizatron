@@ -1,20 +1,15 @@
 package me.twodee.quizatron.Component.Player;
 
 import com.jfoenix.controls.JFXSlider;
-import com.jfoenix.skins.JFXSliderSkin;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -24,6 +19,8 @@ import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import me.twodee.quizatron.Presentation.Presentation;
+import me.twodee.quizatron.Presentation.PresentationFactory;
 
 import javax.inject.Inject;
 
@@ -39,6 +36,8 @@ public class Player {
     private FileChooser fileChooser;
     private double currentPos;
     private boolean playerState;
+    private Presentation presentation;
+    private  PresentationFactory presentationFactory;
 
     @FXML private AnchorPane playerNode;
     @FXML private Button playBtn;
@@ -51,21 +50,33 @@ public class Player {
     @FXML private Label sourceFile;
 
     @Inject
-    public Player(FileChooser fileChooser) {
-        this.mediaView = mediaBox;
+    public Player(FileChooser fileChooser, MediaView mediaView, PresentationFactory presentationFactory) {
+        this.mediaView = mediaView;
         this.fileChooser = fileChooser;
+        this.presentationFactory = presentationFactory;
     }
     @FXML
     public void initialize() {
+
         timeSlider.setValue(0);
     }
     public MediaView getMediaView() {
+
         return mediaView;
+    }
+
+    public void setPresentation(Presentation presentation) {
+        this.presentation = presentation;
     }
 
     public void loadMedia(String source) {
 
         this.setMediaPlayer(new MediaPlayer(new Media(source)));
+        DoubleProperty width = mediaView.fitWidthProperty();
+        DoubleProperty height = mediaView.fitHeightProperty();
+
+        width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
+        height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
     }
 
     public void chooseMediaFile() {
@@ -73,58 +84,70 @@ public class Player {
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog((Stage)playerNode.getScene().getWindow());
         try {
+
             String source = file.toURI().toURL().toExternalForm();
             this.loadMedia(source);
+
             timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
 
-            mediaPlayer.setOnReady(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    String artistName = (String) mediaPlayer.getMedia().getMetadata().get("artist");
-                    String title = (String)mediaPlayer.getMedia().getMetadata().get("title");
-                    String album = (String)mediaPlayer.getMedia().getMetadata().get("album");
-                    String mediaSource = mediaPlayer.getMedia().getSource();
-                    mediaSource = mediaSource.replace("%20", " ");
-                    mediaInfo.setText(title+ " - " + artistName + " - " + album);
-                    sourceFile.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
-                            mediaSource.length()));
-
-                    int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
-                    endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
-                            String.format("%02d", duration  % 60));
-                }
-            });
-
-            this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
-
-                if (!timeSlider.isValueChanging()) {
-
-                    timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
-                                * 100.0);
-                    String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
-                            String.format("%02d", (int) (newDuration.toSeconds() % 60));
-
-                    double realTimeLeft = (this.mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
-                    int timeLeft = (int) realTimeLeft;
-
-                    endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
-                            String.format("%02d", timeLeft  % 60));
-
-                    currTimeLbl.setText(currentTime);
-                    if (newDuration.toMillis() == this.mediaPlayer.getTotalDuration().toMillis()) {
-                        this.stop();
-                        timeSlider.setValue(1);
-                    }
-                }
-
-            });
+            initializePlayer();
+            initializeSlider();
+            playMedia();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    private void initializePlayer() {
+
+        mediaPlayer.setOnReady(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String artistName = (String) mediaPlayer.getMedia().getMetadata().get("artist");
+                String title = (String)mediaPlayer.getMedia().getMetadata().get("title");
+                String album = (String)mediaPlayer.getMedia().getMetadata().get("album");
+                String mediaSource = mediaPlayer.getMedia().getSource();
+
+                mediaSource = mediaSource.replace("%20", " ");
+                mediaInfo.setText(title+ " - " + artistName + " - " + album);
+                sourceFile.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
+                        mediaSource.length()));
+
+                int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
+                endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
+                        String.format("%02d", duration  % 60));
+            }
+        });
+    }
+
+    private void initializeSlider() {
+        this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
+
+            if (!timeSlider.isValueChanging()) {
+
+                timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
+                        * 100.0);
+                String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
+                        String.format("%02d", (int) (newDuration.toSeconds() % 60));
+
+                double realTimeLeft = (this.mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                int timeLeft = (int) realTimeLeft;
+
+                endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
+                        String.format("%02d", timeLeft  % 60));
+                currTimeLbl.setText(currentTime);
+
+                if (newDuration.toMillis() == this.mediaPlayer.getTotalDuration().toMillis()) {
+                    this.stop();
+                    timeSlider.setValue(1);
+                }
+            }
+        });
+    }
+
     public void getSource() {
 
         this.mediaPlayer.getMedia().getSource();
@@ -137,9 +160,23 @@ public class Player {
     @FXML
     public void play(ActionEvent event) {
 
-        if (mediaBox.getMediaPlayer() != this.mediaPlayer) {
-        //mediaView.setMediaPlayer();
-            mediaBox.setMediaPlayer(this.mediaPlayer);
+        playMedia();
+    }
+
+    public void playMedia() {
+        if (mediaView.getMediaPlayer() != this.mediaPlayer) {
+            //mediaView.setMediaPlayer();
+            mediaView.setMediaPlayer(this.mediaPlayer);
+            try {
+                presentation = presentationFactory.create(presentation.getStage(), presentation.getScene(),
+                        "media-view");
+                presentation.show();
+                me.twodee.quizatron.Presentation.View.Media mediaController = presentation.getLoader().getController();
+                mediaController.embedMediaView(mediaView);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         this.setPauseIcon();
         mediaPlayer.play();
@@ -160,19 +197,21 @@ public class Player {
     }
 
     private void setPauseIcon() {
-        FontAwesomeIconView pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
 
+        FontAwesomeIconView pauseIcon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
         pauseIcon.setStyleClass("trackBtnIcon");
         pauseIcon.setGlyphSize(16);
         playBtn.setGraphic(pauseIcon);
         playBtn.setOnAction(this::pause);
     }
+
     @FXML
     public void seek(MouseEvent event) {
-        //System.out.println(timeSlider.getValue());
+
         this.mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
                 mediaPlayer.getTotalDuration().toMillis() / 100.0));
     }
+
     public void openPlaylist() {
 
     }
