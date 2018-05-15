@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="mediaNode" prefHeight="775.0" prefWidth="1093.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.Dashboard.MediaPlayer">
+<AnchorPane fx:id="mediaNode" prefHeight="775.0" prefWidth="1093.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.Dashboard.MediaPlayerPresenter">
    <children>
       <GridPane prefHeight="774.0" prefWidth="1092.0">
         <columnConstraints>

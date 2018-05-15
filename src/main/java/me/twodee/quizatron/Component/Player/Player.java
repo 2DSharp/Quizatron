@@ -7,7 +7,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -21,12 +20,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Presentation.PresentationFactory;
+import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import javax.inject.Inject;
 
 import java.io.File;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 
 public class Player {
 
@@ -71,6 +69,9 @@ public class Player {
 
     public void loadMedia(String source) {
 
+        if (mediaPlayer != null && source != null) {
+            mediaPlayer.dispose();
+        }
         this.setMediaPlayer(new MediaPlayer(new Media(source)));
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
@@ -165,14 +166,19 @@ public class Player {
 
     public void playMedia() {
         if (mediaView.getMediaPlayer() != this.mediaPlayer) {
-            //mediaView.setMediaPlayer();
             mediaView.setMediaPlayer(this.mediaPlayer);
+
             try {
-                presentation = presentationFactory.create(presentation.getStage(), presentation.getScene(),
-                        "media-view");
-                presentation.show();
-                me.twodee.quizatron.Presentation.View.Media mediaController = presentation.getLoader().getController();
-                mediaController.embedMediaView(mediaView);
+                if (!(presentation.getView() instanceof MediaPresentationView)) {
+
+                    presentation = presentationFactory.create(presentation.getStage(),
+                            presentation.getScene(),
+                            "media-view");
+                    presentation.show();
+                }
+
+                MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
+                mediaViewController.embedMediaView(mediaView);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -225,24 +231,5 @@ public class Player {
         mediaPlayer.stop();
         setPlayIcon();
     }
-    /*
-    public void bindToTime(Label timer, Text dater) {
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0),
-                        new EventHandler<ActionEvent>() {
-                            @Override public void handle(ActionEvent actionEvent) {
-                                Calendar time = Calendar.getInstance();
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                                timer.setText(simpleDateFormat.format(time.getTime()));
-                                SimpleDateFormat date = new SimpleDateFormat("EEEE, dd MMMM");
-                                dater.setText(date.format(time.getTime()));
-                            }
-                        }
-                ),
-                new KeyFrame(Duration.seconds(1))
-        );
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
-    }
-    */
+
 }

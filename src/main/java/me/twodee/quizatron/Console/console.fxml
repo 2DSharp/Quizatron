@@ -12,7 +12,7 @@
 
 <AnchorPane fx:id="rootNode" prefHeight="722.0" prefWidth="1362.0" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.Panel.PanelPresenter">
    <children>
-      <VBox layoutX="-8.0" layoutY="-7.0" prefHeight="729.0" prefWidth="280.0" style="-:#000;" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css">
+      <VBox layoutX="-8.0" layoutY="-7.0" prefHeight="729.0" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css">
          <children>
             <Label prefHeight="80.0" prefWidth="300.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
                <font>

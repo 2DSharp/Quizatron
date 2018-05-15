@@ -1,19 +1,12 @@
 package me.twodee.quizatron.Console.Panel;
 
 import com.jfoenix.controls.JFXToggleButton;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Parent;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.MediaView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import me.twodee.quizatron.Console.Dashboard.MediaPlayer;
+import me.twodee.quizatron.Console.Dashboard.MediaPlayerPresenter;
 import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Presentation.PresentationFactory;
 import me.twodee.quizatron.Presentation.IView;
@@ -22,7 +15,6 @@ import me.twodee.quizatron.Presentation.View.HomeView;
 
 import javax.inject.Inject;
 import javafx.event.ActionEvent;
-import java.io.File;
 
 public class PanelPresenter {
 
@@ -48,6 +40,7 @@ public class PanelPresenter {
     public void startQuiz(ActionEvent event) {
 
         presentation.show();
+        presentation.getScene().setCursor(Cursor.NONE);
         this.view = presentation.getView();
     }
 
@@ -70,10 +63,9 @@ public class PanelPresenter {
         dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
         dashboard.getChildren().add(mediaPlayerPane);
 
-        MediaPlayer mediaPlayerController = loader.getController();
-        mediaPlayerController.setPresentation(presentation);
+        MediaPlayerPresenter mediaPlayerPresenter = loader.getController();
+        mediaPlayerPresenter.setPresentation(presentation);
     }
-
 
     public void showScore() {
 

@@ -69,14 +69,14 @@ public class Main extends Application {
 
         // Create the media source.
         String source = file.toURI().toURL().toExternalForm();
-        Media media = new Media(source);
+        MediaPresentationView media = new MediaPresentationView(source);
 
         // Create the player and set to play automatically.
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        MediaPlayerPresenter mediaPlayer = new MediaPlayerPresenter(media);
         mediaPlayer.setAutoPlay(true);
 
         // Create the view and add it to the Scene.
-        MediaView mediaView = new MediaView(mediaPlayer);
+        MediaPresentationView mediaView = new MediaPresentationView(mediaPlayer);
 
         DoubleProperty mvw = mediaView.fitWidthProperty();
         DoubleProperty mvh = mediaView.fitHeightProperty();
