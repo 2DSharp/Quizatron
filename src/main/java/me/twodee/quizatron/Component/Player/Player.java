@@ -5,10 +5,13 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -25,6 +28,8 @@ import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
 import java.io.File;
+
+import static java.lang.Math.abs;
 
 public class Player {
 
@@ -124,7 +129,7 @@ public class Player {
                 int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
                 endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
                         String.format("%02d", duration  % 60));
-            }
+                }
         });
     }
 
@@ -219,8 +224,24 @@ public class Player {
 
     @FXML
     public void seek(MouseEvent event) {
+        System.out.println("Seeked?");
+        System.out.println(timeSlider.getValue());
+        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                //System.out.println(newValue);
+                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 1) {
+                    //System.out.println(newValue+ " " + timeSlider.getValue());
+                    mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
+                            mediaPlayer.getTotalDuration().toMillis() / 100.0));
+                }
+            }
+        });
+    }
 
-        this.mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
+    @FXML public void dragSeek(DragEvent event) {
+        System.out.println("dragged");
+        mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
                 mediaPlayer.getTotalDuration().toMillis() / 100.0));
     }
 

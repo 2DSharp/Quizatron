@@ -37,6 +37,7 @@ public class Presentation {
     public FXMLLoader getLoader() {
         return loader;
     }
+
     public void show() {
         this.stage.show();
     }
