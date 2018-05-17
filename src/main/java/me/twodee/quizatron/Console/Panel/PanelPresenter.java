@@ -29,11 +29,11 @@ public class PanelPresenter {
     @FXML private AnchorPane dashboard;
 
     @Inject
-    public PanelPresenter(Score score, PresentationFactory presentationFactory, FXMLLoader fxmlLoader) throws Exception {
+    public PanelPresenter(Score score, Presentation presentation, FXMLLoader fxmlLoader) throws Exception {
         this.score = score;
         this.presentationFactory = presentationFactory;
         this.fxmlLoader = fxmlLoader;
-        this.presentation = this.presentationFactory.create();
+        this.presentation = presentation;
     }
 
     @FXML
@@ -62,10 +62,7 @@ public class PanelPresenter {
         AnchorPane mediaPlayerPane = loader.load();
         dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
         dashboard.getChildren().add(mediaPlayerPane);
-
-        MediaPlayerPresenter mediaPlayerPresenter = loader.getController();
-        mediaPlayerPresenter.setPresentation(presentation);
-    }
+        }
 
     public void showScore() {
 

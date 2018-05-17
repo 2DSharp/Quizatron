@@ -14,9 +14,4 @@ public class MediaPlayerPresenter {
     @FXML private Parent player;
     @FXML private Player playerController;
 
-    public void setPresentation(Presentation presentation) {
-
-        this.presentation = presentation;
-        playerController.setPresentation(presentation);
-    }
 }

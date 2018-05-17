@@ -11,10 +11,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -24,21 +22,22 @@ import javafx.util.Duration;
 import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Presentation.PresentationFactory;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
-
 import javax.inject.Inject;
 
 import java.io.File;
 
 import static java.lang.Math.abs;
 
+/**
+ * @author dedipyaman
+ * @version %I%, %G%
+ * @since 1.0.18.1
+ */
 public class Player {
 
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private Pane parentContainer;
     private FileChooser fileChooser;
-    private double currentPos;
-    private boolean playerState;
     private Presentation presentation;
     private  PresentationFactory presentationFactory;
 
@@ -51,28 +50,44 @@ public class Player {
     @FXML private JFXSlider timeSlider;
     @FXML private Label mediaInfo;
     @FXML private Label sourceFileLbl;
+    private boolean sliderChanging;
 
+    /**
+     * Media player component constructor.
+     * It has to be injected with a {@link FileChooser} for getting the media file, {@link MediaView}
+     * and {@link PresentationFactory} to create a new instance of a presentation of the view window.
+     * @see Presentation
+     * @param fileChooser
+     * @param mediaView
+     * @param presentation
+     */
     @Inject
-    public Player(FileChooser fileChooser, MediaView mediaView, PresentationFactory presentationFactory) {
+    public Player(FileChooser fileChooser, MediaView mediaView, Presentation presentation) {
         this.mediaView = mediaView;
         this.fileChooser = fileChooser;
-        this.presentationFactory = presentationFactory;
+        this.presentation = presentation;
+        sliderChanging = false;
     }
+
+    /**
+     * Initializer to get the FXML components working.
+     */
     @FXML
     public void initialize() {
-
         timeSlider.setValue(0);
         prepareMediaView();
     }
-    public MediaView getMediaView() {
-
-        return mediaView;
-    }
-
+    /**
+     * Sets the presentation view
+     * @param presentation
+     */
     public void setPresentation(Presentation presentation) {
         this.presentation = presentation;
     }
-
+    /**
+     * Loads the media and instantiates a new media player
+     * @param source Media file source location
+     */
     public void loadMedia(String source) {
 
         if (mediaPlayer != null && source != null) {
@@ -80,7 +95,12 @@ public class Player {
         }
         this.setMediaPlayer(new MediaPlayer(new Media(source)));
     }
-
+    /**
+     * Prepare the mediaview window with correct dimensions
+     * Binds the mediaview's width and height relative to the window size and video ratio
+     * @see MediaPresentationView
+     * @see Bindings
+     */
     public void prepareMediaView() {
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
@@ -88,33 +108,41 @@ public class Player {
         width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
     }
-    public void chooseMediaFile() {
+    /**
+     * Open the file chooser and autoplay the media
+     * @param event Mouse click
+     * @throws Exception
+     */
+    @FXML private void chooseMediaFile(ActionEvent event) throws Exception{
 
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog((Stage)playerNode.getScene().getWindow());
-        try {
-            String source = file.toURI().toURL().toExternalForm();
-            play(source);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        String source = file.toURI().toURL().toExternalForm();
 
+        play(source);
+    }
+    /**
+     * Plays the file
+     * Loads the media file and initializes the slider
+     * Plays the given media file
+     * @param source
+     */
     private void play(String source) {
 
         this.loadMedia(source);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
-        initializePlayer();
-        initializeSlider();
+        setMetaData();
+        initializeTimeSlider();
+        initUIControlsBehavior();
         playMedia();
     }
-    private void initializePlayer() {
 
-        mediaPlayer.setOnReady(new Runnable() {
+    /**
+     * Fetches and substitutes the placeholders for media metadata
+     */
+    private void setMetaData() {
 
-            @Override
-            public void run() {
+        mediaPlayer.setOnReady(() -> {
 
                 String artistName = (String) mediaPlayer.getMedia().getMetadata().get("artist");
                 String title = (String)mediaPlayer.getMedia().getMetadata().get("title");
@@ -130,46 +158,80 @@ public class Player {
                 endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
                         String.format("%02d", duration  % 60));
                 }
-        });
+        );
     }
 
-    private void initializeSlider() {
+    private void initializeTimeSlider() {
+
+        initSliderSeekBehavior();
+        initSliderProgressBehavior();
+    }
+
+    /**
+     * Sets the behavior of the player UI based on the player state
+     */
+    private void initUIControlsBehavior() {
+
+        mediaPlayer.setOnEndOfMedia(() -> {
+            stop();
+            timeSlider.setValue(1);
+        });
+
+        mediaPlayer.setOnPaused(() -> {
+            setPlayIcon();
+        });
+
+        mediaPlayer.setOnPlaying(() -> {
+            setPauseIcon();
+        });
+
+    }
+    private void initSliderSeekBehavior() {
+        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 1) {
+
+                    mediaPlayer.seek(Duration.millis(newValue.doubleValue() *
+                            mediaPlayer.getTotalDuration().toMillis() / 100.0));
+                }
+            }
+        });
+    }
+    @FXML private void clickDetect(MouseEvent event) {
+        sliderChanging = true;
+    }
+
+    private void initSliderProgressBehavior() {
 
         this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
 
             if (!timeSlider.isValueChanging()) {
-
                 timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
                         * 100.0);
                 String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
                         String.format("%02d", (int) (newDuration.toSeconds() % 60));
 
-                double realTimeLeft = (this.mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                double realTimeLeft = (mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
                 int timeLeft = (int) realTimeLeft;
 
                 endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
                         String.format("%02d", timeLeft  % 60));
                 currTimeLbl.setText(currentTime);
-
-                if (newDuration.toMillis() == this.mediaPlayer.getTotalDuration().toMillis()) {
-                    this.stop();
-                    timeSlider.setValue(1);
-                }
             }
         });
     }
-
-    public void getSource() {
-
-        this.mediaPlayer.getMedia().getSource();
-    }
-
-    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+    /**
+     * Setter for the class media player
+     * @param mediaPlayer
+     */
+    private void setMediaPlayer(MediaPlayer mediaPlayer) {
         this.mediaPlayer = mediaPlayer;
     }
 
     @FXML
-    public void play(ActionEvent event) {
+    private void play(ActionEvent event) {
         playMedia();
     }
 
@@ -179,9 +241,7 @@ public class Player {
         try {
             if (!(presentation.getView() instanceof MediaPresentationView)) {
 
-                presentation = presentationFactory.create(presentation.getStage(),
-                        presentation.getScene(),
-                        "media-view");
+                presentation.changeView("media-view");
             }
             MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
             mediaViewController.embedMediaView(mediaView);
@@ -192,16 +252,15 @@ public class Player {
     }
 
     private void playMedia() {
+
         if (mediaView.getMediaPlayer() != this.mediaPlayer) {
             preparePresentation();
         }
-        this.setPauseIcon();
         mediaPlayer.play();
     }
 
     @FXML private void pause(ActionEvent event) {
 
-        this.setPlayIcon();
         mediaPlayer.pause();
     }
 
@@ -220,29 +279,6 @@ public class Player {
         pauseIcon.setGlyphSize(16);
         playBtn.setGraphic(pauseIcon);
         playBtn.setOnAction(this::pause);
-    }
-
-    @FXML
-    public void seek(MouseEvent event) {
-        System.out.println("Seeked?");
-        System.out.println(timeSlider.getValue());
-        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                //System.out.println(newValue);
-                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 1) {
-                    //System.out.println(newValue+ " " + timeSlider.getValue());
-                    mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
-                            mediaPlayer.getTotalDuration().toMillis() / 100.0));
-                }
-            }
-        });
-    }
-
-    @FXML public void dragSeek(DragEvent event) {
-        System.out.println("dragged");
-        mediaPlayer.seek(Duration.millis(timeSlider.getValue() *
-                mediaPlayer.getTotalDuration().toMillis() / 100.0));
     }
 
     public void openPlaylist() {

@@ -6,55 +6,48 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
-public class PresentationFactory {
+public class PresentationFactory implements Provider<Presentation> {
 
     private FXMLLoader fxmlLoader;
+    private Stage stage;
 
     @Inject
-    public PresentationFactory(FXMLLoader fxmlLoader) {
+    public PresentationFactory(Stage stage, FXMLLoader fxmlLoader) {
+
+        this.stage = stage;
         this.fxmlLoader = fxmlLoader;
     }
-    public Presentation create() throws Exception {
 
-        FXMLLoader fxmlLoader = this.loaderBuilder("home");
+    public Presentation get() {
 
-        Parent root = this.getRoot(fxmlLoader);
-        IView view = this.getView(fxmlLoader);
+        try {
 
-        Scene scene = new Scene(root, 800, 600);
+            FXMLLoader fxmlLoader = this.buildDefaultLoader();
 
-        Stage stage = new Stage();
-        stage.setMaximized(true);
-        stage.setScene(scene);
+            Parent root = this.getRoot(fxmlLoader);
+            Scene scene = new Scene(root, 800, 600);
 
-        Presentation presentation = new Presentation(stage, scene, view, fxmlLoader);
-        return presentation;
+            stage.setMaximized(true);
+            stage.setScene(scene);
+
+            return new Presentation(stage, scene, fxmlLoader);
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public Presentation create(Stage stage, Scene scene, String viewFile) throws Exception{
-
-        FXMLLoader fxmlLoader = this.loaderBuilder(viewFile);
-
-        Parent root = this.getRoot(fxmlLoader);
-        IView view = this.getView(fxmlLoader);
-        scene.setRoot(root);
-
-        return new Presentation(stage, scene, view, fxmlLoader);
-    }
-
-    private FXMLLoader loaderBuilder(String viewFile) throws Exception {
-
-        fxmlLoader.setLocation(getClass().getResource("View/" + viewFile + ".fxml" ));
-        return fxmlLoader;
-    }
-
-    private IView getView(FXMLLoader loader) throws Exception {
-
-        return loader.getController();
-    }
     private Parent getRoot(FXMLLoader loader) throws Exception {
 
         return loader.load();
+    }
+    private FXMLLoader buildDefaultLoader() {
+
+        fxmlLoader.setLocation(getClass().getResource("View/home.fxml" ));
+        return fxmlLoader;
     }
 }
