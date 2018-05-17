@@ -1,8 +1,12 @@
 package me.twodee.quizatron.Presentation;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import me.twodee.quizatron.Presentation.View.HomeView;
+import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import javax.inject.Inject;
 

@@ -8,13 +8,13 @@ import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-public class PresentationFactory implements Provider<Presentation> {
+public class PresentationProvider implements Provider<Presentation> {
 
     private FXMLLoader fxmlLoader;
     private Stage stage;
 
     @Inject
-    public PresentationFactory(Stage stage, FXMLLoader fxmlLoader) {
+    public PresentationProvider(Stage stage, FXMLLoader fxmlLoader) {
 
         this.stage = stage;
         this.fxmlLoader = fxmlLoader;

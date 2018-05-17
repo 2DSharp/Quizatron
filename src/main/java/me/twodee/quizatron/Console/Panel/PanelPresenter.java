@@ -6,9 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import me.twodee.quizatron.Console.Dashboard.MediaPlayerPresenter;
 import me.twodee.quizatron.Presentation.Presentation;
-import me.twodee.quizatron.Presentation.PresentationFactory;
+import me.twodee.quizatron.Presentation.PresentationProvider;
 import me.twodee.quizatron.Presentation.IView;
 import me.twodee.quizatron.Model.Score;
 import me.twodee.quizatron.Presentation.View.HomeView;
@@ -19,7 +18,6 @@ import javafx.event.ActionEvent;
 public class PanelPresenter {
 
     private Score score;
-    private PresentationFactory presentationFactory;
     private Presentation presentation;
     private IView view;
     private FXMLLoader fxmlLoader;
@@ -31,7 +29,6 @@ public class PanelPresenter {
     @Inject
     public PanelPresenter(Score score, Presentation presentation, FXMLLoader fxmlLoader) throws Exception {
         this.score = score;
-        this.presentationFactory = presentationFactory;
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
     }

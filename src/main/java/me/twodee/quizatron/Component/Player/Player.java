@@ -20,7 +20,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.twodee.quizatron.Presentation.Presentation;
-import me.twodee.quizatron.Presentation.PresentationFactory;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
@@ -39,7 +38,6 @@ public class Player {
     private MediaPlayer mediaPlayer;
     private FileChooser fileChooser;
     private Presentation presentation;
-    private  PresentationFactory presentationFactory;
 
     @FXML private AnchorPane playerNode;
     @FXML private Button playBtn;
@@ -55,7 +53,6 @@ public class Player {
     /**
      * Media player component constructor.
      * It has to be injected with a {@link FileChooser} for getting the media file, {@link MediaView}
-     * and {@link PresentationFactory} to create a new instance of a presentation of the view window.
      * @see Presentation
      * @param fileChooser
      * @param mediaView
