@@ -12,27 +12,29 @@ public class PresentationProvider implements Provider<Presentation> {
 
     private FXMLLoader fxmlLoader;
     private Stage stage;
+    private LoaderFactory loaderFactory;
 
     @Inject
-    public PresentationProvider(Stage stage, FXMLLoader fxmlLoader) {
+    public PresentationProvider(Stage stage, LoaderFactory loaderFactory) {
 
         this.stage = stage;
-        this.fxmlLoader = fxmlLoader;
+        this.loaderFactory = loaderFactory;
     }
 
     public Presentation get() {
 
         try {
 
-            FXMLLoader fxmlLoader = this.buildDefaultLoader();
+            //FXMLLoader fxmlLoader = this.buildDefaultLoader();
+            FXMLLoader fxmlLoader = loaderFactory.build("home");
 
-            Parent root = this.getRoot(fxmlLoader);
+            Parent root = fxmlLoader.load();
             Scene scene = new Scene(root, 800, 600);
 
             stage.setMaximized(true);
             stage.setScene(scene);
 
-            return new Presentation(stage, scene, fxmlLoader);
+            return new Presentation(stage, scene, fxmlLoader.getController(), loaderFactory);
         }
 
         catch (Exception e) {
