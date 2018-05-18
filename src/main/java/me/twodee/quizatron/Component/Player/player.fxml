@@ -43,7 +43,7 @@
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </VBox>
-            <JFXSlider fx:id="timeSlider" onMouseReleased="#clickDetect" styleClass="specialSlider" />
+            <JFXSlider fx:id="timeSlider" styleClass="specialSlider" />
             <BorderPane prefHeight="6.0" prefWidth="567.0">
                <left>
                   <Label fx:id="currTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
