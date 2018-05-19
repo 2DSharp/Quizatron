@@ -17,15 +17,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
 import java.io.File;
-import java.io.IOException;
-
 import static java.lang.Math.abs;
 
 /**
@@ -99,7 +96,7 @@ public class Player {
     /**
      * Open the file chooser and autoplay the media
      * @param event ActionEvent
-     * @throws Exception NullPointerException thrown on failure to open file
+     * @throws Exception thrown on failure to open file
      */
     @FXML private void chooseMediaFromFile(ActionEvent event) throws Exception {
 
@@ -130,7 +127,7 @@ public class Player {
     private void setMetaData() {
 
         mediaPlayer.setOnReady(() -> {
-
+            timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
             ObservableMap<String, Object> metaData = mediaPlayer.getMedia().getMetadata();
 
             String artistName = (String) metaData.get("artist");
@@ -160,9 +157,11 @@ public class Player {
         // Compromising on the readability a bit, maybe switch to a more verbose approach?
         mediaPlayer.setOnEndOfMedia(() -> {
             stop();
-            timeSlider.setValue(1);
         });
-
+        mediaPlayer.setOnStopped(() -> {
+            togglePlayPauseBtn(PLAY);
+            timeSlider.setValue(0);
+        });
         mediaPlayer.setOnPaused(() -> {
             togglePlayPauseBtn(PLAY);
         });
@@ -181,9 +180,13 @@ public class Player {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 // Is the change significant enough?
                 // Drag was buggy, have to run some tests
-                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.5) {
-                    mediaPlayer.seek(Duration.millis(newValue.doubleValue() *
-                            mediaPlayer.getTotalDuration().toMillis() / 100.0));
+                // Affects only the drag it seems
+                double tolerance = 1;
+                if (mediaPlayer.getTotalDuration().toSeconds() <= 100) {
+                    tolerance = 0.5;
+                }
+                if (abs(oldValue.doubleValue() - newValue.doubleValue()) >= tolerance) {
+                    mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
                 }
             }
         });
@@ -198,8 +201,9 @@ public class Player {
             // Making sure it doesn't interfere with the manual seeking
             if (!timeSlider.isValueChanging()) {
 
-                timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
-                        * 100.0);
+                if (newDuration.toSeconds() - oldDuration.toSeconds() >= 0.1) {
+                    timeSlider.setValue(newDuration.toSeconds());
+                }
 
                 String elapsedTimeFormatted = formatTime((int) newDuration.toSeconds());
                 int timeLeft = (int) (mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
@@ -286,7 +290,6 @@ public class Player {
      */
     public void stop() {
         mediaPlayer.stop();
-        togglePlayPauseBtn(PLAY);
     }
 
     public void openPlaylist() {
