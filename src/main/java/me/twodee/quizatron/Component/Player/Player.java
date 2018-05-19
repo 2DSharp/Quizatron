@@ -9,7 +9,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +24,7 @@ import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.io.IOException;
 
 import static java.lang.Math.abs;
 
@@ -75,14 +75,13 @@ public class Player {
     }
     /**
      * Loads the media and instantiates a new media player
-     * @param source String- Media file source location
+     * @param media Media - reusable media component, can be used from anywhere
      */
-    public void loadMedia(String source) {
-
-        if (mediaPlayer != null && source != null) {
+    public void loadMedia(Media media) {
+        if (mediaPlayer != null) {
             mediaPlayer.dispose();
         }
-        this.setMediaPlayer(new MediaPlayer(new Media(source)));
+        this.setMediaPlayer(new MediaPlayer(media));
     }
     /**
      * Prepare the mediaview window with correct dimensions
@@ -102,23 +101,23 @@ public class Player {
      * @param event ActionEvent
      * @throws Exception NullPointerException thrown on failure to open file
      */
-    @FXML private void chooseMediaFile(ActionEvent event) throws Exception{
+    @FXML private void chooseMediaFromFile(ActionEvent event) throws Exception {
 
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog((Stage)playerNode.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(playerNode.getScene().getWindow());
         String source = file.toURI().toURL().toExternalForm();
-
-        play(source);
+        Media media = new Media(source);
+        play(media);
     }
     /**
      * Plays the file
      * Loads the media file and initializes the slider
      * Plays the given media file
-     * @param source String - source file to be played
+     * @param media Media - source media to be played
      */
-    private void play(String source) {
+    private void play(Media media) {
 
-        this.loadMedia(source);
+        this.loadMedia(media);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
         setMetaData();
         initializeTimeSlider();
@@ -139,14 +138,11 @@ public class Player {
             String album = (String) metaData.get("album");
             String mediaSource = mediaPlayer.getMedia().getSource();
 
-            mediaSource = mediaSource.replace("%20", " ");
-            mediaInfo.setText(title+ " - " + artistName + " - " + album);
-            sourceFileLbl.setText(mediaSource.substring( mediaSource.lastIndexOf('/')+1,
-                    mediaSource.length()));
+            mediaInfo.setText(title + " - " + artistName + " - " + album);
+            sourceFileLbl.setText(getFileName(mediaSource));
 
             int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
-            endTimeLbl.setText(String.format("%02d", duration / 60) + ":" +
-                    String.format("%02d", duration  % 60));
+            endTimeLbl.setText(formatTime(duration));
             });
     }
     /**
@@ -168,11 +164,11 @@ public class Player {
         });
 
         mediaPlayer.setOnPaused(() -> {
-            setPlayPauseIcon(PLAY);
+            togglePlayPauseBtn(PLAY);
         });
 
         mediaPlayer.setOnPlaying(() -> {
-            setPlayPauseIcon(PAUSE);
+            togglePlayPauseBtn(PAUSE);
         });
     }
     /**
@@ -185,7 +181,7 @@ public class Player {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 // Is the change significant enough?
                 // Drag was buggy, have to run some tests
-                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.1) {
+                if (abs(oldValue.doubleValue() - newValue.doubleValue()) > 0.5) {
                     mediaPlayer.seek(Duration.millis(newValue.doubleValue() *
                             mediaPlayer.getTotalDuration().toMillis() / 100.0));
                 }
@@ -204,15 +200,14 @@ public class Player {
 
                 timeSlider.setValue((newDuration.toMillis() / this.mediaPlayer.getTotalDuration().toMillis())
                         * 100.0);
-                String currentTime = String.format("%02d",(int) (newDuration.toSeconds() / 60))+ ":" +
-                        String.format("%02d", (int) (newDuration.toSeconds() % 60));
 
-                double realTimeLeft = (mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
-                int timeLeft = (int) realTimeLeft;
+                String elapsedTimeFormatted = formatTime((int) newDuration.toSeconds());
+                int timeLeft = (int) (mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                String remainingTimeFormatted = formatTime(timeLeft);
+
                 // Time elapsed/left indicators update
-                endTimeLbl.setText(String.format("%02d", timeLeft / 60) + ":" +
-                        String.format("%02d", timeLeft  % 60));
-                currTimeLbl.setText(currentTime);
+                currTimeLbl.setText(elapsedTimeFormatted);
+                endTimeLbl.setText(remainingTimeFormatted);
             }
         });
     }
@@ -273,19 +268,17 @@ public class Player {
      * Change the pause button to a play button and have the appropriate action based on it
      * {@link FontAwesomeIconView}
      */
-    private void setPlayPauseIcon(String status) {
+    private void togglePlayPauseBtn(String status) {
 
         FontAwesomeIconView icon;
-        if (status == PLAY) {
-            icon= new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+        if (status.equals(PLAY)) {
+            icon= getIcon(FontAwesomeIcon.PLAY);
             playBtn.setOnAction(this::play);
         }
         else {
-            icon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
+            icon = getIcon(FontAwesomeIcon.PAUSE);
             playBtn.setOnAction(this::pause);
         }
-        icon.setGlyphSize(16);
-        icon.setStyleClass("trackBtnIcon");
         playBtn.setGraphic(icon);
     }
     /**
@@ -293,7 +286,7 @@ public class Player {
      */
     public void stop() {
         mediaPlayer.stop();
-        setPlayPauseIcon(PLAY);
+        togglePlayPauseBtn(PLAY);
     }
 
     public void openPlaylist() {
@@ -305,6 +298,44 @@ public class Player {
     public void next() {
 
     }
+    /**
+     * Helper functions
+     */
+    /**
+     * Formats the time to a MM:SS format as a string
+     * @param totalSeconds the time specified in seconds
+     * @return the formatted time string
+     */
+    private String formatTime(int totalSeconds) {
 
+        int min = totalSeconds / 60;
+        int sec = totalSeconds % 60;
+
+        String formattedMin = String.format("%02d", min);
+        String formattedSec = String.format("%02d", sec);
+
+        String formattedTime = formattedMin + ":" + formattedSec;
+        return formattedTime;
+    }
+    /**
+     * Creates a FontAwesomeIconView based on the supplied icon type
+     * @param iconType FontAwesome icon to be built
+     * @return The final icon with appropriate styles and glyph sizes
+     */
+    private FontAwesomeIconView getIcon(FontAwesomeIcon iconType) {
+        FontAwesomeIconView icon = new FontAwesomeIconView(iconType);
+        icon.setGlyphSize(16);
+        icon.setStyleClass("trackBtnIcon");
+        return icon;
+    }
+    /**
+     * Extracts the filename + extension from the supplied file path
+     * @param filePath full file path
+     * @return the filename stripped of slashes and everything before
+     */
+    private String getFileName(String filePath) {
+        filePath = filePath.replace("%20", " ");
+        return filePath.substring( filePath.lastIndexOf('/')+1, filePath.length());
+    }
 
 }

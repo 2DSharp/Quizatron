@@ -57,7 +57,7 @@
                   <Insets left="103.0" right="40.0" top="5.0" />
                </padding>
                <children>
-                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFile" styleClass="trackBtn">
+                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFromFile" styleClass="trackBtn">
                      <graphic>
                         <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtnIcon" />
                      </graphic>
