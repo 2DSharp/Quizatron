@@ -44,7 +44,10 @@
 
 /* Styling the animated thumb */
 .specialSlider > .animated-thumb {
-    -fx-background-color: orange;
+    -fx-background-color: steelblue;
+    -fx-font-size: 8px;
+    -fx-font-weight: lighter;
+    -fx-padding: 20px;
 }
 
 /* Styling the slider value text inside animated thumb */
@@ -63,7 +66,7 @@
 }
 
 .volSeeker > .animated-thumb {
-    -fx-background-color: orangered;
+    -fx-background-color: orangered ;
 }
 .trackBtnIcon {
     -fx-fill: palegreen;

@@ -1,9 +1,10 @@
-package me.twodee.quizatron.Component.Player;
+package me.twodee.quizatron.Console.UIComponent;
 
 import com.jfoenix.controls.JFXSlider;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,24 +18,27 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javafx.util.Duration;
-import me.twodee.quizatron.Presentation.Presentation;
+import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
 import java.io.File;
+
 import static java.lang.Math.abs;
 
 /**
  * Media Player component for Quizatron
  * @author Dedipyaman Das <2d@twodee.me>
- * @version 2018
+ * @version 1.0.18.1
  * @since 1.0.18.1
  */
 public class Player {
 
-    private static final String PLAY = "play";
-    private static final String PAUSE = "pause";
+    public enum PlayerState {
+        PLAY, PAUSE
+    }
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private FileChooser fileChooser;
@@ -68,7 +72,24 @@ public class Player {
     @FXML
     public void initialize() {
         timeSlider.setValue(0);
+        initIndicatorValueProperty();
         prepareMediaView();
+    }
+    /**
+     * Display indicator in HH:MM format
+     */
+    private void initIndicatorValueProperty() {
+        timeSlider.setValueFactory(new Callback<JFXSlider, StringBinding>() {
+            @Override
+            public StringBinding call(JFXSlider arg0) {
+                return Bindings.createStringBinding(new java.util.concurrent.Callable<String>(){
+                    @Override
+                    public String call() throws Exception {
+                        return formatTime(timeSlider.getValue());
+                    }
+                }, timeSlider.valueProperty());
+            }
+        });
     }
     /**
      * Loads the media and instantiates a new media player
@@ -107,9 +128,7 @@ public class Player {
         play(media);
     }
     /**
-     * Plays the file
-     * Loads the media file and initializes the slider
-     * Plays the given media file
+     * Loads and plays the media source
      * @param media Media - source media to be played
      */
     private void play(Media media) {
@@ -138,7 +157,7 @@ public class Player {
             mediaInfo.setText(title + " - " + artistName + " - " + album);
             sourceFileLbl.setText(getFileName(mediaSource));
 
-            int duration = (int) mediaPlayer.getTotalDuration().toSeconds();
+            double duration = mediaPlayer.getTotalDuration().toSeconds();
             endTimeLbl.setText(formatTime(duration));
             });
     }
@@ -159,15 +178,15 @@ public class Player {
             stop();
         });
         mediaPlayer.setOnStopped(() -> {
-            togglePlayPauseBtn(PLAY);
+            togglePlayPauseBtn(PlayerState.PLAY);
             timeSlider.setValue(0);
         });
         mediaPlayer.setOnPaused(() -> {
-            togglePlayPauseBtn(PLAY);
+            togglePlayPauseBtn(PlayerState.PLAY);
         });
 
         mediaPlayer.setOnPlaying(() -> {
-            togglePlayPauseBtn(PAUSE);
+            togglePlayPauseBtn(PlayerState.PAUSE);
         });
     }
     /**
@@ -199,14 +218,21 @@ public class Player {
 
         this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
             // Making sure it doesn't interfere with the manual seeking
+
+            double newElapsedTime = newDuration.toSeconds();
+            double oldElapsedTime = oldDuration.toSeconds();
+            double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+
             if (!timeSlider.isValueChanging()) {
 
-                if (newDuration.toSeconds() - oldDuration.toSeconds() >= 0.1) {
-                    timeSlider.setValue(newDuration.toSeconds());
+                if (newElapsedTime - oldElapsedTime >= 0.1) {
+                    timeSlider.setValue(newElapsedTime);
                 }
 
-                String elapsedTimeFormatted = formatTime((int) newDuration.toSeconds());
-                int timeLeft = (int) (mediaPlayer.getTotalDuration().toSeconds() - newDuration.toSeconds());
+                // Get rid of the unnecessary decimal points
+                double timeLeft = totalDuration - newElapsedTime;
+
+                String elapsedTimeFormatted = formatTime(newElapsedTime);
                 String remainingTimeFormatted = formatTime(timeLeft);
 
                 // Time elapsed/left indicators update
@@ -272,10 +298,10 @@ public class Player {
      * Change the pause button to a play button and have the appropriate action based on it
      * {@link FontAwesomeIconView}
      */
-    private void togglePlayPauseBtn(String status) {
+    private void togglePlayPauseBtn(PlayerState state) {
 
         FontAwesomeIconView icon;
-        if (status.equals(PLAY)) {
+        if (state.equals(PlayerState.PLAY)) {
             icon= getIcon(FontAwesomeIcon.PLAY);
             playBtn.setOnAction(this::play);
         }
@@ -301,7 +327,7 @@ public class Player {
     public void next() {
 
     }
-    /**
+    /*
      * Helper functions
      */
     /**
@@ -309,10 +335,10 @@ public class Player {
      * @param totalSeconds the time specified in seconds
      * @return the formatted time string
      */
-    private String formatTime(int totalSeconds) {
+    private String formatTime(double totalSeconds) {
 
-        int min = totalSeconds / 60;
-        int sec = totalSeconds % 60;
+        int min = (int) totalSeconds / 60;
+        int sec = (int) totalSeconds % 60;
 
         String formattedMin = String.format("%02d", min);
         String formattedSec = String.format("%02d", sec);

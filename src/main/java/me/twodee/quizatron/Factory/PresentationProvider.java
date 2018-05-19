@@ -1,16 +1,16 @@
-package me.twodee.quizatron.Presentation;
+package me.twodee.quizatron.Factory;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import me.twodee.quizatron.Component.Presentation;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
 public class PresentationProvider implements Provider<Presentation> {
 
-    private FXMLLoader fxmlLoader;
     private Stage stage;
     private LoaderFactory loaderFactory;
 
@@ -24,7 +24,6 @@ public class PresentationProvider implements Provider<Presentation> {
     public Presentation get() {
 
         try {
-
             //FXMLLoader fxmlLoader = this.buildDefaultLoader();
             FXMLLoader fxmlLoader = loaderFactory.build("home");
 
@@ -41,15 +40,5 @@ public class PresentationProvider implements Provider<Presentation> {
             e.printStackTrace();
             return null;
         }
-    }
-
-    private Parent getRoot(FXMLLoader loader) throws Exception {
-
-        return loader.load();
-    }
-    private FXMLLoader buildDefaultLoader() {
-
-        fxmlLoader.setLocation(getClass().getResource("View/home.fxml" ));
-        return fxmlLoader;
     }
 }

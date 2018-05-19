@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Presentation;
+package me.twodee.quizatron.Factory;
 
 import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class LoaderFactory {
 
     public FXMLLoader build(String viewFile) {
         loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("View/" + viewFile + ".fxml" ));
+        loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
         loader.setControllerFactory(injector::getInstance);
         return loader;
     }

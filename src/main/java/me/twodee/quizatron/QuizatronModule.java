@@ -3,8 +3,8 @@ package me.twodee.quizatron;
 import com.google.inject.*;
 import javafx.fxml.FXMLLoader;
 import me.twodee.quizatron.Model.Score;
-import me.twodee.quizatron.Presentation.Presentation;
-import me.twodee.quizatron.Presentation.PresentationProvider;
+import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Factory.PresentationProvider;
 
 public class QuizatronModule extends AbstractModule {
 

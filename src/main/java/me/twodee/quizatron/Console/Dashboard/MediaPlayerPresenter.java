@@ -3,8 +3,8 @@ package me.twodee.quizatron.Console.Dashboard;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
-import me.twodee.quizatron.Component.Player.Player;
-import me.twodee.quizatron.Presentation.Presentation;
+import me.twodee.quizatron.Console.UIComponent.Player;
+import me.twodee.quizatron.Component.Presentation;
 
 public class MediaPlayerPresenter {
 
