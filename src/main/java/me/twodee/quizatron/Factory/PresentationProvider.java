@@ -22,7 +22,6 @@ public class PresentationProvider implements Provider<Presentation> {
     }
 
     public Presentation get() {
-
         try {
             //FXMLLoader fxmlLoader = this.buildDefaultLoader();
             FXMLLoader fxmlLoader = loaderFactory.build("home");

@@ -58,7 +58,7 @@ public class PanelPresenter {
         AnchorPane mediaPlayerPane = loader.load();
         dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
         dashboard.getChildren().add(mediaPlayerPane);
-        }
+    }
 
     public void showScore() {
 

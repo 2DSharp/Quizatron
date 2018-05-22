@@ -43,7 +43,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" onMouseReleased="#openMedia" styleClass="btns">
+            <HBox alignment="CENTER_LEFT" fx:id="mediaPlayerTab" onMouseReleased="#openMedia" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Media player" textFill="#7c8184">

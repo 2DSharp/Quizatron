@@ -2,7 +2,6 @@ package me.twodee.quizatron.Factory;
 
 import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 
 import javax.inject.Inject;
 

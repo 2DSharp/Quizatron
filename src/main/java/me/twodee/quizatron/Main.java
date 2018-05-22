@@ -29,66 +29,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        Score score = new Score();
-
-        Map<Object, Object> customProperties = new HashMap<>();
-
-        customProperties.put("score", score);
-        System.out.println(dashboardView.getView().toString());
-        primaryStage.setTitle("Quizatron console");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        /*
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("me/twodee/quizatron/Console/Dashboard/console.fxml"));
-
-        primaryStage.setTitle("Quizatron Console");
-
-
-        primaryStage.setScene(scene);
-
-        primaryStage.show();
-
-        /*
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(primaryStage);
-
-        // Create the media source.
-        String source = file.toURI().toURL().toExternalForm();
-        MediaPresentationView media = new MediaPresentationView(source);
-
-        // Create the player and set to play automatically.
-        MediaPlayerPresenter mediaPlayer = new MediaPlayerPresenter(media);
-        mediaPlayer.setAutoPlay(true);
-
-        // Create the view and add it to the Scene.
-        MediaPresentationView mediaView = new MediaPresentationView(mediaPlayer);
-
-        DoubleProperty mvw = mediaView.fitWidthProperty();
-        DoubleProperty mvh = mediaView.fitHeightProperty();
-        mvw.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
-        mvh.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
-
-
-        ((Group) outputScene.getRoot()).getChildren().add(mediaView);
-
-        outputStage.setScene(outputScene);
-        */
-
     }
 
 
