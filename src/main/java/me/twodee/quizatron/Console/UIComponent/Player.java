@@ -6,8 +6,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -75,6 +73,11 @@ public class Player {
         this.presentation = presentation;
     }
 
+    public enum PlayerState {
+
+        PLAY, PAUSE
+    }
+
     /**
      * Initializer to get the FXML components working.
      */
@@ -82,30 +85,7 @@ public class Player {
     public void initialize() {
 
         timeSlider.setValue(0);
-        initIndicatorValueProperty();
         prepareMediaView();
-    }
-
-    /**
-     * Display indicator in HH:MM format
-     */
-    private void initIndicatorValueProperty() {
-
-        timeSlider.setValueFactory(new Callback<JFXSlider, StringBinding>() {
-
-            @Override
-            public StringBinding call(JFXSlider arg0) {
-
-                return Bindings.createStringBinding(new java.util.concurrent.Callable<String>() {
-
-                    @Override
-                    public String call() {
-
-                        return formatTime(timeSlider.getValue());
-                    }
-                }, timeSlider.valueProperty());
-            }
-        });
     }
 
     /**
@@ -125,20 +105,6 @@ public class Player {
     }
 
     /**
-     * Formats the time to a MM:SS format as a string
-     *
-     * @param totalSeconds the time specified in seconds
-     * @return the formatted time string
-     */
-    private String formatTime(double totalSeconds) {
-
-        int min = (int) totalSeconds / 60;
-        int sec = (int) totalSeconds % 60;
-
-        return String.format("%02d:%02d", min, sec);
-    }
-
-    /**
      * Open the file chooser and autoplay the media
      *
      * @param event ActionEvent
@@ -152,7 +118,7 @@ public class Player {
 
         String source = file.toURI().toURL().toExternalForm();
         Media media = new Media(source);
-        play(media);
+        startPlayer(media);
     }
 
     /**
@@ -160,14 +126,14 @@ public class Player {
      *
      * @param media Media - source media to be played
      */
-    private void play(Media media) {
+    private void startPlayer(Media media) {
 
-        this.loadMedia(media);
+        loadMedia(media);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
-        displayMetaData();
-        initializeTimeSlider();
+        mediaPlayer.setOnReady(this::displayMetaData);
+        initTimeSlider();
         initUIControlsBehavior();
-        playMedia();
+        playLoadedMedia();
     }
 
     /**
@@ -181,172 +147,144 @@ public class Player {
 
             mediaPlayer.dispose();
         }
-
         this.setMediaPlayer(new MediaPlayer(media));
     }
 
     /**
      * Fetches and substitutes the placeholders for media metadata
      */
-    private void displayMetaData() {
+    private void displayMetaData()  {
 
-        mediaPlayer.setOnReady(() -> {
+        timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
+        ObservableMap<String, Object> metaData = mediaPlayer.getMedia().getMetadata();
 
-            timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
-            ObservableMap<String, Object> metaData = mediaPlayer.getMedia().getMetadata();
+        String artistName = (String) metaData.get("artist");
+        String title = (String) metaData.get("title");
+        String album = (String) metaData.get("album");
+        String mediaSource = mediaPlayer.getMedia().getSource();
 
-            String artistName = (String) metaData.get("artist");
-            String title = (String) metaData.get("title");
-            String album = (String) metaData.get("album");
-            String mediaSource = mediaPlayer.getMedia().getSource();
-
-            mediaInfo.setText(title + " - " + artistName + " - " + album);
-            sourceFileLbl.setText(getFileName(mediaSource));
-
-            double duration = mediaPlayer.getTotalDuration().toSeconds();
-            endTimeLbl.setText(formatTime(duration));
-        });
-    }
-
-    /**
-     * Initialize the slider behavior
-     */
-    private void initializeTimeSlider() {
-
-        initSliderSeekBehavior();
-        initSliderProgressBehavior();
-    }
-
-    /**
-     * Sets the behavior of the player UI based on the player state
-     */
-    private void initUIControlsBehavior() {
-
-        // Compromising on the readability a bit, maybe switch to a more verbose approach?
-        mediaPlayer.setOnEndOfMedia(() -> {
-
-            stop();
-        });
-
-        mediaPlayer.setOnStopped(() -> {
-
-            togglePlayPauseBtn(PlayerState.PLAY);
-            timeSlider.setValue(0);
-        });
-
-        mediaPlayer.setOnPaused(() -> {
-
-            togglePlayPauseBtn(PlayerState.PLAY);
-        });
-
-        mediaPlayer.setOnPlaying(() -> {
-
-            togglePlayPauseBtn(PlayerState.PAUSE);
-        });
-    }
-
-    /**
-     * Check if the media player was already there, prepare the presentation and play the video
-     */
-    private void playMedia() {
-
-        if (mediaView.getMediaPlayer() != this.mediaPlayer) {
-
-            preparePresentation();
+        mediaInfo.setText(title + " - " + artistName + " - " + album);
+        try {
+            sourceFileLbl.setText(getFileNameFromPath(mediaSource));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
-        mediaPlayer.play();
+        double duration = mediaPlayer.getTotalDuration().toSeconds();
+        endTimeLbl.setText(formatTime(duration));
     }
 
     /**
-     * Setter for the class media player
-     *
-     * @param mediaPlayer MediaPlayer {@link MediaPlayer}
+     * Get the slider running and enable seeking
+     * {@link JFXSlider}
      */
-    private void setMediaPlayer(MediaPlayer mediaPlayer) {
-        this.mediaPlayer = mediaPlayer;
-    }
+    private void initTimeSlider() {
 
-    /**
-     * Extracts the filename + extension from the supplied file path
-     *
-     * @param filePath full file path
-     * @return the filename stripped of slashes and everything before
-     */
-    private String getFileName(String filePath) {
-
-        filePath = filePath.replace("%20", " ");
-        return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
+        timeSlider
+                .valueProperty()
+                .addListener((observable, oldValue, newValue)
+                                     -> sliderSeekBehavior(oldValue, newValue));
+        mediaPlayer
+                .currentTimeProperty()
+                .addListener((observable, oldDuration, newDuration)
+                                     -> sliderProgressBehavior(oldDuration, newDuration));
+        initIndicatorValueProperty();
     }
 
     /**
      * The slider behavior on dragging/clicking on the JFXSlider to seek
      *
-     * @see JFXSlider
+     * @param oldValue Number - before seeking
+     * @param newValue Number - after action on slider
      */
-    private void initSliderSeekBehavior() {
+    private void sliderSeekBehavior(Number oldValue, Number newValue) {
 
-        timeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+        // Is the change significant enough?
+        // Drag was buggy, have to run some tests
+        // Affects only the drag it seems
+        double tolerance = 1;
 
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                // Is the change significant enough?
-                // Drag was buggy, have to run some tests
-                // Affects only the drag it seems
-                double tolerance = 1;
-                if (mediaPlayer.getTotalDuration().toSeconds() <= 100) {
+        if (mediaPlayer.getTotalDuration().toSeconds() <= 100) {
 
-                    tolerance = 0.5;
-                }
-                if (abs(oldValue.doubleValue() - newValue.doubleValue()) >= tolerance) {
+            tolerance = 0.5;
+        }
+        if (abs(oldValue.doubleValue() - newValue.doubleValue()) >= tolerance) {
 
-                    mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
-                }
-            }
-        });
+            mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
+        }
     }
 
     /**
      * Behavior of the slider as it progresses
+     *
+     * @param oldDuration
+     * @param newDuration
+     */
+    private void sliderProgressBehavior(Duration oldDuration, Duration newDuration) {
+
+        double newElapsedTime = newDuration.toSeconds();
+        double oldElapsedTime = oldDuration.toSeconds();
+        double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+
+        // Making sure it doesn't interfere with the manual seeking
+        if (!timeSlider.isValueChanging()) {
+
+            if (newElapsedTime - oldElapsedTime >= 0.1) {
+
+                timeSlider.setValue(newElapsedTime);
+            }
+            updateTimeLabel(totalDuration, newElapsedTime);
+        }
+    }
+
+    /**
      * Setting the time elapsed and time left on the appropriate indicators
      */
-    private void initSliderProgressBehavior() {
+    private void updateTimeLabel(double totalDuration, double elapsedTime) {
 
-        this.mediaPlayer.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
+        // Get rid of the unnecessary decimal points
+        double timeLeft = totalDuration - elapsedTime;
 
-            // Making sure it doesn't interfere with the manual seeking
-            double newElapsedTime = newDuration.toSeconds();
-            double oldElapsedTime = oldDuration.toSeconds();
-            double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
+        String elapsedTimeFormatted = formatTime(elapsedTime);
+        String remainingTimeFormatted = formatTime(timeLeft);
 
-            if (!timeSlider.isValueChanging()) {
-
-                if (newElapsedTime - oldElapsedTime >= 0.1) {
-
-                    timeSlider.setValue(newElapsedTime);
-                }
-                // Get rid of the unnecessary decimal points
-                double timeLeft = totalDuration - newElapsedTime;
-
-                String elapsedTimeFormatted = formatTime(newElapsedTime);
-                String remainingTimeFormatted = formatTime(timeLeft);
-
-                // Time elapsed/left indicators update
-                currTimeLbl.setText(elapsedTimeFormatted);
-                endTimeLbl.setText(remainingTimeFormatted);
-            }
-        });
+        currTimeLbl.setText(elapsedTimeFormatted);
+        endTimeLbl.setText(remainingTimeFormatted);
     }
 
     /**
-     * User action event to stop the media
+     * Display indicator in HH:MM format
      */
-    public void stop() {
-        mediaPlayer.stop();
+    private void initIndicatorValueProperty() {
+
+        timeSlider.setValueFactory(
+                slider -> Bindings.createStringBinding(() -> formatTime(slider.getValue()),
+                                                       slider.valueProperty()));
     }
 
     /**
-     * Change the pause button to a play button and have the appropriate action based on it
+     * Sets the behavior of the player UI components based on the player state
+     */
+    private void initUIControlsBehavior() {
+
+        mediaPlayer.setOnEndOfMedia(this::stop);
+
+        // Multiline lambdas should be avoided? - Venkat S.
+        mediaPlayer.setOnStopped(() -> {
+            // Needs to be revisited
+            togglePlayPauseBtn(PlayerState.PLAY);
+            timeSlider.setValue(0);
+        });
+
+        mediaPlayer.setOnPaused(() -> togglePlayPauseBtn(PlayerState.PLAY));
+        mediaPlayer.setOnPlaying(() -> togglePlayPauseBtn(PlayerState.PAUSE));
+    }
+
+    /**
+     * Change the pause button to a startPlayer button and have the appropriate action based on it
+     *
+     * @param state current state of the player
      * {@link FontAwesomeIconView}
      */
     private void togglePlayPauseBtn(PlayerState state) {
@@ -357,14 +295,24 @@ public class Player {
 
             icon = getIcon(FontAwesomeIcon.PLAY);
             playBtn.setOnAction(this::play);
-        }
-        else {
+        } else {
 
             icon = getIcon(FontAwesomeIcon.PAUSE);
             playBtn.setOnAction(this::pause);
         }
-
         playBtn.setGraphic(icon);
+    }
+
+    /**
+     * Check if the media player was already there, prepare the presentation and startPlayer the video
+     */
+    private void playLoadedMedia() {
+
+        if (mediaView.getMediaPlayer() != this.mediaPlayer) {
+
+            preparePresentation();
+        }
+        mediaPlayer.play();
     }
 
     /**
@@ -375,7 +323,6 @@ public class Player {
     private void preparePresentation() {
 
         mediaView.setMediaPlayer(this.mediaPlayer);
-
         try {
 
             if (!(presentation.getView() instanceof MediaPresentationView)) {
@@ -385,11 +332,77 @@ public class Player {
 
             MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
             mediaViewController.embedMediaView(mediaView);
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
 
             e.printStackTrace();
         }
+    }
+
+    /**
+     * User action to startPlayer the media
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    private void play(ActionEvent event) {
+
+        mediaPlayer.play();
+    }
+
+    /**
+     * User action event to pause the video
+     *
+     * @param event
+     */
+    @FXML
+    private void pause(ActionEvent event) {
+
+        mediaPlayer.pause();
+    }
+
+    /**
+     * User action event to stop the media
+     */
+    public void stop() {
+
+        mediaPlayer.stop();
+    }
+
+    public void openPlaylist() {
+
+    }
+
+    public void back() {
+
+    }
+
+    public void next() {
+
+    }
+    // Helper functions
+
+    /**
+     * Setter for the class media player
+     *
+     * @param mediaPlayer MediaPlayer {@link MediaPlayer}
+     */
+    private void setMediaPlayer(MediaPlayer mediaPlayer) {
+
+        this.mediaPlayer = mediaPlayer;
+    }
+
+    /**
+     * Extracts the filename + extension from the supplied file path
+     *
+     * @param filePath full file path
+     * @return the filename stripped of slashes and everything before
+     */
+    private String getFileNameFromPath(String filePath) throws Exception {
+
+        String cleanPath = java.net.URLDecoder.decode(filePath,"UTF-8");
+        return java.nio.file.Paths.get(cleanPath).toFile().getName();
+        //return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
     }
 
     /**
@@ -407,40 +420,16 @@ public class Player {
     }
 
     /**
-     * User action to play the media
+     * Formats the time to a MM:SS format as a string
      *
-     * @param event ActionEvent
+     * @param totalSeconds the time specified in seconds
+     * @return the formatted time string
      */
-    @FXML
-    private void play(ActionEvent event) {
-        playMedia();
-    }
+    private String formatTime(double totalSeconds) {
 
-    /**
-     * User action event to pause the video
-     *
-     * @param event
-     */
-    @FXML
-    private void pause(ActionEvent event) {
+        int min = (int) totalSeconds / 60;
+        int sec = (int) totalSeconds % 60;
 
-        mediaPlayer.pause();
-    }
-
-    public void openPlaylist() {
-
-    }
-
-    public void back() {
-
-    }
-
-    public void next() {
-
-    }
-
-    public enum PlayerState {
-
-        PLAY, PAUSE
+        return String.format("%02d:%02d", min, sec);
     }
 }
