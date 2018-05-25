@@ -29,3 +29,6 @@
     -fx-text-fill: #fff;
 
 }
+.configLoader:hover {
+    -fx-fill: #5a99b2;
+}

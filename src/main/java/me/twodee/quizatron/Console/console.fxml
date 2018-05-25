@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -43,7 +46,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" fx:id="mediaPlayerTab" onMouseReleased="#openMedia" styleClass="btns">
+            <HBox fx:id="mediaPlayerTab" alignment="CENTER_LEFT" onMouseReleased="#openMedia" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Media player" textFill="#7c8184">
@@ -112,7 +115,7 @@
             <HBox alignment="CENTER_LEFT" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="SIGN_IN" glyphStyle="-fx-fill:#7c8184" size="16px" />
-                  <Label text="Open Interstitial" textFill="#7c8184">
+                  <Label text="Load saved file" textFill="#7c8184">
                      <font>
                         <Font name="Open Sans Regular" size="15.0" />
                      </font>
@@ -131,7 +134,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" styleClass="btns">
+            <HBox fx:id="saveBtn" alignment="CENTER_LEFT" onMouseReleased="#saveState" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="DOWNLOAD" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Save" textFill="#7c8184">
@@ -155,13 +158,31 @@
             </HBox>
             <VBox prefHeight="396.0" prefWidth="270.0">
                <children>
-                  <VBox prefHeight="73.0" prefWidth="250.0">
+                  <VBox prefHeight="244.0" prefWidth="250.0">
                      <children>
-
-                     </children></VBox>
-                  <VBox prefHeight="174.0" prefWidth="250.0">
-                     <children>
-                        <JFXToggleButton fx:id="fullScreenToggleBtn" onAction="#toggleFullScreen" text="Full screen" textFill="WHITE" />
+                        <HBox prefHeight="44.0" prefWidth="250.0">
+                           <children>
+                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#openConfigChooser" prefHeight="42.0" prefWidth="19.0" style="-fx-background-color: transparent; -fx-cursor: hand;" textFill="#570b0b">
+                                 <graphic>
+                                    <MaterialDesignIconView fill="#8a8a8a" glyphName="FOLDER_MULTIPLE_OUTLINE" size="22" styleClass="configLoader" />
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
+                                 <font>
+                                    <Font name="Open Sans Regular" size="13.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </JFXTextField>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="20.0" />
+                           </VBox.margin>
+                        </HBox>
                         <HBox prefHeight="30.0" prefWidth="250.0">
                            <children>
                               <Label text="Quiz loaded:" textFill="#d3d3d3">
@@ -169,7 +190,7 @@
                                     <Font name="Open Sans Regular" size="13.0" />
                                  </font>
                               </Label>
-                              <Label text="{{ Quiz.Name }}" textFill="WHITE">
+                              <Label fx:id="loadedQuizNameLbl" textFill="WHITE">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>
@@ -179,11 +200,15 @@
                               </Label>
                            </children>
                         </HBox>
-                        <JFXButton fx:id="startBtn" buttonType="RAISED" onAction="#startQuiz" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizStartBtn" text="START QUIZ">
+                        <JFXButton fx:id="startBtn" buttonType="RAISED" disable="true" onAction="#startQuiz" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizStartBtn" text="START QUIZ">
                            <font>
                               <Font name="Open Sans Regular" size="19.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="10.0" />
+                           </VBox.margin>
                         </JFXButton>
+                        <JFXToggleButton fx:id="fullScreenToggleBtn" onAction="#toggleFullScreen" prefHeight="50.0" prefWidth="143.0" text="Full screen" textFill="WHITE" />
                      </children>
                   </VBox>
                   <VBox prefHeight="120.0" prefWidth="250.0" style="-fx-border-color: #333645; -fx-border-width: 1px;">
