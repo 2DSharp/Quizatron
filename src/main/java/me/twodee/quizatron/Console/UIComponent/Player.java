@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXSlider;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
@@ -16,9 +15,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import javafx.util.Duration;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Component.Presentation.Presentation;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import javax.inject.Inject;

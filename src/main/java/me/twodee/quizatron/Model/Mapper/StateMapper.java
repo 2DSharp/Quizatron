@@ -19,21 +19,26 @@ public class StateMapper implements IStateMapper {
     StateMapper(Gson gson) {
         this.gson = gson;
     }
+
     public void populate(IState state, Path configFile) throws FileNotFoundException {
 
         Configuration configuration = gson.fromJson(new FileReader(configFile.toString()),
                                                     Configuration.class);
-        state.setConfiguration(configuration);
         state.setConfigurationFile(configFile);
+        state.setConfiguration(configuration);
     }
 
-    public void load(IState state, Path saveFile) {
+    public State load(IState state, String saveFile) throws IOException, ClassNotFoundException {
 
+        FileInputStream inputStream = new FileInputStream(saveFile);
+        ObjectInput objectInput = new ObjectInputStream(inputStream);
+        state = (State) objectInput.readObject();
+        return (State) state;
     }
 
     public void save(IState state, String saveFile) throws IOException {
-        FileOutputStream fout = new FileOutputStream(saveFile);
-        ObjectOutput objectOutput = new ObjectOutputStream(fout);
+        FileOutputStream outputStream = new FileOutputStream(saveFile);
+        ObjectOutput objectOutput = new ObjectOutputStream(outputStream);
         objectOutput.writeObject(state);
         objectOutput.flush();
         objectOutput.close();

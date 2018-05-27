@@ -1,16 +1,9 @@
 package me.twodee.quizatron.Console.Panel;
 
-import javafx.application.Platform;
-import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.QuizatronTestBase;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.testfx.api.FxRobotException;
 import org.testfx.matcher.base.NodeMatchers;
-import org.testfx.util.WaitForAsyncUtils;
-
-import javax.inject.Inject;
 
 import static org.testfx.api.FxAssert.verifyThat;
 

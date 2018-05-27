@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Component;
+package me.twodee.quizatron.Component.Presentation;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

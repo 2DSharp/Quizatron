@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootNode" prefHeight="722.0" prefWidth="1362.0" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.Panel.PanelPresenter">
+<AnchorPane fx:id="rootNode" prefHeight="722.0" prefWidth="1362.0" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.PanelPresenter">
    <children>
       <VBox layoutX="-8.0" layoutY="-7.0" prefHeight="729.0" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css">
          <children>
@@ -112,7 +112,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox alignment="CENTER_LEFT" styleClass="btns">
+            <HBox fx:id="loadSavedBtn" alignment="CENTER_LEFT" onMouseReleased="#loadSavedState" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="SIGN_IN" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Load saved file" textFill="#7c8184">
@@ -170,7 +170,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
+                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" onAction="#importConfigFile" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
                                  <font>
                                     <Font name="Open Sans Regular" size="13.0" />
                                  </font>

@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Component.Presentation.Presentation;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

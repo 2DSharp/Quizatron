@@ -3,6 +3,7 @@ package me.twodee.quizatron.Model.Service;
 import me.twodee.quizatron.Model.Contract.IState;
 import me.twodee.quizatron.Model.Contract.IStateMapper;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
+import me.twodee.quizatron.Model.Entity.State;
 import me.twodee.quizatron.Model.Exception.ProjectNotSetException;
 
 import javax.inject.Inject;
@@ -37,13 +38,14 @@ public class StateService {
     public void loadState() throws FileNotFoundException {
         stateMapper.populate(state, configFile);
     }
+    public void loadState(Path savedFile) throws IOException, ClassNotFoundException {
+        state = stateMapper.load(state, savedFile.toString());
+    }
 
     public Configuration getConfiguration() {
         return state.getConfiguration();
     }
-    public void loadState(IState state) {
 
-    }
     public String saveState() throws IOException {
 
         // Autosave should be only one file
@@ -61,6 +63,7 @@ public class StateService {
                 Files.createDirectories(savePath);
             }
             String saveFile = projectDirectory + "save/" + stateFileName;
+
             stateMapper.save(state, saveFile);
             return saveFile;
         }
