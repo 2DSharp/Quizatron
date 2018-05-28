@@ -14,6 +14,7 @@ import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation.Presentation;
 import me.twodee.quizatron.Component.State.State;
 import me.twodee.quizatron.Console.Controller.ConfigLoaderController;
+import me.twodee.quizatron.Console.Controller.StateLoaderController;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
 import me.twodee.quizatron.Model.Service.ConfigurationManager;
@@ -72,33 +73,50 @@ public class PanelPresenter {
     private void loadSavedState(MouseEvent event) {
         try {
             Path file = getFile("Open quiz saved file");
-            state.load(file);
-            loadFeedback();
+            StateLoaderController stateLoaderController = new StateLoaderController(mediator, state);
+            stateLoaderController.update();
+
+            loadFeedBack();
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private void loadFeedBack() {
+
+        ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, state);
+        configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
+        mediator.display(configLoaderView);
+
+    }
+
+
+    private void loadFromConfigFile(Path file) {
+
+        ConfigLoaderController configLoaderController = new ConfigLoaderController(mediator, state, configurationManager);
+        configLoaderController.setInput(file);
+        mediator.updateModel(configLoaderController);
+
+    }
 
     @FXML
     private void importConfigFile(ActionEvent event) {
 
+        String location = configFileLbl.getText();
+        Path file = Paths.get(location);
+        loadFromConfigFile(file);
+        loadFeedBack();
     }
 
     @FXML
     private void openConfigChooser(ActionEvent event)  {
         try {
             Path file = getFile("Open quiz configuration file");
-            //loadFeedback(LoaderType.CONFIG_FILE, file);
 
-            ConfigLoaderController configLoaderController = new ConfigLoaderController(mediator, state, configurationManager);
-            configLoaderController.setInput(file);
-            mediator.updateModel(configLoaderController);
-
-            ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, state);
-            configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
-            mediator.display(configLoaderView);
+            loadFromConfigFile(file);
+            loadFeedBack();
 
             String source = file.toAbsolutePath().toString();
             configFileLbl.setText(source);
@@ -106,13 +124,6 @@ public class PanelPresenter {
         catch (NullPointerException e) {
             System.out.println("No file chosen");
         }
-    }
-
-    private void loadFeedback()  {
-
-        Configuration configuration = state.get("configuration");
-        loadedQuizNameLbl.setText(configuration.getName());
-        startBtn.setDisable(false);
     }
 
     private Path getFile(String title) {
