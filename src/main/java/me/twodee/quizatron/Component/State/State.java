@@ -56,7 +56,9 @@ public class State implements StateContextInterface, Serializable {
 
     @Override
     public void save(Path location) throws IOException {
-
+        // Why not let the strategy be included as an argument?
+        // The state doesn't necessarily need persistence
+        // If it does, provide the serializer
         String file = location.toAbsolutePath().toString();
         serializationIOStrategy.persist(stateMap, file);
     }

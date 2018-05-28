@@ -10,8 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation.Presentation;
 import me.twodee.quizatron.Component.State.State;
+import me.twodee.quizatron.Console.Controller.ConfigLoaderController;
+import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
 import me.twodee.quizatron.Model.Service.ConfigurationManager;
 import me.twodee.quizatron.Model.Service.StateService;
@@ -30,9 +33,6 @@ import java.util.prefs.Preferences;
 
 public class PanelPresenter {
 
-    private enum LoaderType {
-        SAVE_FILE, CONFIG_FILE
-    }
     private Configuration configuration;
 
     private Score score;
@@ -44,6 +44,7 @@ public class PanelPresenter {
     private Preferences prefs;
     private ConfigurationManager configurationManager;
     private State state;
+    private Mediator mediator;
 
     @FXML private JFXToggleButton fullScreenToggleBtn;
     @FXML private AnchorPane rootNode;
@@ -57,12 +58,14 @@ public class PanelPresenter {
     public PanelPresenter(Presentation presentation,
                           FXMLLoader fxmlLoader,
                           ConfigurationManager configurationManager,
-                          State state) throws Exception {
+                          State state,
+                          Mediator mediator) throws Exception {
 
         this.configurationManager = configurationManager;
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
         this.state = state;
+        this.mediator = mediator;
 
     }
     @FXML
@@ -77,24 +80,10 @@ public class PanelPresenter {
         }
     }
 
-    private void loadConfigToState(Path file) throws FileNotFoundException {
 
-        Configuration configuration = configurationManager.loadConfiguration(file);
-        state.set("configuration", configuration);
-        state.set("homedir", file.getParent().toAbsolutePath().toString());
-
-    }
     @FXML
     private void importConfigFile(ActionEvent event) {
-        try {
-            String location = configFileLbl.getText();
-            Path file = Paths.get(location);
-            loadConfigToState(file);
-            loadFeedback();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @FXML
@@ -102,34 +91,32 @@ public class PanelPresenter {
         try {
             Path file = getFile("Open quiz configuration file");
             //loadFeedback(LoaderType.CONFIG_FILE, file);
-            loadConfigToState(file);
+
+            ConfigLoaderController configLoaderController = new ConfigLoaderController(mediator, state, configurationManager);
+            configLoaderController.setInput(file);
+            mediator.updateModel(configLoaderController);
+
+            ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, state);
+            configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
+            mediator.display(configLoaderView);
 
             String source = file.toAbsolutePath().toString();
             configFileLbl.setText(source);
-
-            loadFeedback();
         }
         catch (NullPointerException e) {
             System.out.println("No file chosen");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     private void loadFeedback()  {
 
         Configuration configuration = state.get("configuration");
-
-        String homeDir = state.get("homedir");
-
-
         loadedQuizNameLbl.setText(configuration.getName());
-
         startBtn.setDisable(false);
     }
 
     private Path getFile(String title) {
+
         FileChooser fileChooser = new FileChooser();
 
         if (state.has("homedir")) {
