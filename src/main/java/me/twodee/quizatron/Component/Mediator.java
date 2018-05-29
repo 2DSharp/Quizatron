@@ -3,7 +3,7 @@ package me.twodee.quizatron.Component;
 public class Mediator {
 
     private String error;
-    boolean hasError = false;
+    private boolean hasError = false;
 
     public void setError(String error) {
 
@@ -19,13 +19,13 @@ public class Mediator {
         return hasError;
     }
 
-    public void updateModel(Controller controller) {
+    public void request(Controller controller) {
 
         clean();
         controller.update();
     }
 
-    public void display(View view) {
+    public void respond(View view) {
 
         view.display();
     }

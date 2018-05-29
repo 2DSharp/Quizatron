@@ -1,0 +1,16 @@
+{
+  "name" : "Inquizzitive 15",
+  "alias" : "IQ 15",
+  "description" : "An quizzing event in Agartala that held its ground for 15 years.",
+  "organizer" : "Ramakrishna Mission Alumni Association",
+  "sequence" : "rounds.csv",
+
+  "appearance" : {
+    "logo" : "media/logo.png",
+    "logo-animated" : "media/anim-logo.mp4",
+    "secondary-animation" : "media/sec-anim.mp4",
+    "theme-music" : "media/theme.mp3",
+    "default-background" : "img/bg.png",
+    "theme-color" : "#00F0F1"
+  }
+}

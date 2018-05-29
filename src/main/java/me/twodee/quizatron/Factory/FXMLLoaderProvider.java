@@ -4,18 +4,28 @@ import com.google.inject.Injector;
 import javafx.fxml.FXMLLoader;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
-public class LoaderFactory {
+public class FXMLLoaderProvider implements Provider<FXMLLoader> {
 
-    private FXMLLoader loader;
     private Injector injector;
+    private FXMLLoader loader;
 
     @Inject
-    public LoaderFactory(Injector injector) {
+    public FXMLLoaderProvider(Injector injector)  {
+
         this.injector = injector;
     }
 
+    public FXMLLoader get() {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setControllerFactory(injector::getInstance);
+        return loader;
+    }
+
     public FXMLLoader build(String viewFile) {
+
         loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
         loader.setControllerFactory(injector::getInstance);

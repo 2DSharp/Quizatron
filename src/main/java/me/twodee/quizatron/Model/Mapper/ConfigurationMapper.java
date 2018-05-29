@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Model.Service;
+package me.twodee.quizatron.Model.Mapper;
 
 import com.google.gson.Gson;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
@@ -8,13 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
 
-public class ConfigurationManager {
+public class ConfigurationMapper {
 
     private Configuration configuration;
     private Gson gson;
 
     @Inject
-    ConfigurationManager(Configuration configuration, Gson gson) {
+    public ConfigurationMapper(Configuration configuration, Gson gson) {
 
         this.configuration = configuration;
         this.gson = gson;

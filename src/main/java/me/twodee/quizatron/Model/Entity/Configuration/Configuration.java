@@ -10,18 +10,23 @@ public class Configuration implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("alias")
     @Expose
     private String alias;
+
     @SerializedName("description")
     @Expose
     private String description;
+
     @SerializedName("organizer")
     @Expose
     private String organizer;
+
     @SerializedName("quiz")
     @Expose
-    private Quiz quiz;
+    private String sequence;
+
     @SerializedName("appearance")
     @Expose
     private Appearance appearance;
@@ -42,8 +47,8 @@ public class Configuration implements Serializable {
         return organizer;
     }
 
-    public Quiz getQuiz() {
-        return quiz;
+    public String getSequence() {
+        return sequence;
     }
 
     public Appearance getAppearance() {
