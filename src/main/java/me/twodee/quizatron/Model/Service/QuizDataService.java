@@ -39,7 +39,7 @@ public class QuizDataService {
         return quizData.getConfiguration();
     }
 
-    public void loadData(Path file) throws IOException, ClassNotFoundException {
+    public void loadSavedData(Path file) throws IOException, ClassNotFoundException {
 
         quizData = quizDataMapper.load(file.toAbsolutePath().toString());
     }
@@ -47,16 +47,16 @@ public class QuizDataService {
 
         // Autosave should be only one file
         // Manual save multiple files based on nanoTime
-        String fileName = "Q_SAVE_" + System.nanoTime() + ".2D";
+        String fileName = "Q_SAVE_DATA.2D";
 
         if (quizDataLoaded()) {
 
-            Path savePath = Paths.get(quizData.getDirectory() + "save/");
+            Path savePath = Paths.get(quizData.getDirectory() + "/save/");
 
             if (!Files.exists(savePath)) {
                 Files.createDirectories(savePath);
             }
-            String saveFile = quizData.getDirectory() + "save/" + fileName;
+            String saveFile = quizData.getDirectory() + "/save/" + fileName;
 
             quizDataMapper.save(quizData, saveFile);
             return saveFile;

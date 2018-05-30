@@ -100,7 +100,7 @@ public class PanelPresenter {
             configFileLbl.setText(source);
         }
         catch (NullPointerException e) {
-            System.out.println("No file chosen");
+            e.printStackTrace();
         }
     }
 
@@ -145,7 +145,7 @@ public class PanelPresenter {
     private void loadStateFromFile(Path file) {
 
         try {
-            quizDataService.loadData(file);
+            quizDataService.loadSavedData(file);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -176,7 +176,7 @@ public class PanelPresenter {
 
         FileChooser fileChooser = new FileChooser();
 
-        if (quizDataService.getInitialDirectory() != null) {
+        if (quizDataService.quizDataLoaded()) {
 
             Path homePath = quizDataService.getInitialDirectory();
             fileChooser.setInitialDirectory(homePath.toFile());

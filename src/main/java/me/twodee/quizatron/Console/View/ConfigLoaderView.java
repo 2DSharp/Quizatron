@@ -3,7 +3,6 @@ package me.twodee.quizatron.Console.View;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.Label;
 import me.twodee.quizatron.Component.Mediator;
-import me.twodee.quizatron.Component.State.State;
 import me.twodee.quizatron.Component.View;
 
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
