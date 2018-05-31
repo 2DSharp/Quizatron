@@ -1,15 +1,9 @@
 package me.twodee.quizatron.Model.Mapper;
 
-import com.google.gson.Gson;
-import me.twodee.quizatron.Model.Contract.IState;
-import me.twodee.quizatron.Model.Contract.IStateMapper;
 import me.twodee.quizatron.Model.Contract.ProjectDataMapper;
-import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
 import me.twodee.quizatron.Model.Entity.QuizData;
 
-import javax.inject.Inject;
 import java.io.*;
-import java.nio.file.Path;
 
 public class QuizDataMapper implements ProjectDataMapper<QuizData> {
 

@@ -3,12 +3,9 @@ package me.twodee.quizatron.Model.Entity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.inject.Singleton;
-import me.twodee.quizatron.Model.Contract.IState;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
 
 import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * This preserves the quiz data including the configuration.
