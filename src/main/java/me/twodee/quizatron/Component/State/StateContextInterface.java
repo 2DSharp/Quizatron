@@ -15,6 +15,6 @@ public interface StateContextInterface {
 
     void destroy();
 
-    void save(SerializationIOStrategy serializationIOStrategy, Path location) throws IOException;
-    void load(SerializationIOStrategy serializationIOStrategy, Path location) throws IOException, ClassNotFoundException;
+    void save(Path location) throws IOException;
+    void load(Path location) throws IOException, ClassNotFoundException;
 }

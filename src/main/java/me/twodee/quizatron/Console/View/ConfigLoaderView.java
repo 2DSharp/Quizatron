@@ -3,27 +3,25 @@ package me.twodee.quizatron.Console.View;
 import com.jfoenix.controls.JFXButton;
 import javafx.scene.control.Label;
 import me.twodee.quizatron.Component.Mediator;
-import me.twodee.quizatron.Component.State.State;
 import me.twodee.quizatron.Component.View;
 
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
-import me.twodee.quizatron.Model.Service.ConfigurationManager;
+import me.twodee.quizatron.Model.Service.QuizDataService;
 
 
 import java.nio.file.Path;
 
 public class ConfigLoaderView implements View {
 
-    private Path file;
     private Label loadedQuizNameLbl;
     private JFXButton startBtn;
-    private State state;
     private Mediator mediator;
+    private QuizDataService quizDataService;
 
-    public ConfigLoaderView(Mediator mediator, State state) {
+    public ConfigLoaderView(Mediator mediator, QuizDataService quizDataService) {
 
         this.mediator = mediator;
-        this.state = state;
+        this.quizDataService = quizDataService;
     }
 
     public void setOutput(Label loadedQuizNameLbl, JFXButton startBtn) {
@@ -36,7 +34,7 @@ public class ConfigLoaderView implements View {
 
         if (!mediator.hasError()) {
 
-            Configuration configuration = state.get("configuration");
+            Configuration configuration = quizDataService.getConfiguration();
             loadedQuizNameLbl.setText(configuration.getName());
             startBtn.setDisable(false);
         }

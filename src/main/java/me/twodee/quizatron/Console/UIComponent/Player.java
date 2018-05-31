@@ -16,7 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-import me.twodee.quizatron.Component.Presentation.Presentation;
+import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import javax.inject.Inject;

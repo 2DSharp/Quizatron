@@ -1,24 +1,23 @@
-package me.twodee.quizatron.Component.Presentation;
+package me.twodee.quizatron.Component;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import me.twodee.quizatron.Factory.FXMLLoaderProvider;
 import me.twodee.quizatron.Presentation.IView;
-import me.twodee.quizatron.Factory.LoaderFactory;
 
 public class Presentation {
 
     private Stage stage;
     private Scene scene;
-    private FXMLLoader loader;
     private IView view;
-    private LoaderFactory loaderFactory;
+    private FXMLLoaderProvider FXMLLoaderProvider;
 
-    public Presentation(Stage stage, Scene scene, IView view, LoaderFactory loaderFactory) {
+    public Presentation(Stage stage, Scene scene, IView view, FXMLLoaderProvider FXMLLoaderProvider) {
         this.stage = stage;
         this.scene = scene;
         this.view = view;
-        this.loaderFactory = loaderFactory;
+        this.FXMLLoaderProvider = FXMLLoaderProvider;
     }
 
     public Stage getStage() {
@@ -27,10 +26,6 @@ public class Presentation {
 
     public Scene getScene() {
         return scene;
-    }
-
-    public FXMLLoader getLoader() {
-        return loader;
     }
 
     public void show() {
@@ -51,7 +46,8 @@ public class Presentation {
     public void changeView(String viewFile) throws Exception {
 
         //loader = new FXMLLoader(getClass().getResource("View/" + viewFile + ".fxml" ));
-        loader = loaderFactory.build(viewFile);
+        FXMLLoader loader = FXMLLoaderProvider.get();
+        loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
         scene.setRoot(loader.load());
         view = loader.getController();
     }

@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
 import me.twodee.quizatron.Console.UIComponent.Player;
-import me.twodee.quizatron.Component.Presentation.Presentation;
+import me.twodee.quizatron.Component.Presentation;
 
 public class MediaPlayerPresenter {
 

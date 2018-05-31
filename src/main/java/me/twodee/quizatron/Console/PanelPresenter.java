@@ -3,6 +3,7 @@ package me.twodee.quizatron.Console;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -11,128 +12,80 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
-import me.twodee.quizatron.Component.Presentation.Presentation;
-import me.twodee.quizatron.Component.State.State;
-import me.twodee.quizatron.Console.Controller.ConfigLoaderController;
-import me.twodee.quizatron.Console.Controller.StateLoaderController;
+import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
-import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
-import me.twodee.quizatron.Model.Service.ConfigurationManager;
-import me.twodee.quizatron.Model.Service.StateService;
+import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
+import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Presentation.IView;
-import me.twodee.quizatron.Model.Score;
 import me.twodee.quizatron.Presentation.View.HomeView;
 
 import javax.inject.Inject;
-import javafx.event.ActionEvent;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.prefs.Preferences;
 
 public class PanelPresenter {
 
-    private Configuration configuration;
-
-    private Score score;
     private Presentation presentation;
     private IView view;
     private FXMLLoader fxmlLoader;
-    private StateService stateService;
-    private FileChooser fileChooser;
-    private Preferences prefs;
-    private ConfigurationManager configurationManager;
-    private State state;
     private Mediator mediator;
+    private QuizDataService quizDataService;
 
-    @FXML private JFXToggleButton fullScreenToggleBtn;
-    @FXML private AnchorPane rootNode;
-    @FXML private AnchorPane dashboard;
-    @FXML private JFXTextField configFileLbl;
-    @FXML private Label loadedQuizNameLbl;
-    @FXML private JFXButton startBtn;
+    @FXML
+    private JFXToggleButton fullScreenToggleBtn;
+    @FXML
+    private AnchorPane rootNode;
+    @FXML
+    private AnchorPane dashboard;
+    @FXML
+    private JFXTextField configFileLbl;
+    @FXML
+    private Label loadedQuizNameLbl;
+    @FXML
+    private JFXButton startBtn;
 
 
     @Inject
     public PanelPresenter(Presentation presentation,
                           FXMLLoader fxmlLoader,
-                          ConfigurationManager configurationManager,
-                          State state,
-                          Mediator mediator) throws Exception {
+                          Mediator mediator,
+                          QuizDataService quizDataService) throws Exception {
 
-        this.configurationManager = configurationManager;
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
-        this.state = state;
         this.mediator = mediator;
-
+        this.quizDataService = quizDataService;
     }
+
+    @FXML
+    public void openMediaTabAction(MouseEvent event) throws Exception {
+
+        FXMLLoader loader = this.fxmlLoader;
+        loader.setLocation(getClass().getResource("Dashboard/media-player.fxml"));
+        AnchorPane mediaPlayerPane = loader.load();
+        dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
+        dashboard.getChildren().add(mediaPlayerPane);
+    }
+
+
     @FXML
     private void loadSavedState(MouseEvent event) {
-        try {
-            Path file = getFile("Open quiz saved file");
-            StateLoaderController stateLoaderController = new StateLoaderController(mediator, state);
-            stateLoaderController.update();
 
-            loadFeedBack();
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadFeedBack() {
-
-        ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, state);
-        configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
-        mediator.display(configLoaderView);
-
-    }
-
-
-    private void loadFromConfigFile(Path file) {
-
-        ConfigLoaderController configLoaderController = new ConfigLoaderController(mediator, state, configurationManager);
-        configLoaderController.setInput(file);
-        mediator.updateModel(configLoaderController);
-
-    }
-
-    @FXML
-    private void importConfigFile(ActionEvent event) {
-
-        String location = configFileLbl.getText();
-        Path file = Paths.get(location);
-        loadFromConfigFile(file);
+        Path file = getFile("Open quiz saved file");
+        mediator.request(() -> loadStateFromFile(file));
         loadFeedBack();
-    }
-
-    @FXML
-    private void openConfigChooser(ActionEvent event)  {
-        try {
-            Path file = getFile("Open quiz configuration file");
-
-            loadFromConfigFile(file);
-            loadFeedBack();
-
-            String source = file.toAbsolutePath().toString();
-            configFileLbl.setText(source);
-        }
-        catch (NullPointerException e) {
-            System.out.println("No file chosen");
-        }
     }
 
     private Path getFile(String title) {
 
         FileChooser fileChooser = new FileChooser();
 
-        if (state.has("homedir")) {
-            String homeDir = state.get("homedir");
-            Path homePath = Paths.get(homeDir);
+        if (quizDataService.quizDataLoaded()) {
+
+            Path homePath = quizDataService.getInitialDirectory();
             fileChooser.setInitialDirectory(homePath.toFile());
         }
 
@@ -141,53 +94,120 @@ public class PanelPresenter {
         return file;
     }
 
-    @FXML
-    private void saveState(MouseEvent event) {
+    private void loadStateFromFile(Path file) {
+
         try {
-
-            String homeDir = state.get("homedir");
-            String fileStr = homeDir + "/save/SaveData.2D";
-            Path filePath = Paths.get(fileStr);
-            state.save(filePath);
+            quizDataService.loadSavedData(file);
         }
-
         catch (IOException e) {
             e.printStackTrace();
         }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
+
+    private void loadFeedBack() {
+
+        ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, quizDataService);
+        configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
+        mediator.respond(configLoaderView);
+    }
+
     @FXML
-    private void startQuiz(ActionEvent event) {
+    private void saveStateAction(MouseEvent event) {
 
-        presentation.show();
-        presentation.getScene().setCursor(Cursor.NONE);
-        this.view = presentation.getView();
+        mediator.request(this::saveStateToFile);
+    }
 
+    @FXML
+    private void loadConfigTxtAction(ActionEvent event) {
+
+        String location = configFileLbl.getText();
+        Path file = Paths.get(location);
+        loadFromConfigFile(file);
+        loadFeedBack();
+    }
+
+    private void loadFromConfigFile(Path file) {
+
+        mediator.request(() -> loadConfig(file));
+    }
+
+    private void loadConfig(Path file) {
+
+        try {
+
+            quizDataService.loadConfig(file);
+        }
+        catch (FileNotFoundException e) {
+
+            mediator.setError("The file you entered couldn't be found");
+        }
+    }
+
+    @FXML
+    private void loadConfigBtnAction(ActionEvent event) {
+
+        try {
+
+            Path file = getFile("Open quiz configuration file");
+            loadFromConfigFile(file);
+            loadFeedBack();
+
+            String source = file.toAbsolutePath().toString();
+            configFileLbl.setText(source);
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void startQuizAction(ActionEvent event) {
+
+        try {
+            presentation.show();
+            presentation.getScene().setCursor(Cursor.NONE);
+            HomeView view = (HomeView) presentation.getView();
+            Appearance appearance = quizDataService.getConfiguration().getAppearance();
+            String bgImage = makeAbsURL(appearance.getDefaultBackground());
+            String logo = makeAbsURL(appearance.getLogo());
+
+            view.setLogo(logo);
+            view.setBackground(bgImage);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String makeAbsURL(String url) throws MalformedURLException {
+
+        String file = quizDataService.getInitialDirectory() + "/" + url;
+        Path filePath = Paths.get(file);
+        return filePath.toUri().toURL().toString();
     }
 
     @FXML
     public void toggleFullScreen(ActionEvent event) {
+
         if (fullScreenToggleBtn.isSelected()) {
+
             presentation.getStage().setFullScreenExitHint("");
             presentation.getStage().setFullScreen(true);
-        }
-        else {
+        } else {
             presentation.getStage().setFullScreen(false);
         }
     }
-    @FXML
-    public void openMedia(MouseEvent event) throws Exception {
 
-        FXMLLoader loader = this.fxmlLoader;
-        loader.setLocation(getClass().getResource("../Dashboard/media-player.fxml"));
-        AnchorPane mediaPlayerPane = loader.load();
-        dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
-        dashboard.getChildren().add(mediaPlayerPane);
-    }
+    private void saveStateToFile() {
 
-    public void showScore() {
-
-        this.score.setScore(100);
-        HomeView view = (HomeView)this.view;
-        view.updateScore(this.score.getScore());
+        try {
+            quizDataService.saveData();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

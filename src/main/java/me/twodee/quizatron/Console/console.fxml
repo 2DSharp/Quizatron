@@ -46,7 +46,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="mediaPlayerTab" alignment="CENTER_LEFT" onMouseReleased="#openMedia" styleClass="btns">
+            <HBox fx:id="mediaPlayerTab" alignment="CENTER_LEFT" onMouseReleased="#openMediaTabAction" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="PLAY_CIRCLE" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Media player" textFill="#7c8184">
@@ -68,7 +68,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="scoreBox" alignment="CENTER_LEFT" onMouseReleased="#showScore" styleClass="btns">
+            <HBox fx:id="scoreBox" alignment="CENTER_LEFT"  styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="LIST_UL" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Scoreboard" textFill="#7c8184">
@@ -134,7 +134,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="saveBtn" alignment="CENTER_LEFT" onMouseReleased="#saveState" styleClass="btns">
+            <HBox fx:id="saveBtn" alignment="CENTER_LEFT" onMouseReleased="#saveStateAction" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="DOWNLOAD" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Save" textFill="#7c8184">
@@ -162,7 +162,7 @@
                      <children>
                         <HBox prefHeight="44.0" prefWidth="250.0">
                            <children>
-                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#openConfigChooser" prefHeight="42.0" prefWidth="19.0" style="-fx-background-color: transparent; -fx-cursor: hand;" textFill="#570b0b">
+                              <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#loadConfigBtnAction" prefHeight="42.0" prefWidth="19.0" style="-fx-background-color: transparent; -fx-cursor: hand;" textFill="#570b0b">
                                  <graphic>
                                     <MaterialDesignIconView fill="#8a8a8a" glyphName="FOLDER_MULTIPLE_OUTLINE" size="22" styleClass="configLoader" />
                                  </graphic>
@@ -170,7 +170,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" onAction="#importConfigFile" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
+                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" onAction="#loadConfigTxtAction" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
                                  <font>
                                     <Font name="Open Sans Regular" size="13.0" />
                                  </font>
@@ -200,7 +200,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <JFXButton fx:id="startBtn" buttonType="RAISED" disable="true" onAction="#startQuiz" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizStartBtn" text="START QUIZ">
+                        <JFXButton fx:id="startBtn" buttonType="RAISED" disable="true" onAction="#startQuizAction" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizStartBtn" text="START QUIZ">
                            <font>
                               <Font name="Open Sans Regular" size="19.0" />
                            </font>

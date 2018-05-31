@@ -4,7 +4,8 @@ import me.twodee.quizatron.Component.Controller;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.State.State;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
-import me.twodee.quizatron.Model.Service.ConfigurationManager;
+import me.twodee.quizatron.Model.Mapper.ConfigurationMapper;
+import me.twodee.quizatron.Model.Service.QuizDataService;
 
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
@@ -13,14 +14,15 @@ public class ConfigLoaderController implements Controller {
 
     private State state;
     private Path file;
-    private ConfigurationManager configurationManager;
+    private ConfigurationMapper configurationMapper;
     private Mediator mediator;
+    private QuizDataService quizDataService;
 
-    public ConfigLoaderController(Mediator mediator, State state, ConfigurationManager configurationManager) {
+    public ConfigLoaderController(Mediator mediator, QuizDataService quizDataService) {
 
         this.mediator = mediator;
         this.state = state;
-        this.configurationManager = configurationManager;
+        this.quizDataService = quizDataService;
     }
 
     public void setInput(Path file) {
@@ -31,18 +33,11 @@ public class ConfigLoaderController implements Controller {
 
         try {
 
-            loadConfigToState(file);
+            quizDataService.loadConfig(file);
         }
         catch (FileNotFoundException e) {
 
             mediator.setError("The file you entered couldn't be found");
         }
-    }
-
-    private void loadConfigToState(Path file) throws FileNotFoundException {
-
-        Configuration configuration = configurationManager.loadConfiguration(file);
-        state.set("configuration", configuration);
-        state.set("homedir", file.getParent().toAbsolutePath().toString());
     }
 }

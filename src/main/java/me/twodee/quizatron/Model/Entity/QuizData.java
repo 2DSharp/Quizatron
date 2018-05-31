@@ -1,0 +1,39 @@
+package me.twodee.quizatron.Model.Entity;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import com.google.inject.Singleton;
+import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
+
+import java.io.Serializable;
+
+/**
+ * This preserves the quiz data including the configuration.
+ */
+@Singleton
+public class QuizData implements Serializable  {
+
+    @SerializedName("configuration")
+    @Expose
+    private Configuration configuration;
+
+    @SerializedName("directory")
+    @Expose
+    private String directory;
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+
+    public String getDirectory() {
+        return directory;
+    }
+}

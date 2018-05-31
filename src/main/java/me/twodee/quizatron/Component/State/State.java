@@ -9,9 +9,10 @@ import java.util.Map;
 public class State implements StateContextInterface, Serializable {
 
     private final Map<String, Object> stateMap;
+    private SerializationIOStrategy serializationIOStrategy;
 
     @Inject
-    public State(Map stateMap) {
+    public State(Map stateMap, SerializationIOStrategy serializationIOStrategy) {
 
         this.stateMap = stateMap;
     }
@@ -51,7 +52,7 @@ public class State implements StateContextInterface, Serializable {
     }
 
 
-    public void save(SerializationIOStrategy serializationIOStrategy, Path location) throws IOException {
+    public void save(Path location) throws IOException {
         // Why not let the strategy be included as an argument?
         // The state doesn't necessarily need persistence
         // If it does, provide the serializer
@@ -60,7 +61,7 @@ public class State implements StateContextInterface, Serializable {
     }
 
 
-    public void load(SerializationIOStrategy serializationIOStrategy, Path location) throws IOException, ClassNotFoundException {
+    public void load(Path location) throws IOException, ClassNotFoundException {
 
         String file = location.toAbsolutePath().toString();
         serializationIOStrategy.populate(stateMap, file);
