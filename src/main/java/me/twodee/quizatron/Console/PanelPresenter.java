@@ -10,11 +10,14 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
+import me.twodee.quizatron.Model.Service.QuestionSetService;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Presentation.IView;
 import me.twodee.quizatron.Presentation.View.HomeView;
@@ -23,6 +26,7 @@ import javax.inject.Inject;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -33,6 +37,7 @@ public class PanelPresenter {
     private FXMLLoader fxmlLoader;
     private Mediator mediator;
     private QuizDataService quizDataService;
+    private QuestionSetService questionSetService;
 
     @FXML
     private JFXToggleButton fullScreenToggleBtn;
@@ -46,18 +51,23 @@ public class PanelPresenter {
     private Label loadedQuizNameLbl;
     @FXML
     private JFXButton startBtn;
-
+    @FXML
+    private JFXButton pauseBtn;
+    @FXML
+    private JFXButton stopBtn;
 
     @Inject
     public PanelPresenter(Presentation presentation,
                           FXMLLoader fxmlLoader,
                           Mediator mediator,
-                          QuizDataService quizDataService) throws Exception {
+                          QuizDataService quizDataService,
+                          QuestionSetService questionSetService) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
         this.mediator = mediator;
         this.quizDataService = quizDataService;
+        this.questionSetService = questionSetService;
     }
 
     @FXML
@@ -79,6 +89,24 @@ public class PanelPresenter {
         loadFeedBack();
     }
 
+    @FXML
+    private void openSlideShow(MouseEvent event) {
+
+        try {
+            Path file = Paths.get(this.getClass().getResource("/rounds/qset1.csv").toURI().getPath());
+            questionSetService.loadSet(file);
+            QuestionConsoleView questionConsoleView = new QuestionConsoleView(questionSetService);
+            dashboard.getChildren().add(questionConsoleView);
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+    }
     private Path getFile(String title) {
 
         FileChooser fileChooser = new FileChooser();
@@ -110,7 +138,7 @@ public class PanelPresenter {
     private void loadFeedBack() {
 
         ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, quizDataService);
-        configLoaderView.setOutput(loadedQuizNameLbl, startBtn);
+        configLoaderView.setOutput(loadedQuizNameLbl, startBtn, pauseBtn, stopBtn);
         mediator.respond(configLoaderView);
     }
 

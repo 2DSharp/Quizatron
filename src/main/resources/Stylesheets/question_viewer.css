@@ -1,0 +1,17 @@
+.nextPrevBtn {
+    -fx-cursor: hand;
+    -fx-background-color: none;
+    -fx-border-radius: 50%;
+    -fx-border-color: #00B5FF;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+}
+
+.decisionBtns {
+
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+}
+

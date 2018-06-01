@@ -24,7 +24,7 @@
                <padding>
                   <Insets left="20.0" top="10.0" />
                </padding></Label>
-            <HBox alignment="CENTER_LEFT" styleClass="btns">
+            <HBox alignment="CENTER_LEFT" onMouseReleased="#openSlideShow" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="DASHBOARD" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label fx:id="panelList" text="Control Panel" textFill="#7c8184">
@@ -68,7 +68,7 @@
                   <Insets bottom="10.0" left="10.0" top="10.0" />
                </padding>
             </HBox>
-            <HBox fx:id="scoreBox" alignment="CENTER_LEFT"  styleClass="btns">
+            <HBox fx:id="scoreBox" alignment="CENTER_LEFT" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="LIST_UL" glyphStyle="-fx-fill:#7c8184" size="16px" />
                   <Label text="Scoreboard" textFill="#7c8184">
@@ -208,6 +208,29 @@
                               <Insets bottom="20.0" top="10.0" />
                            </VBox.margin>
                         </JFXButton>
+                        <HBox prefHeight="55.0" prefWidth="250.0">
+                           <children>
+                              <JFXButton id="pauseQuizActionBtn" fx:id="pauseBtn" buttonType="RAISED" disable="true" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizReplaceBtns" text="Pause">
+                                 <font>
+                                    <Font name="Open Sans Regular" size="16.0" />
+                                 </font>
+                                 <graphic>
+                                    <MaterialDesignIconView fill="WHITE" glyphName="PAUSE" size="14" />
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton id="stopQuizActionBtn" fx:id="stopBtn" buttonType="RAISED" disable="true" prefHeight="54.0" prefWidth="245.0" ripplerFill="WHITE" styleClass="quizReplaceBtns" text="Stop">
+                                 <font>
+                                    <Font name="Open Sans Regular" size="16.0" />
+                                 </font>
+                                 <graphic>
+                                    <MaterialDesignIconView fill="WHITE" glyphName="STOP" size="14.0" />
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </HBox>
                         <JFXToggleButton fx:id="fullScreenToggleBtn" onAction="#toggleFullScreen" prefHeight="50.0" prefWidth="143.0" text="Full screen" textFill="WHITE" />
                      </children>
                   </VBox>

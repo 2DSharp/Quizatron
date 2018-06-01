@@ -18,6 +18,18 @@
     -fx-border-radius: 5px;
 }
 
+.quizReplaceBtns {
+    -jfx-button-type: RAISED;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+#stopQuizActionBtn {
+    -fx-background-color: orangered;
+}
+#pauseQuizActionBtn {
+    -fx-background-color: #00B5FF;
+}
 .quizStartBtn {
     -jfx-button-type: RAISED;
     -fx-background-color: #91CC41;

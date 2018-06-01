@@ -15,6 +15,8 @@ public class ConfigLoaderView implements View {
 
     private Label loadedQuizNameLbl;
     private JFXButton startBtn;
+    private JFXButton pauseBtn;
+    private JFXButton stopBtn;
     private Mediator mediator;
     private QuizDataService quizDataService;
 
@@ -24,10 +26,12 @@ public class ConfigLoaderView implements View {
         this.quizDataService = quizDataService;
     }
 
-    public void setOutput(Label loadedQuizNameLbl, JFXButton startBtn) {
+    public void setOutput(Label loadedQuizNameLbl, JFXButton startBtn, JFXButton pauseBtn, JFXButton stopBtn) {
 
         this.loadedQuizNameLbl = loadedQuizNameLbl;
         this.startBtn = startBtn;
+        this.stopBtn = stopBtn;
+        this.pauseBtn = pauseBtn;
     }
 
     public void display() {
@@ -37,6 +41,8 @@ public class ConfigLoaderView implements View {
             Configuration configuration = quizDataService.getConfiguration();
             loadedQuizNameLbl.setText(configuration.getName());
             startBtn.setDisable(false);
+            pauseBtn.setDisable(false);
+            stopBtn.setDisable(false);
         }
 
         else {

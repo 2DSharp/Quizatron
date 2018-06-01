@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root fx:id="rootNode" type="javafx.scene.layout.BorderPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../../resources/Stylesheets/question_viewer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <VBox prefHeight="112.0" prefWidth="600.0" style="-fx-background-color: #282828;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
+               <children>
+                  <Button fx:id="prevBtn" disable="true" mnemonicParsing="false" onAction="#getPreviousAction" styleClass="nextPrevBtn">
+                     <graphic>
+                        <MaterialDesignIconView fill="#00b5ff" glyphName="STEP_BACKWARD" size="24" />
+                     </graphic>
+                  </Button>
+                  <JFXButton fx:id="wrongBtn" onAction="#setWrongAction" style="-fx-background-color: orangered;" styleClass="decisionBtns" text="Wrong">
+                     <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="CLOSE" size="18" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="20.0" right="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="correctBtn" onAction="#setCorrectAction" style="-fx-background-color: #91CC41;" styleClass="decisionBtns" text="Correct">
+                     <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="CHECKBOX_MARKED_CIRCLE_OUTLINE" size="18.0" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="10.0" right="20.0" />
+                     </HBox.margin>
+                  </JFXButton>
+                  <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#getNextAction" styleClass="nextPrevBtn">
+                     <graphic>
+                        <MaterialDesignIconView fill="#00b5ff" glyphName="STEP_FORWARD" size="24" styleClass="nextPrevBtn" />
+                     </graphic>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+   <top>
+      <VBox alignment="TOP_CENTER" prefHeight="206.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets top="35.0" />
+         </padding>
+         <children>
+            <Label fx:id="questionLbl" text="What is the question?" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="descriptionLbl" text="Tiny description, if any.">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Label>
+         </children>
+      </VBox>
+   </top>
+   <center>
+      <VBox alignment="TOP_CENTER" prefHeight="124.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="answerLbl" text="I don't know the answer. But if I require a big answer, what do I do?">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Open Sans Regular" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </center>
+</fx:root>
