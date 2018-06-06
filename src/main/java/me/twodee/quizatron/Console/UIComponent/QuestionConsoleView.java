@@ -17,7 +17,13 @@ import me.twodee.quizatron.Model.Service.QuestionSetService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-
+/**
+ * Question control center for Quizatron
+ *
+ * @author Dedipyaman Das <2d@twodee.me>
+ * @version 1.0.18.1
+ * @since 1.0.18.1
+ */
 public class QuestionConsoleView extends BorderPane
 {
 

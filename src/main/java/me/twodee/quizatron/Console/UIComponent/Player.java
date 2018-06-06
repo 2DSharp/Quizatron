@@ -20,8 +20,6 @@ import javafx.util.Duration;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
-import javax.inject.Inject;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -34,8 +32,10 @@ import static java.lang.Math.abs;
  * @version 1.0.18.1
  * @since 1.0.18.1
  */
-public class Player extends AnchorPane {
+public class Player extends AnchorPane
+{
 
+    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/media.css").toExternalForm();
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private Presentation presentation;
@@ -54,41 +54,37 @@ public class Player extends AnchorPane {
     @FXML
     private Label sourceFileLbl;
 
-    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/media.css").toExternalForm();
     /**
      * Media player component constructor.
      *
      * @param presentation Presentation state for separate stage
      */
-    public Player(Presentation presentation) throws IOException {
-
+    public Player(Presentation presentation) throws IOException
+    {
         this.presentation = presentation;
         FXMLLoader loader = initFXML();
         loader.load();
     }
 
-    public enum PlayerState {
-
-        PLAY, PAUSE
-    }
-
     /**
      * Initializer to get the FXML components working.
      */
-    public void initialize() {
-
+    public void initialize()
+    {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         timeSlider.setValue(0);
         prepareMediaView();
     }
 
-    private FXMLLoader initFXML() {
+    private FXMLLoader initFXML()
+    {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("player.fxml"));
         fxmlLoader.setController(this);
         fxmlLoader.setRoot(this);
         return fxmlLoader;
     }
+
     /**
      * Prepare the mediaview window with correct dimensions
      * Binds the mediaview's width and height relative to the window size and video ratio
@@ -96,8 +92,8 @@ public class Player extends AnchorPane {
      * @see MediaPresentationView
      * @see Bindings
      */
-    private void prepareMediaView() {
-
+    private void prepareMediaView()
+    {
         if (mediaView == null) {
             mediaView = new MediaView();
         }
@@ -115,16 +111,18 @@ public class Player extends AnchorPane {
      * @throws Exception thrown on failure to open file
      */
     @FXML
-    private void chooseMediaFromFile(ActionEvent event) throws Exception {
-
+    private void chooseMediaFromFile(ActionEvent event) throws Exception
+    {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(playerNode.getScene().getWindow());
 
-        String source = file.toURI().toURL().toExternalForm();
-        Media media = new Media(source);
-        loadMedia(media);
-        playLoadedMedia();
+        if (file != null) {
+            String source = file.toURI().toURL().toExternalForm();
+            Media media = new Media(source);
+            loadMedia(media);
+            playLoadedMedia();
+        }
     }
 
     /**
@@ -132,8 +130,8 @@ public class Player extends AnchorPane {
      *
      * @param media Media - source media to be played
      */
-    public void loadMedia(Media media) {
-
+    public void loadMedia(Media media)
+    {
         initPlayer(media);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
         mediaPlayer.setOnReady(this::displayMetaData);
@@ -146,10 +144,9 @@ public class Player extends AnchorPane {
      *
      * @param media Media - reusable media component, can be used from anywhere
      */
-    private void initPlayer(Media media) {
-
+    private void initPlayer(Media media)
+    {
         if (mediaPlayer != null) {
-
             mediaPlayer.dispose();
         }
         setMediaPlayer(new MediaPlayer(media));
@@ -158,8 +155,8 @@ public class Player extends AnchorPane {
     /**
      * Fetches and substitutes the placeholders for media metadata
      */
-    private void displayMetaData()  {
-
+    private void displayMetaData()
+    {
         timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
         ObservableMap<String, Object> metaData = mediaPlayer.getMedia().getMetadata();
 
@@ -184,16 +181,14 @@ public class Player extends AnchorPane {
      * Get the slider running and enable seeking
      * {@link JFXSlider}
      */
-    private void initTimeSlider() {
-
-        timeSlider
-                .valueProperty()
-                .addListener((observable, oldValue, newValue)
-                                     -> sliderSeekBehavior(oldValue, newValue));
-        mediaPlayer
-                .currentTimeProperty()
-                .addListener((observable, oldDuration, newDuration)
-                                     -> sliderProgressBehavior(oldDuration, newDuration));
+    private void initTimeSlider()
+    {
+        timeSlider.valueProperty()
+                  .addListener((observable, oldValue, newValue) ->
+                                       sliderSeekBehavior(oldValue, newValue));
+        mediaPlayer.currentTimeProperty()
+                   .addListener((observable, oldDuration, newDuration) ->
+                                        sliderProgressBehavior(oldDuration, newDuration));
         initIndicatorValueProperty();
     }
 
@@ -203,19 +198,17 @@ public class Player extends AnchorPane {
      * @param oldValue Number - before seeking
      * @param newValue Number - after action on slider
      */
-    private void sliderSeekBehavior(Number oldValue, Number newValue) {
-
+    private void sliderSeekBehavior(Number oldValue, Number newValue)
+    {
         // Is the change significant enough?
         // Drag was buggy, have to run some tests
         // Affects only the drag it seems
         double tolerance = 1;
 
         if (mediaPlayer.getTotalDuration().toSeconds() <= 100) {
-
             tolerance = 0.5;
         }
         if (abs(oldValue.doubleValue() - newValue.doubleValue()) >= tolerance) {
-
             mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
         }
     }
@@ -226,17 +219,15 @@ public class Player extends AnchorPane {
      * @param oldDuration
      * @param newDuration
      */
-    private void sliderProgressBehavior(Duration oldDuration, Duration newDuration) {
-
+    private void sliderProgressBehavior(Duration oldDuration, Duration newDuration)
+    {
         double newElapsedTime = newDuration.toSeconds();
         double oldElapsedTime = oldDuration.toSeconds();
         double totalDuration = mediaPlayer.getTotalDuration().toSeconds();
 
         // Making sure it doesn't interfere with the manual seeking
         if (!timeSlider.isValueChanging()) {
-
             if (newElapsedTime - oldElapsedTime >= 0.1) {
-
                 timeSlider.setValue(newElapsedTime);
             }
             updateTimeLabel(totalDuration, newElapsedTime);
@@ -246,8 +237,8 @@ public class Player extends AnchorPane {
     /**
      * Setting the time elapsed and time left on the appropriate indicators
      */
-    private void updateTimeLabel(double totalDuration, double elapsedTime) {
-
+    private void updateTimeLabel(double totalDuration, double elapsedTime)
+    {
         // Get rid of the unnecessary decimal points
         double timeLeft = totalDuration - elapsedTime;
 
@@ -261,18 +252,18 @@ public class Player extends AnchorPane {
     /**
      * Display indicator in HH:MM format
      */
-    private void initIndicatorValueProperty() {
-
-        timeSlider.setValueFactory(
-                slider -> Bindings.createStringBinding(() -> formatTime(slider.getValue()),
-                                                       slider.valueProperty()));
+    private void initIndicatorValueProperty()
+    {
+        timeSlider.setValueFactory(slider ->
+                                           Bindings.createStringBinding(
+                                                   () -> formatTime(slider.getValue()), slider.valueProperty()));
     }
 
     /**
      * Sets the behavior of the player UI components based on the player state
      */
-    private void initUIControlsBehavior() {
-
+    private void initUIControlsBehavior()
+    {
         mediaPlayer.setOnEndOfMedia(this::stop);
 
         // Multiline lambdas should be avoided? - Venkat S.
@@ -281,7 +272,6 @@ public class Player extends AnchorPane {
             togglePlayPauseBtn(PlayerState.PLAY);
             timeSlider.setValue(0);
         });
-
         mediaPlayer.setOnPaused(() -> togglePlayPauseBtn(PlayerState.PLAY));
         mediaPlayer.setOnPlaying(() -> togglePlayPauseBtn(PlayerState.PAUSE));
     }
@@ -292,16 +282,15 @@ public class Player extends AnchorPane {
      * @param state current state of the player
      * {@link FontAwesomeIconView}
      */
-    private void togglePlayPauseBtn(PlayerState state) {
-
+    private void togglePlayPauseBtn(PlayerState state)
+    {
         FontAwesomeIconView icon;
 
         if (state.equals(PlayerState.PLAY)) {
-
             icon = getIcon(FontAwesomeIcon.PLAY);
             playBtn.setOnAction(this::play);
-        } else {
-
+        }
+        else {
             icon = getIcon(FontAwesomeIcon.PAUSE);
             playBtn.setOnAction(this::pause);
         }
@@ -311,10 +300,9 @@ public class Player extends AnchorPane {
     /**
      * Check if the media player was already there, prepare the presentation and loadMedia the video
      */
-    private void playLoadedMedia() {
-
+    private void playLoadedMedia()
+    {
         if (mediaView.getMediaPlayer() != this.mediaPlayer) {
-
             preparePresentation();
         }
         mediaPlayer.play();
@@ -325,13 +313,11 @@ public class Player extends AnchorPane {
      * Get the view controller and embed visual output
      * {@link Presentation}
      */
-    private void preparePresentation() {
-
+    private void preparePresentation()
+    {
         mediaView.setMediaPlayer(this.mediaPlayer);
         try {
-
             if (!(presentation.getView() instanceof MediaPresentationView)) {
-
                 presentation.changeView("media-view");
             }
 
@@ -339,7 +325,6 @@ public class Player extends AnchorPane {
             mediaViewController.embedMediaView(mediaView);
         }
         catch (Exception e) {
-
             e.printStackTrace();
         }
     }
@@ -350,8 +335,8 @@ public class Player extends AnchorPane {
      * @param event ActionEvent
      */
     @FXML
-    private void play(ActionEvent event) {
-
+    private void play(ActionEvent event)
+    {
         playLoadedMedia();
     }
 
@@ -361,41 +346,44 @@ public class Player extends AnchorPane {
      * @param event
      */
     @FXML
-    private void pause(ActionEvent event) {
-
+    private void pause(ActionEvent event)
+    {
         mediaPlayer.pause();
     }
 
     /**
      * User action event to stop the media
      */
-    public void stop() {
-
+    public void stop()
+    {
         mediaPlayer.stop();
     }
 
-    public void openPlaylist() {
+    public void openPlaylist()
+    {
 
     }
 
-    public void back() {
+    public void back()
+    {
 
     }
 
-    public void next() {
+    public void next()
+    {
 
     }
-    // Helper functions
 
     /**
      * Setter for the class media player
      *
      * @param mediaPlayer MediaPlayer {@link MediaPlayer}
      */
-    private void setMediaPlayer(MediaPlayer mediaPlayer) {
-
+    private void setMediaPlayer(MediaPlayer mediaPlayer)
+    {
         this.mediaPlayer = mediaPlayer;
     }
+    // Helper functions
 
     /**
      * Extracts the filename + extension from the supplied file path
@@ -403,9 +391,9 @@ public class Player extends AnchorPane {
      * @param filePath full file path
      * @return the filename stripped of slashes and everything before
      */
-    private String getFileNameFromPath(String filePath) throws Exception {
-
-        String cleanPath = java.net.URLDecoder.decode(filePath,"UTF-8");
+    private String getFileNameFromPath(String filePath) throws Exception
+    {
+        String cleanPath = java.net.URLDecoder.decode(filePath, "UTF-8");
         return java.nio.file.Paths.get(cleanPath).toFile().getName();
         //return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.length());
     }
@@ -416,8 +404,8 @@ public class Player extends AnchorPane {
      * @param iconType FontAwesome icon to be built
      * @return The final icon with appropriate styles and glyph sizes
      */
-    private FontAwesomeIconView getIcon(FontAwesomeIcon iconType) {
-
+    private FontAwesomeIconView getIcon(FontAwesomeIcon iconType)
+    {
         FontAwesomeIconView icon = new FontAwesomeIconView(iconType);
         icon.setGlyphSize(16);
         icon.setStyleClass("trackBtnIcon");
@@ -430,11 +418,16 @@ public class Player extends AnchorPane {
      * @param totalSeconds the time specified in seconds
      * @return the formatted time string
      */
-    private String formatTime(double totalSeconds) {
-
+    private String formatTime(double totalSeconds)
+    {
         int min = (int) totalSeconds / 60;
         int sec = (int) totalSeconds % 60;
 
         return String.format("%02d:%02d", min, sec);
+    }
+
+    public enum PlayerState
+    {
+        PLAY, PAUSE
     }
 }
