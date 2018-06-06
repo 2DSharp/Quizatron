@@ -9,6 +9,7 @@ import org.apache.commons.csv.CSVRecord;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,11 +21,13 @@ public class QuestionSetService implements IQuestionSetService {
     private QuestionMapper questionMapper;
     private Iterator<CSVRecord> set = null;
     private List setList;
+    private QuizDataService quizDataService;
 
     @Inject
-    public QuestionSetService(QuestionMapper questionMapper) {
+    public QuestionSetService(QuestionMapper questionMapper, QuizDataService quizDataService) {
 
         this.questionMapper = questionMapper;
+        this.quizDataService = quizDataService;
     }
     @Override
     public void loadSet(Path file) throws IOException{
@@ -35,7 +38,7 @@ public class QuestionSetService implements IQuestionSetService {
 
     }
 
-    public List<Question> toList() {
+    public List<Question> toList() throws MalformedURLException {
         setList = new ArrayList<Question>();
         Iterator<CSVRecord> iterator = set;
 
@@ -61,7 +64,7 @@ public class QuestionSetService implements IQuestionSetService {
 
 
     @Override
-    public Question nextQuestion() throws NoQuestionLeftException {
+    public Question nextQuestion() throws NoQuestionLeftException, MalformedURLException {
         if (set.hasNext()) {
             CSVRecord record = set.next();
             question = loadQuestionFromRecord(record);
@@ -82,13 +85,13 @@ public class QuestionSetService implements IQuestionSetService {
         return set.hasNext();
     }
 
-    private Question loadQuestionFromRecord(CSVRecord record) {
+    private Question loadQuestionFromRecord(CSVRecord record) throws MalformedURLException {
 
         String title = record.get("Title");
         String description = record.get("Description");
         String answer = record.get("Answer");
         String image = record.get("Image");
-
-        return new Question(title, description, answer, image);
+        String media = record.get("Media");
+        return new Question(quizDataService.getInitialDirectory().toUri().toURL().toExternalForm(), title, description, answer, image, media);
     }
 }

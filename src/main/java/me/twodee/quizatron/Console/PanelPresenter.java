@@ -73,6 +73,7 @@ public class PanelPresenter {
     @FXML
     public void openMediaTabAction(MouseEvent event) throws Exception {
 
+        dashboard.getChildren().clear();
         FXMLLoader loader = this.fxmlLoader;
         loader.setLocation(getClass().getResource("Dashboard/media-player.fxml"));
         AnchorPane mediaPlayerPane = loader.load();
@@ -92,12 +93,12 @@ public class PanelPresenter {
     @FXML
     private void openSlideShow(MouseEvent event) {
 
+        dashboard.getChildren().clear();
         try {
             Path file = Paths.get(this.getClass().getResource("/rounds/qset1.csv").toURI().getPath());
             questionSetService.loadSet(file);
-            QuestionConsoleView questionConsoleView = new QuestionConsoleView(questionSetService);
+            QuestionConsoleView questionConsoleView = new QuestionConsoleView(questionSetService, presentation);
             dashboard.getChildren().add(questionConsoleView);
-
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -219,9 +220,7 @@ public class PanelPresenter {
 
     @FXML
     public void toggleFullScreen(ActionEvent event) {
-
         if (fullScreenToggleBtn.isSelected()) {
-
             presentation.getStage().setFullScreenExitHint("");
             presentation.getStage().setFullScreen(true);
         } else {

@@ -8,6 +8,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +23,7 @@ import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 import javax.inject.Inject;
 
 import java.io.File;
+import java.io.IOException;
 
 import static java.lang.Math.abs;
 
@@ -32,11 +34,10 @@ import static java.lang.Math.abs;
  * @version 1.0.18.1
  * @since 1.0.18.1
  */
-public class Player {
+public class Player extends AnchorPane {
 
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
-    private FileChooser fileChooser;
     private Presentation presentation;
     @FXML
     private AnchorPane playerNode;
@@ -53,22 +54,17 @@ public class Player {
     @FXML
     private Label sourceFileLbl;
 
+    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/media.css").toExternalForm();
     /**
      * Media player component constructor.
-     * Guice or any other injector needs to inject a {@link FileChooser} for getting the media file,
-     * {@link MediaView} for visual output
-     * and {@link Presentation} to have it presented in a separate view
      *
-     * @param fileChooser  FileChooser - single file
-     * @param mediaView    MediaView - Parent container for visual output
      * @param presentation Presentation state for separate stage
      */
-    @Inject
-    public Player(FileChooser fileChooser, MediaView mediaView, Presentation presentation) {
+    public Player(Presentation presentation) throws IOException {
 
-        this.mediaView = mediaView;
-        this.fileChooser = fileChooser;
         this.presentation = presentation;
+        FXMLLoader loader = initFXML();
+        loader.load();
     }
 
     public enum PlayerState {
@@ -79,13 +75,20 @@ public class Player {
     /**
      * Initializer to get the FXML components working.
      */
-    @FXML
     public void initialize() {
 
+        this.getStylesheets().add(USER_AGENT_STYLESHEET);
         timeSlider.setValue(0);
         prepareMediaView();
     }
 
+    private FXMLLoader initFXML() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("player.fxml"));
+        fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
+        return fxmlLoader;
+    }
     /**
      * Prepare the mediaview window with correct dimensions
      * Binds the mediaview's width and height relative to the window size and video ratio
@@ -95,6 +98,9 @@ public class Player {
      */
     private void prepareMediaView() {
 
+        if (mediaView == null) {
+            mediaView = new MediaView();
+        }
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
 
@@ -111,12 +117,14 @@ public class Player {
     @FXML
     private void chooseMediaFromFile(ActionEvent event) throws Exception {
 
+        FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         File file = fileChooser.showOpenDialog(playerNode.getScene().getWindow());
 
         String source = file.toURI().toURL().toExternalForm();
         Media media = new Media(source);
-        startPlayer(media);
+        loadMedia(media);
+        playLoadedMedia();
     }
 
     /**
@@ -124,14 +132,13 @@ public class Player {
      *
      * @param media Media - source media to be played
      */
-    private void startPlayer(Media media) {
+    public void loadMedia(Media media) {
 
-        loadMedia(media);
+        initPlayer(media);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
         mediaPlayer.setOnReady(this::displayMetaData);
         initTimeSlider();
         initUIControlsBehavior();
-        playLoadedMedia();
     }
 
     /**
@@ -139,13 +146,13 @@ public class Player {
      *
      * @param media Media - reusable media component, can be used from anywhere
      */
-    public void loadMedia(Media media) {
+    private void initPlayer(Media media) {
 
         if (mediaPlayer != null) {
 
             mediaPlayer.dispose();
         }
-        this.setMediaPlayer(new MediaPlayer(media));
+        setMediaPlayer(new MediaPlayer(media));
     }
 
     /**
@@ -280,7 +287,7 @@ public class Player {
     }
 
     /**
-     * Change the pause button to a startPlayer button and have the appropriate action based on it
+     * Change the pause button to a loadMedia button and have the appropriate action based on it
      *
      * @param state current state of the player
      * {@link FontAwesomeIconView}
@@ -302,7 +309,7 @@ public class Player {
     }
 
     /**
-     * Check if the media player was already there, prepare the presentation and startPlayer the video
+     * Check if the media player was already there, prepare the presentation and loadMedia the video
      */
     private void playLoadedMedia() {
 
@@ -338,14 +345,14 @@ public class Player {
     }
 
     /**
-     * User action to startPlayer the media
+     * User action to loadMedia the media
      *
      * @param event ActionEvent
      */
     @FXML
     private void play(ActionEvent event) {
 
-        mediaPlayer.play();
+        playLoadedMedia();
     }
 
     /**

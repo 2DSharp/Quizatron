@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="rootNode" type="javafx.scene.layout.BorderPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../../resources/Stylesheets/question_viewer.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="rootNode" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../../resources/Stylesheets/question_viewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <VBox prefHeight="112.0" prefWidth="600.0" style="-fx-background-color: #282828;" BorderPane.alignment="CENTER">
          <children>
@@ -47,11 +48,16 @@
                   <Insets top="20.0" />
                </VBox.margin>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <JFXToggleButton fx:id="mediaDisplayToggleBtn" disable="true" onAction="#toggleMediaDisplay" text="Display question" textFill="WHITE" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </bottom>
    <top>
-      <VBox alignment="TOP_CENTER" prefHeight="206.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="topBox" alignment="TOP_CENTER" prefHeight="206.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets top="35.0" />
          </padding>
@@ -64,19 +70,11 @@
                   <Insets />
                </VBox.margin>
             </Label>
-            <Label fx:id="descriptionLbl" text="Tiny description, if any.">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </Label>
          </children>
       </VBox>
    </top>
    <center>
-      <VBox alignment="TOP_CENTER" prefHeight="124.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="bottomBox" alignment="TOP_CENTER" prefHeight="124.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="answerLbl" text="I don't know the answer. But if I require a big answer, what do I do?">
                <VBox.margin>

@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Model.Service;
 
+import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Mapper.QuestionMapper;
@@ -20,7 +21,7 @@ public class QuestionSetServiceTest {
     @Before
     public void setUp() {
 
-        questionSetService = new QuestionSetService(new QuestionMapper());
+        //questionSetService = new QuestionSetService(new QuestionMapper(), new Presentation());
     }
     @Test
     public void loadQSetTest() throws URISyntaxException, IOException {
