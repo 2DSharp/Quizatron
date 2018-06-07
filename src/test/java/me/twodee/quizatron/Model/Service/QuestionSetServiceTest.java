@@ -6,6 +6,9 @@ import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Mapper.QuestionMapper;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -18,10 +21,15 @@ public class QuestionSetServiceTest {
 
     QuestionSetService questionSetService;
 
+    @Mock
+    private QuizDataService quizDataService;
+
     @Before
     public void setUp() {
 
-        //questionSetService = new QuestionSetService(new QuestionMapper(), new Presentation());
+        MockitoAnnotations.initMocks(this);
+
+        questionSetService = new QuestionSetService(new QuestionMapper(), quizDataService);
     }
     @Test
     public void loadQSetTest() throws URISyntaxException, IOException {
@@ -38,7 +46,7 @@ public class QuestionSetServiceTest {
         questionSetService.loadSet(file);
         questionSetService.toList();
         Question question = questionSetService.getQuestion(3);
-        assertEquals("Just an alt.", question.getDescription());
+        assertEquals("I don't know.", question.getAnswer());
     }
 
     @Test

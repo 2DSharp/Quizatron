@@ -7,18 +7,16 @@ import me.twodee.quizatron.Model.Contract.IQuestion;
 public class Question implements IQuestion {
 
     private String title;
-    private String description;
+
     private String answer;
     private String image;
     private String media;
-    private String type;
     private String homeDir;
 
-    public Question(String homeDir, String title, String description, String answer, String image, String media) {
+    public Question(String homeDir, String title, String answer, String image, String media) {
 
         this.homeDir = homeDir;
         this.title = title;
-        this.description = description;
         this.answer = answer;
         this.image = image;
         this.media = media;
@@ -26,11 +24,6 @@ public class Question implements IQuestion {
     @Override
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
     }
 
     @Override
@@ -48,9 +41,9 @@ public class Question implements IQuestion {
 
     public Media getMedia() {
 
-        if (media.isEmpty()) {
-            return null;
+        if (!media.isEmpty()) {
+            return new Media(homeDir + media);
         }
-        return new Media(homeDir + media);
+        return null;
     }
 }

@@ -38,9 +38,9 @@ public class Presentation {
         return view;
     }
      */
-    public IView getView() {
+    public <T> T getView() {
 
-        return view;
+        return (T) view;
     }
 
     public void changeView(String viewFile) throws Exception {

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -14,6 +15,8 @@ import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Service.QuestionSetService;
+import me.twodee.quizatron.Presentation.IView;
+import me.twodee.quizatron.Presentation.View.QuestionDisplay;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -83,10 +86,24 @@ public class QuestionConsoleView extends BorderPane
         displayQuestionData(question);
     }
 
+    private void displayQuestionPresentation(String question) {
+        try {
+            presentation.changeView("questionview");
+            QuestionDisplay questionDisplay = presentation.getView();
+            questionDisplay.setTitle(question);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void displayQuestionData(Question question)
     {
         if (question.getMedia() != null) {
             loadMedia(question.getMedia());
+        }
+        else {
+            displayQuestionPresentation(question.getTitle());
         }
         questionLbl.setText(question.getTitle());
         answerLbl.setText(question.getAnswer());
@@ -136,6 +153,7 @@ public class QuestionConsoleView extends BorderPane
     private void toggleMediaDisplay(ActionEvent event)
     {
         setQuestionDataVisibility(mediaDisplayToggleBtn.isSelected());
+        displayQuestionPresentation(questionSetService.getQuestion().getTitle());
     }
 
     @FXML

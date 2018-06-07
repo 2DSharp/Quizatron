@@ -1,6 +1,5 @@
 package me.twodee.quizatron.Model.Service;
 
-import me.twodee.quizatron.Model.Contract.IQuestion;
 import me.twodee.quizatron.Model.Contract.IQuestionSetService;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
@@ -15,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class QuestionSetService implements IQuestionSetService {
+public class QuestionSetService implements IQuestionSetService
+{
 
     private Question question;
     private QuestionMapper questionMapper;
@@ -24,21 +24,22 @@ public class QuestionSetService implements IQuestionSetService {
     private QuizDataService quizDataService;
 
     @Inject
-    public QuestionSetService(QuestionMapper questionMapper, QuizDataService quizDataService) {
-
+    public QuestionSetService(QuestionMapper questionMapper, QuizDataService quizDataService)
+    {
         this.questionMapper = questionMapper;
         this.quizDataService = quizDataService;
     }
-    @Override
-    public void loadSet(Path file) throws IOException{
-        set = questionMapper.load(file.toAbsolutePath().toString());
 
+    @Override
+    public void loadSet(Path file) throws IOException
+    {
+        set = questionMapper.load(file.toAbsolutePath().toString());
         CSVRecord record = set.next();
         question = loadQuestionFromRecord(record);
-
     }
 
-    public List<Question> toList() throws MalformedURLException {
+    public List<Question> toList() throws MalformedURLException
+    {
         setList = new ArrayList<Question>();
         Iterator<CSVRecord> iterator = set;
 
@@ -53,21 +54,24 @@ public class QuestionSetService implements IQuestionSetService {
         return setList;
     }
 
-    public Question getQuestion() {
+    public Question getQuestion()
+    {
         return question;
     }
 
-    public Question getQuestion(int index) {
-
+    public Question getQuestion(int index)
+    {
         return (Question) setList.get(index - 1);
     }
 
 
     @Override
-    public Question nextQuestion() throws NoQuestionLeftException, MalformedURLException {
+    public Question nextQuestion() throws NoQuestionLeftException, MalformedURLException
+    {
         if (set.hasNext()) {
             CSVRecord record = set.next();
             question = loadQuestionFromRecord(record);
+
             return question;
         }
         else {
@@ -76,22 +80,23 @@ public class QuestionSetService implements IQuestionSetService {
     }
 
 
-    public boolean isQSetLoaded() {
+    public boolean isQSetLoaded()
+    {
         return question != null;
     }
 
 
-    public boolean hasNext() {
+    public boolean hasNext()
+    {
         return set.hasNext();
     }
 
-    private Question loadQuestionFromRecord(CSVRecord record) throws MalformedURLException {
-
+    private Question loadQuestionFromRecord(CSVRecord record) throws MalformedURLException
+    {
         String title = record.get("Title");
-        String description = record.get("Description");
         String answer = record.get("Answer");
         String image = record.get("Image");
         String media = record.get("Media");
-        return new Question(quizDataService.getInitialDirectory().toUri().toURL().toExternalForm(), title, description, answer, image, media);
+        return new Question(quizDataService.getInitialDirectory().toUri().toURL().toExternalForm(), title, answer, image, media);
     }
 }
