@@ -35,7 +35,9 @@ import static java.lang.Math.abs;
 public class Player extends AnchorPane
 {
 
-    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/media.css").toExternalForm();
+    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class
+            .getResource("/Stylesheets/media.css")
+            .toExternalForm();
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private Presentation presentation;
@@ -255,8 +257,8 @@ public class Player extends AnchorPane
     private void initIndicatorValueProperty()
     {
         timeSlider.setValueFactory(slider ->
-                                           Bindings.createStringBinding(
-                                                   () -> formatTime(slider.getValue()), slider.valueProperty()));
+                                   Bindings.createStringBinding(
+                                           () -> formatTime(slider.getValue()), slider.valueProperty()));
     }
 
     /**

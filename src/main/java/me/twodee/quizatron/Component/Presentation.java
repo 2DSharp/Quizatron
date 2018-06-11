@@ -45,7 +45,6 @@ public class Presentation {
 
     public void changeView(String viewFile) throws Exception {
 
-        //loader = new FXMLLoader(getClass().getResource("View/" + viewFile + ".fxml" ));
         FXMLLoader loader = FXMLLoaderProvider.get();
         loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
         scene.setRoot(loader.load());

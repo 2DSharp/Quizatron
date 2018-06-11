@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -15,11 +14,12 @@ import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Service.QuestionSetService;
-import me.twodee.quizatron.Presentation.IView;
 import me.twodee.quizatron.Presentation.View.QuestionDisplay;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Question control center for Quizatron
  *
@@ -29,7 +29,6 @@ import java.net.MalformedURLException;
  */
 public class QuestionConsoleView extends BorderPane
 {
-
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
     private QuestionSetService questionSetService;
     private FXMLLoader fxmlLoader;
@@ -51,10 +50,11 @@ public class QuestionConsoleView extends BorderPane
     private JFXToggleButton mediaDisplayToggleBtn;
     @FXML
     private VBox topBox;
+    private  List<Question> questionList;
+    private int current;
 
     public QuestionConsoleView(QuestionSetService questionSetService, Presentation presentation) throws IOException
     {
-
         this.presentation = presentation;
         this.questionSetService = questionSetService;
         this.fxmlLoader = initFXML();
@@ -80,17 +80,20 @@ public class QuestionConsoleView extends BorderPane
         return fxmlLoader;
     }
 
-    private void loadInitialQuestion()
+    private void loadInitialQuestion() throws MalformedURLException
     {
-        Question question = questionSetService.getQuestion();
+        current = 1;
+        questionList = questionSetService.toList();
+        Question question = questionSetService.getQuestion(current);
         displayQuestionData(question);
     }
 
-    private void displayQuestionPresentation(String question) {
+    private void displayQuestionPresentation(String question)
+    {
         try {
             presentation.changeView("questionview");
             QuestionDisplay questionDisplay = presentation.getView();
-            questionDisplay.setTitle(question);
+            questionDisplay.revealQuestion(question);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -108,8 +111,10 @@ public class QuestionConsoleView extends BorderPane
         questionLbl.setText(question.getTitle());
         answerLbl.setText(question.getAnswer());
 
-        Boolean isLastQuestion = !questionSetService.hasNext();
+        Boolean isLastQuestion = questionList.size() <= current;
+        Boolean isFirstQuestion = current <= 1;
         nextBtn.setDisable(isLastQuestion);
+        prevBtn.setDisable(isFirstQuestion);
     }
 
     private void loadMedia(Media media)
@@ -129,9 +134,8 @@ public class QuestionConsoleView extends BorderPane
     private void initPlayer(Player player, Media media)
     {
         player.loadMedia(media);
-        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty().not().and(
-                mediaDisplayToggleBtn.disabledProperty().not());
-
+        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty().not()
+                                                          .and(mediaDisplayToggleBtn.disabledProperty().not());
         player.visibleProperty().bind(toggleState);
         player.managedProperty().bind(player.visibleProperty());
     }
@@ -153,30 +157,28 @@ public class QuestionConsoleView extends BorderPane
     private void toggleMediaDisplay(ActionEvent event)
     {
         setQuestionDataVisibility(mediaDisplayToggleBtn.isSelected());
-        displayQuestionPresentation(questionSetService.getQuestion().getTitle());
+        if (!mediaDisplayToggleBtn.isSelected()) {
+            reset();
+            loadMedia(questionSetService.getQuestion(current).getMedia());
+        }
+        displayQuestionPresentation(questionSetService.getQuestion(current).getTitle());
     }
 
     @FXML
     private void getNextAction(ActionEvent event)
     {
-        try {
-            if (playerLoaded) {
-                reset();
-            }
-            Question question = questionSetService.nextQuestion();
-            displayQuestionData(question);
+        if (playerLoaded) {
+            reset();
         }
-        catch (NoQuestionLeftException e) {
-            e.printStackTrace();
-        }
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        Question question = questionSetService.getQuestion(++current);
+        displayQuestionData(question);
     }
 
     private void reset()
     {
+        topBox.getChildren().remove(player);
         setQuestionDataVisibility(true);
+        mediaDisplayToggleBtn.setSelected(false);
         mediaDisplayToggleBtn.setDisable(true);
         playerLoaded = false;
         player = null;
@@ -185,7 +187,11 @@ public class QuestionConsoleView extends BorderPane
     @FXML
     private void getPreviousAction(ActionEvent event)
     {
-
+        if (playerLoaded) {
+            reset();
+        }
+        Question question = questionSetService.getQuestion(--current);
+        displayQuestionData(question);
     }
 
     @FXML
