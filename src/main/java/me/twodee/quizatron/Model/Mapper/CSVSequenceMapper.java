@@ -27,7 +27,7 @@ public class CSVSequenceMapper extends CSVMapper implements ISequenceMapper
     private void init() throws IOException
     {
         iterator = load(configuration.getSequence());
-        sequences = new ArrayList<Sequence>();
+        sequences = new ArrayList<>();
 
         while (iterator.hasNext()) {
             CSVRecord record = iterator.next();

@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
@@ -24,7 +23,7 @@ public class SequenceMapperTest
     private Configuration configuration;
 
     @Before
-    public void beforeEachTest() throws URISyntaxException, MalformedURLException
+    public void beforeEachTest() throws URISyntaxException
     {
         String sequenceFile = Paths.get(this.getClass().getResource("/sequence.csv").toURI())
                             .toAbsolutePath()
@@ -38,7 +37,6 @@ public class SequenceMapperTest
     public void fetchNonExistentIndexPositive() throws NonExistentRecordException, IOException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(10);
         sequenceMapper.fetch(sequence);
@@ -59,7 +57,6 @@ public class SequenceMapperTest
     public void fetchFirstRecordTest() throws IOException, NonExistentRecordException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(0);
         sequenceMapper.fetch(sequence);
@@ -71,7 +68,6 @@ public class SequenceMapperTest
     public void fetchSecondRecordTest() throws IOException, NonExistentRecordException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(1);
         sequenceMapper.fetch(sequence);
@@ -92,7 +88,6 @@ public class SequenceMapperTest
     public void fetchTypeTest() throws IOException, NonExistentRecordException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(3);
         sequenceMapper.fetch(sequence);
@@ -104,7 +99,6 @@ public class SequenceMapperTest
     public void fetchFileTest() throws IOException, NonExistentRecordException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(5);
         sequenceMapper.fetch(sequence);
@@ -116,7 +110,6 @@ public class SequenceMapperTest
     public void fetchIntroTest() throws IOException, NonExistentRecordException
     {
         ISequenceMapper sequenceMapper = new CSVSequenceMapper(configuration);
-
         Sequence sequence = new Sequence();
         sequence.setIndex(3);
         sequenceMapper.fetch(sequence);
