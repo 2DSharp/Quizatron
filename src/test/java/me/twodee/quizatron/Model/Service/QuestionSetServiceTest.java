@@ -28,23 +28,22 @@ public class QuestionSetServiceTest {
     public void setUp() {
 
         MockitoAnnotations.initMocks(this);
-
         questionSetService = new QuestionSetService(new QuestionMapper(), quizDataService);
     }
     @Test
-    public void loadQSetTest() throws URISyntaxException, IOException {
-
+    public void loadQSetTest() throws URISyntaxException, IOException
+    {
         Path file = Paths.get(this.getClass().getResource("/rounds/qset1.csv").toURI().getPath());
         questionSetService.loadSet(file);
         assertTrue(questionSetService.isQSetLoaded());
     }
 
     @Test
-    public void loadQSetAsListTest() throws URISyntaxException, IOException {
-
+    public void loadQSetAsListTest() throws URISyntaxException, IOException
+    {
         Path file = Paths.get(this.getClass().getResource("/rounds/qset1.csv").toURI().getPath());
         questionSetService.loadSet(file);
-        questionSetService.toList();
+        //questionSetService.toList();
         Question question = questionSetService.getQuestion(3);
         assertEquals("I don't know.", question.getAnswer());
     }

@@ -12,12 +12,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Model.Entity.Question;
-import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Service.QuestionSetService;
 import me.twodee.quizatron.Presentation.View.QuestionDisplay;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,7 +81,7 @@ public class QuestionConsoleView extends BorderPane
     private void loadInitialQuestion() throws MalformedURLException
     {
         current = 1;
-        questionList = questionSetService.toList();
+        //questionList = questionSetService.toList();
         Question question = questionSetService.getQuestion(current);
         displayQuestionData(question);
     }
@@ -120,7 +118,6 @@ public class QuestionConsoleView extends BorderPane
     private void loadMedia(Media media)
     {
         playerLoaded = true;
-
         try {
             player = new Player(presentation);
             initPlayer(player, media);

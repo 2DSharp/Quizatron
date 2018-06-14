@@ -115,7 +115,7 @@
             <HBox fx:id="loadSavedBtn" alignment="CENTER_LEFT" onMouseReleased="#loadSavedState" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="SIGN_IN" glyphStyle="-fx-fill:#7c8184" size="16px" />
-                  <Label text="Load saved file" textFill="#7c8184">
+                  <Label text="Load saved filePath" textFill="#7c8184">
                      <font>
                         <Font name="Open Sans Regular" size="15.0" />
                      </font>
@@ -170,7 +170,7 @@
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" onAction="#loadConfigTxtAction" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration file" style="-fx-text-fill: #7c8184;">
+                              <JFXTextField fx:id="configFileLbl" focusColor="#5a99b2" onAction="#loadConfigTxtAction" prefHeight="28.0" prefWidth="204.0" promptText="Import configuration filePath" style="-fx-text-fill: #7c8184;">
                                  <font>
                                     <Font name="Open Sans Regular" size="13.0" />
                                  </font>

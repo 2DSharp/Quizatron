@@ -27,12 +27,11 @@ public class QuestionDisplay extends IView
     private Label titleLbl;
     @FXML
     private VBox leftBar;
-
     @FXML
     BorderPane root;
     @FXML
     private  VBox titleContainer;
-
+    private QuizDataService quizDataService;
     private String logo;
     private String background;
 
@@ -40,21 +39,11 @@ public class QuestionDisplay extends IView
     @Inject
     public QuestionDisplay(QuizDataService quizDataService) throws MalformedURLException
     {
-
-        this.background = getBackground(quizDataService);
-        this.logo = getLogo(quizDataService);
+        this.quizDataService = quizDataService;
     }
 
-    private String getLogo(QuizDataService quizDataService) throws MalformedURLException
+    public void initialize() throws MalformedURLException
     {
-        return quizDataService.getInitialDirectory().toUri().toURL().toExternalForm() +
-                quizDataService.getConfiguration().getAppearance().getLogo();
-    }
-    private String getBackground(QuizDataService quizDataService)
-    {
-        return quizDataService.getConfiguration().getAppearance().getThemeColor();
-    }
-    public void initialize() {
         root.getStylesheets().add(USER_AGENT_STYLESHEET);
         /*
         Image img = new Image(background);
@@ -65,27 +54,32 @@ public class QuestionDisplay extends IView
                                                     BackgroundSize.DEFAULT);
         leftBar.setBackground(new Background(bgImg));
         */
-        leftBar.setStyle("-fx-background-color:" + background );
+        generateBg();
+    }
+
+    private void generateBg() throws MalformedURLException
+    {
+        leftBar.setStyle("-fx-background-color:" + getBackground(quizDataService));
         leftBar.setAlignment(Pos.BOTTOM_CENTER);
-        Image logo = new Image(this.logo);
+        leftBar.getChildren().add(getLogoView());
+    }
+
+    private ImageView getLogoView() throws MalformedURLException
+    {
+        Image logo = new Image(getLogo(quizDataService));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(150);
         logoView.setPreserveRatio(true);
-        leftBar.getChildren().add(logoView);
-        System.out.println(background);
+        return logoView;
     }
-
-    public void revealQuestion(String question)
+    private String getLogo(QuizDataService quizDataService) throws MalformedURLException
     {
-        setTitle(question);
-        fadeIn(titleLbl);
+        return quizDataService.getInitialDirectory().toUri().toURL().toExternalForm() +
+                quizDataService.getConfiguration().getAppearance().getLogo();
     }
-    private void fadeIn(Node node) {
-        FadeTransition ft = new FadeTransition(Duration.millis(3000), node);
-        ft.setFromValue(0.0);
-        ft.setToValue(1.0);
-        ft.setCycleCount(1);
-        ft.play();
+    private String getBackground(QuizDataService quizDataService)
+    {
+        return quizDataService.getConfiguration().getAppearance().getThemeColor();
     }
     public void setTitle(String title)
     {
@@ -98,7 +92,22 @@ public class QuestionDisplay extends IView
     {
 
     }
-    private int computeFontSize(String text) 
+
+    public void revealQuestion(String question)
+    {
+        setTitle(question);
+        fadeIn(titleLbl);
+    }
+
+    private void fadeIn(Node node)
+    {
+        FadeTransition ft = new FadeTransition(Duration.millis(3000), node);
+        ft.setFromValue(0.0);
+        ft.setToValue(1.0);
+        ft.setCycleCount(1);
+        ft.play();
+    }
+    private int computeFontSize(String text)
     {
         int size = 44;
         int textLength = text.length();
