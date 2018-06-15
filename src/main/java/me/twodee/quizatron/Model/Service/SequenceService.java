@@ -23,10 +23,35 @@ public class SequenceService
         this.sequenceMapper = sequenceMapper;
     }
 
-    public void getNextSequence() throws NonExistentRecordException
+
+    public void getNext() throws NonExistentRecordException
     {
         curr += 1;
+        setAndFetch();
+    }
+    public void getPrevious() throws NonExistentRecordException
+    {
+        curr -= 1;
+        setAndFetch();
+    }
+
+    private void setAndFetch() throws NonExistentRecordException
+    {
         sequence.setIndex(curr);
         sequenceMapper.fetch(sequence);
+    }
+    public Sequence getSequence() throws NonExistentRecordException
+    {
+        if (sequence.getName() == null) {
+            sequenceMapper.fetch(sequence);
+        }
+        return sequence;
+    }
+
+    public Sequence getSequence(int index) throws NonExistentRecordException
+    {
+        sequence.setIndex(index - 1);
+        sequenceMapper.fetch(sequence);
+        return  sequence;
     }
 }
