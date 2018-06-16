@@ -25,7 +25,7 @@ import java.util.List;
  * @version 1.0.18.1
  * @since 1.0.18.1
  */
-public class QuestionConsoleView extends BorderPane
+public class QuestionConsoleView extends UIComponent
 {
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
     private QuestionSetService questionSetService;
@@ -55,7 +55,7 @@ public class QuestionConsoleView extends BorderPane
     {
         this.presentation = presentation;
         this.questionSetService = questionSetService;
-        this.fxmlLoader = initFXML();
+        this.fxmlLoader = initFXML("questionviewer.fxml");
         this.fxmlLoader.load();
 
         loadInitialQuestion();
@@ -68,17 +68,7 @@ public class QuestionConsoleView extends BorderPane
         questionLbl.managedProperty().bind(questionLbl.visibleProperty());
     }
 
-    private FXMLLoader initFXML()
-    {
-        // Need to get a factory
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("questionviewer.fxml"));
-        fxmlLoader.setController(this);
-        fxmlLoader.setRoot(this);
-        return fxmlLoader;
-    }
-
-    private void loadInitialQuestion() throws MalformedURLException
+    private void loadInitialQuestion()
     {
         current = 1;
         //questionList = questionSetService.toList();

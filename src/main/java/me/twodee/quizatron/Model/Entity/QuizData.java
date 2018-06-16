@@ -21,6 +21,8 @@ public class QuizData implements Serializable  {
     @Expose
     private String directory;
 
+    private int currentSequence;
+
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
@@ -35,5 +37,15 @@ public class QuizData implements Serializable  {
 
     public String getDirectory() {
         return directory;
+    }
+
+    public int getCurrentSequenceIndex()
+    {
+        return currentSequence;
+    }
+
+    public void setCurrentSequenceIndex(int currentSequence)
+    {
+        this.currentSequence = currentSequence;
     }
 }

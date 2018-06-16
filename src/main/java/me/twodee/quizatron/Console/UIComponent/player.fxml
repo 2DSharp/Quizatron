@@ -15,105 +15,109 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="playerNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="605.0" stylesheets="@../../../../../../resources/Stylesheets/media.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 
-    <children>
-      <VBox layoutX="-1.0" layoutY="-6.0" prefHeight="136.0" prefWidth="607.0" style="-fx-background-color: #282828;">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="153.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane fx:id="playerNode" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="605.0" stylesheets="@../../../../../../resources/Stylesheets/media.css" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="38.0" prefWidth="567.0">
+            <VBox layoutX="-1.0" layoutY="-6.0" prefHeight="136.0" prefWidth="607.0" style="-fx-background-color: #282828;">
                <children>
-                  <Label fx:id="sourceFileLbl" textFill="#8a8888">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="mediaInfo" prefHeight="10.0" prefWidth="535.0" textFill="#a7d9e0" wrapText="true">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="10.0" top="10.0" />
-               </padding>
-            </VBox>
-            <JFXSlider fx:id="timeSlider" styleClass="specialSlider" />
-            <BorderPane prefHeight="6.0" prefWidth="567.0">
-               <left>
-                  <Label fx:id="currTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
-               </left>
-               <right>
-                  <Label fx:id="endTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
-               </right>
-            </BorderPane>
-            <HBox prefHeight="51.0" prefWidth="567.0" spacing="20.0">
-               <padding>
-                  <Insets left="103.0" right="40.0" top="5.0" />
-               </padding>
-               <children>
-                  <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFromFile" styleClass="trackBtn">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtnIcon" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist" styleClass="trackBtn">
-                     <graphic>
-                        <MaterialDesignIconView glyphName="PLAYLIST_PLAY" size="24" styleClass="trackBtnIcon" />
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#back" styleClass="trackBtn">
-                     <graphic>
-                        <FontAwesomeIconView fx:id="backBtn" glyphName="STEP_BACKWARD" size="18" styleClass="trackBtnIcon" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" style="-fx-padding: 20px;">
-                     <graphic>
-                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="16" strokeType="INSIDE" strokeWidth="2.0" styleClass="trackBtnIcon" textAlignment="CENTER">
-                           <fill>
-                              <LinearGradient endX="0.9038461538461539" endY="0.298076923076923" startY="1.0">
-                                 <stops>
-                                    <Stop color="BLACK" />
-                                    <Stop color="#a9ab37" offset="1.0" />
-                                 </stops>
-                              </LinearGradient>
-                           </fill>
-                        </FontAwesomeIconView>
-                     </graphic>
-                     <styleClass>
-                        <String fx:value="playBtn" />
-                        <String fx:value="trackBtn" />
-                     </styleClass>
-                  </Button>
-                  <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#next" styleClass="trackBtn">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="STEP_FORWARD" size="18" styleClass="trackBtnIcon" />
-                     </graphic>
-                  </Button>
-                  <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stop" styleClass="trackBtn">
-                     <graphic>
-                        <FontAwesomeIconView glyphName="STOP" size="18" styleClass="trackBtnIcon" />
-                     </graphic>
-                  </Button>
-                  <HBox prefHeight="52.0" prefWidth="98.0">
+                  <VBox prefHeight="38.0" prefWidth="567.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="trackBtn">
+                        <Label fx:id="sourceFileLbl" textFill="#8a8888">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="mediaInfo" prefHeight="10.0" prefWidth="535.0" textFill="#a7d9e0" wrapText="true">
+                           <font>
+                              <Font size="11.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <JFXSlider fx:id="timeSlider" styleClass="specialSlider" />
+                  <BorderPane prefHeight="6.0" prefWidth="567.0">
+                     <left>
+                        <Label fx:id="currTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+                     </left>
+                     <right>
+                        <Label fx:id="endTimeLbl" text="00:00" textFill="#a7d9e0" BorderPane.alignment="CENTER" />
+                     </right>
+                  </BorderPane>
+                  <HBox prefHeight="51.0" prefWidth="567.0" spacing="20.0">
+                     <padding>
+                        <Insets left="103.0" right="40.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <Button fx:id="fileBtn" mnemonicParsing="false" onAction="#chooseMediaFromFile" styleClass="trackBtn">
                            <graphic>
-                              <FontAwesomeIconView fx:id="muteBtn" fill="#cdc7c7" glyphName="VOLUME_OFF" size="18.0" />
+                              <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtnIcon" />
                            </graphic>
                         </Button>
-                        <JFXSlider styleClass="volSeeker">
-                           <HBox.margin>
-                              <Insets top="12.0" />
-                           </HBox.margin>
-                        </JFXSlider>
+                        <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist" styleClass="trackBtn">
+                           <graphic>
+                              <MaterialDesignIconView glyphName="PLAYLIST_PLAY" size="24" styleClass="trackBtnIcon" />
+                           </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#back" styleClass="trackBtn">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="backBtn" glyphName="STEP_BACKWARD" size="18" styleClass="trackBtnIcon" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="playBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#play" style="-fx-padding: 20px;">
+                           <graphic>
+                              <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY" size="16" strokeType="INSIDE" strokeWidth="2.0" styleClass="trackBtnIcon" textAlignment="CENTER">
+                                 <fill>
+                                    <LinearGradient endX="0.9038461538461539" endY="0.298076923076923" startY="1.0">
+                                       <stops>
+                                          <Stop color="BLACK" />
+                                          <Stop color="#a9ab37" offset="1.0" />
+                                       </stops>
+                                    </LinearGradient>
+                                 </fill>
+                              </FontAwesomeIconView>
+                           </graphic>
+                           <styleClass>
+                              <String fx:value="playBtn" />
+                              <String fx:value="trackBtn" />
+                           </styleClass>
+                        </Button>
+                        <Button fx:id="nextBtn" mnemonicParsing="false" onAction="#next" styleClass="trackBtn">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="STEP_FORWARD" size="18" styleClass="trackBtnIcon" />
+                           </graphic>
+                        </Button>
+                        <Button fx:id="stopBtn" mnemonicParsing="false" onAction="#stop" styleClass="trackBtn">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="STOP" size="18" styleClass="trackBtnIcon" />
+                           </graphic>
+                        </Button>
+                        <HBox prefHeight="52.0" prefWidth="98.0">
+                           <children>
+                              <Button mnemonicParsing="false" styleClass="trackBtn">
+                                 <graphic>
+                                    <FontAwesomeIconView fx:id="muteBtn" fill="#cdc7c7" glyphName="VOLUME_OFF" size="18.0" />
+                                 </graphic>
+                              </Button>
+                              <JFXSlider styleClass="volSeeker">
+                                 <HBox.margin>
+                                    <Insets top="12.0" />
+                                 </HBox.margin>
+                              </JFXSlider>
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" />
+               </padding>
+            </VBox>
          </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" />
-         </padding>
-      </VBox>
-   </children>
-</fx:root>
+      </AnchorPane>
+   </center>
+</BorderPane>

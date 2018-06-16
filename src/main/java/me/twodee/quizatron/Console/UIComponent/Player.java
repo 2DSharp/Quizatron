@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -32,7 +33,7 @@ import static java.lang.Math.abs;
  * @version 1.0.18.1
  * @since 1.0.18.1
  */
-public class Player extends AnchorPane
+public class Player extends UIComponent
 {
 
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class
@@ -42,7 +43,7 @@ public class Player extends AnchorPane
     private MediaPlayer mediaPlayer;
     private Presentation presentation;
     @FXML
-    private AnchorPane playerNode;
+    private BorderPane playerNode;
     @FXML
     private Button playBtn;
     @FXML
@@ -64,7 +65,7 @@ public class Player extends AnchorPane
     public Player(Presentation presentation) throws IOException
     {
         this.presentation = presentation;
-        FXMLLoader loader = initFXML();
+        FXMLLoader loader = initFXML("player.fxml");
         loader.load();
     }
 
@@ -76,15 +77,6 @@ public class Player extends AnchorPane
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         timeSlider.setValue(0);
         prepareMediaView();
-    }
-
-    private FXMLLoader initFXML()
-    {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("player.fxml"));
-        fxmlLoader.setController(this);
-        fxmlLoader.setRoot(this);
-        return fxmlLoader;
     }
 
     /**
@@ -323,7 +315,7 @@ public class Player extends AnchorPane
                 presentation.changeView("media-view");
             }
 
-            MediaPresentationView mediaViewController = (MediaPresentationView) presentation.getView();
+            MediaPresentationView mediaViewController = presentation.getView();
             mediaViewController.embedMediaView(mediaView);
         }
         catch (Exception e) {

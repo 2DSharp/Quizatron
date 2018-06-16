@@ -3,55 +3,55 @@ package me.twodee.quizatron.Model.Service;
 import me.twodee.quizatron.Model.Contract.ISequenceMapper;
 import me.twodee.quizatron.Model.Entity.Sequence;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import me.twodee.quizatron.Model.Mapper.CSVMapper;
 import me.twodee.quizatron.Model.Entity.QuizData;
-
-import java.io.IOException;
+import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
 
 public class SequenceService
 {
     private QuizData quizData;
     private final ISequenceMapper sequenceMapper;
     private Sequence sequence;
-
     private int curr;
 
-    public SequenceService(QuizData quizData, Sequence sequence, ISequenceMapper sequenceMapper)
+    public SequenceService(QuizData quizData, ISequenceMapper sequenceMapper)
     {
-        this.sequence = sequence;
         this.quizData = quizData;
         this.sequenceMapper = sequenceMapper;
     }
-
-
-    public void getNext() throws NonExistentRecordException
+    public void fetchNext()
     {
         curr += 1;
-        setAndFetch();
-    }
-    public void getPrevious() throws NonExistentRecordException
-    {
-        curr -= 1;
-        setAndFetch();
     }
 
-    private void setAndFetch() throws NonExistentRecordException
+    public void fetchPrevious()
     {
-        sequence.setIndex(curr);
-        sequenceMapper.fetch(sequence);
+        curr -= 1;
     }
-    public Sequence getSequence() throws NonExistentRecordException
+
+    public Sequence fetchSequence() throws NonExistentRecordException
     {
-        if (sequence.getName() == null) {
-            sequenceMapper.fetch(sequence);
-        }
+        return fetchSequence(curr + 1);
+    }
+
+    public Sequence fetchSequence(int index) throws NonExistentRecordException
+    {
+        sequence = new Sequence();
+        sequence.setIndex(index - 1);
+        sequenceMapper.fetch(sequence);
+
         return sequence;
     }
 
-    public Sequence getSequence(int index) throws NonExistentRecordException
+    public void rememberCurrent() throws SequenceNotSetException
     {
-        sequence.setIndex(index - 1);
-        sequenceMapper.fetch(sequence);
-        return  sequence;
+        if (sequence == null) {
+            throw new SequenceNotSetException();
+        }
+        quizData.setCurrentSequenceIndex(sequence.getIndex() + 1);
+    }
+
+    public void getSequenceHandler()
+    {
+
     }
 }
