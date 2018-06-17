@@ -9,6 +9,6 @@ import java.nio.file.Path;
 
 public interface IQuestionSetService {
 
-    //IQuestion getQuestion(int index);
+    //IQuestion fetchQuestion(int index);
     IQuestion nextQuestion() throws NoQuestionLeftException, MalformedURLException;
 }

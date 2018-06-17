@@ -1,39 +1,25 @@
 package me.twodee.quizatron.Model.Service.RoundService;
 
-import me.twodee.quizatron.Model.Contract.IQuestionSetService;
 import me.twodee.quizatron.Model.Entity.Question;
-import me.twodee.quizatron.Model.Exception.NoQuestionLeftException;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import me.twodee.quizatron.Model.Mapper.StandardSetMapper;
-import me.twodee.quizatron.Model.Service.QuizDataService;
-import org.apache.commons.csv.CSVRecord;
+import me.twodee.quizatron.Model.Mapper.StandardQSetMapper;
 
 import javax.inject.Inject;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class StandardQSet
 {
-
-    private Question question;
-    private StandardSetMapper standardSetMapper;
-    private Iterator<CSVRecord> set = null;
-    private List setList;
+    private StandardQSetMapper standardQSetMapper;
     private int curr;
 
     @Inject
-    public StandardQSet(StandardSetMapper standardSetMapper)
+    public StandardQSet(StandardQSetMapper standardQSetMapper)
     {
-        this.standardSetMapper = standardSetMapper;
+        this.standardQSetMapper = standardQSetMapper;
     }
 
-    public Question getQuestion() throws NonExistentRecordException
+    public Question fetchQuestion() throws NonExistentRecordException
     {
-       return getQuestion(curr + 1);
+       return fetchQuestion(curr + 1);
     }
 
     public void nextQuestion()
@@ -46,23 +32,23 @@ public class StandardQSet
         curr -= 1;
     }
 
-    public Question getQuestion(int index) throws NonExistentRecordException
+    public Question fetchQuestion(int index) throws NonExistentRecordException
     {
         Question question = new Question();
         curr = index - 1;
         question.setIndex(curr);
-        standardSetMapper.fetch(question);
+        standardQSetMapper.fetch(question);
         return question;
     }
 
     public int getTotalQuestions()
     {
-        return standardSetMapper.getTotalRecords();
+        return standardQSetMapper.getTotalRecords();
     }
 
     public boolean hasNext()
     {
-        return curr < standardSetMapper.getTotalRecords() - 1;
+        return curr < standardQSetMapper.getTotalRecords() - 1;
     }
 
     public boolean hasPrev()
@@ -72,6 +58,6 @@ public class StandardQSet
 
     public boolean hasEnded()
     {
-        return curr > standardSetMapper.getTotalRecords() - 1;
+        return curr > standardQSetMapper.getTotalRecords() - 1;
     }
 }

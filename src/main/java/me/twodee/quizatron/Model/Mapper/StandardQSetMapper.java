@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class StandardSetMapper implements CSVReaderMapper<Question>
+public class StandardQSetMapper implements CSVReaderMapper<Question>
 {
 
     private Iterator<CSVRecord> iterator;
@@ -22,7 +22,7 @@ public class StandardSetMapper implements CSVReaderMapper<Question>
     private String setFile;
     List<Question> questions;
 
-    public StandardSetMapper(CSVManager csvManager, String setFile) throws IOException
+    public StandardQSetMapper(CSVManager csvManager, String setFile) throws IOException
     {
         this.csvManager = csvManager;
         this.setFile = setFile;
