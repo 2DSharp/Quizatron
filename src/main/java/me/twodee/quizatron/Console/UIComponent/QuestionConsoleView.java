@@ -70,7 +70,7 @@ public class QuestionConsoleView extends UIComponent
     {
         current = 1;
         //questionList = standardQSet.toList();
-        //Question question = standardQSet.fetchQuestion(current);
+        //Question question = standardQSet.fetch(current);
         //displayQuestionData(question);
     }
 
@@ -144,9 +144,9 @@ public class QuestionConsoleView extends UIComponent
         setQuestionDataVisibility(mediaDisplayToggleBtn.isSelected());
         if (!mediaDisplayToggleBtn.isSelected()) {
             reset();
-            //loadMedia(standardQSet.fetchQuestion(current).getMedia());
+            //loadMedia(standardQSet.fetch(current).getMedia());
         }
-        //displayQuestionPresentation(standardQSet.fetchQuestion(current).getTitle());
+        //displayQuestionPresentation(standardQSet.fetch(current).getTitle());
     }
 
     @FXML
@@ -155,7 +155,7 @@ public class QuestionConsoleView extends UIComponent
         if (playerLoaded) {
             reset();
         }
-        //Question question = standardQSet.fetchQuestion(++current);
+        //Question question = standardQSet.fetch(++current);
         //displayQuestionData(question);
     }
 
@@ -175,7 +175,7 @@ public class QuestionConsoleView extends UIComponent
         if (playerLoaded) {
             reset();
         }
-        //Question question = standardQSet.fetchQuestion(--current);
+        //Question question = standardQSet.fetch(--current);
         //displayQuestionData(question);
     }
 

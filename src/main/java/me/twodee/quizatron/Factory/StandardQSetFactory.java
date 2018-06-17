@@ -11,18 +11,15 @@ import java.io.IOException;
 public class StandardQSetFactory
 {
     private final CSVManager csvManager;
-    private final QuizDataService quizDataService;
 
     @Inject
-    public StandardQSetFactory(CSVManager csvManager, QuizDataService quizDataService)
+    public StandardQSetFactory(CSVManager csvManager)
     {
         this.csvManager = csvManager;
-        this.quizDataService = quizDataService;
     }
     public StandardQSet create(String file) throws IOException
     {
-        String homedir = quizDataService.getInitialDirectory().toString();
-        StandardQSetMapper standardQSetMapper = new StandardQSetMapper(csvManager, homedir + "/" + file);
+        StandardQSetMapper standardQSetMapper = new StandardQSetMapper(csvManager,  file);
         return new StandardQSet(standardQSetMapper);
     }
 }

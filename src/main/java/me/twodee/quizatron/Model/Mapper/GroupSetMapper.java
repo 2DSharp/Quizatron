@@ -3,6 +3,7 @@ package me.twodee.quizatron.Model.Mapper;
 import me.twodee.quizatron.Component.CSVManager;
 import me.twodee.quizatron.Model.Contract.CSVReaderMapper;
 import me.twodee.quizatron.Model.Entity.Group;
+import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import org.apache.commons.csv.CSVRecord;
 
 import javax.inject.Inject;
@@ -26,10 +27,19 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
         init();
     }
 
-    public void fetch(Group group)
+    public String getFile()
     {
-        Group target = groups.get(group.getIndex());
-        group.setGroup(target);
+        return file;
+    }
+    public void fetch(Group group) throws NonExistentRecordException
+    {
+        try {
+            Group target = groups.get(group.getIndex());
+            group.setGroup(target);
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new NonExistentRecordException();
+        }
     }
 
     private void init() throws IOException
@@ -52,4 +62,8 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
         return new Group(fileName);
     }
 
+    public int getTotalRecords()
+    {
+        return groups.size();
+    }
 }

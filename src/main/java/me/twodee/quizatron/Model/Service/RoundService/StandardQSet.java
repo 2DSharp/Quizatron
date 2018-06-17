@@ -1,15 +1,15 @@
 package me.twodee.quizatron.Model.Service.RoundService;
 
+import me.twodee.quizatron.Model.Contract.IQuestionSetService;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Mapper.StandardQSetMapper;
 
 import javax.inject.Inject;
 
-public class StandardQSet
+public class StandardQSet extends QuestionSetService implements IQuestionSetService<Question>
 {
     private StandardQSetMapper standardQSetMapper;
-    private int curr;
 
     @Inject
     public StandardQSet(StandardQSetMapper standardQSetMapper)
@@ -17,22 +17,14 @@ public class StandardQSet
         this.standardQSetMapper = standardQSetMapper;
     }
 
-    public Question fetchQuestion() throws NonExistentRecordException
+    @Override
+    public Question fetch() throws NonExistentRecordException
     {
-       return fetchQuestion(curr + 1);
+        return fetch(curr + 1);
     }
 
-    public void nextQuestion()
-    {
-        curr += 1;
-    }
-
-    public void prevQuestion()
-    {
-        curr -= 1;
-    }
-
-    public Question fetchQuestion(int index) throws NonExistentRecordException
+    @Override
+    public Question fetch(int index) throws NonExistentRecordException
     {
         Question question = new Question();
         curr = index - 1;
@@ -41,23 +33,14 @@ public class StandardQSet
         return question;
     }
 
-    public int getTotalQuestions()
-    {
-        return standardQSetMapper.getTotalRecords();
-    }
-
+    @Override
     public boolean hasNext()
     {
         return curr < standardQSetMapper.getTotalRecords() - 1;
     }
 
-    public boolean hasPrev()
+    public int getTotalQuestions()
     {
-        return curr > 0;
-    }
-
-    public boolean hasEnded()
-    {
-        return curr > standardQSetMapper.getTotalRecords() - 1;
+        return standardQSetMapper.getTotalRecords();
     }
 }

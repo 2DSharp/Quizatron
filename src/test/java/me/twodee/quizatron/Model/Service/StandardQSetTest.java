@@ -33,8 +33,8 @@ public class StandardQSetTest
         StandardQSetMapper standardQSetMapper = new StandardQSetMapper(csvManager, file);
 
         StandardQSet standardQSet = new StandardQSet(standardQSetMapper);
-
-        Question question = standardQSet.fetchQuestion();
+        standardQSet.toStart();
+        Question question = standardQSet.fetch();
         String result = question.getTitle();
 
         assertThat(result, is("What is your name?"));
@@ -47,7 +47,7 @@ public class StandardQSetTest
         StandardQSetMapper standardQSetMapper = new StandardQSetMapper(csvManager, file);
 
         StandardQSet  standardQSet = new StandardQSet(standardQSetMapper);
-        standardQSet.fetchQuestion(10);
+        standardQSet.fetch(10);
     }
 
     @Test
@@ -55,9 +55,9 @@ public class StandardQSetTest
     {
         CSVManager csvManager = new CSVManager();
         StandardQSetMapper standardQSetMapper = new StandardQSetMapper(csvManager, file);
-
         StandardQSet  standardQSet = new StandardQSet(standardQSetMapper);
-        String result = standardQSet.fetchQuestion(2).getAnswer();
+
+        String result = standardQSet.fetch(2).getAnswer();
 
         assertThat(result, is("Good."));
     }
@@ -71,10 +71,10 @@ public class StandardQSetTest
         StandardQSet  standardQSet = new StandardQSet(standardQSetMapper);
 
         int i = 1;
-        while (!standardQSet.hasEnded()) {
-            Question question = standardQSet.fetchQuestion();
+        while (standardQSet.hasNext()) {
+            standardQSet.next();
+            Question question = standardQSet.fetch();
             System.out.println(i++ + " " + question.getTitle() + " " + question.getAnswer());
-            standardQSet.nextQuestion();
         }
 
         assertThat(i, is(4));
