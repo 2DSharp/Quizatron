@@ -1,7 +1,5 @@
 package me.twodee.quizatron.Model.Entity;
 
-import javafx.scene.image.Image;
-import javafx.scene.media.Media;
 import me.twodee.quizatron.Model.Contract.IQuestion;
 
 public class Question implements IQuestion {
@@ -9,41 +7,71 @@ public class Question implements IQuestion {
     private String title;
 
     private String answer;
-    private String image;
+    private String questionImage;
+    private String ansImage;
     private String media;
-    private String homeDir;
+    private int index;
 
-    public Question(String homeDir, String title, String answer, String image, String media) {
+    public Question()
+    {
 
-        this.homeDir = homeDir;
+    }
+    public Question(String title, String questionImage, String answer, String ansImage, String media)
+    {
+
         this.title = title;
+        this.questionImage = questionImage;
         this.answer = answer;
-        this.image = image;
+        this.ansImage = ansImage;
         this.media = media;
     }
+
+    public void setQuestion(Question question)
+    {
+        this.index = question.index;
+        this.title = question.title;
+        this.questionImage = question.questionImage;
+        this.ansImage = question.ansImage;
+        this.answer = question.answer;
+        this.media = question.media;
+    }
+    public void setIndex(int index)
+    {
+        this.index = index;
+    }
+
+    public int getIndex()
+    {
+        return index;
+    }
+
     @Override
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
     @Override
-    public String getAnswer() {
+    public String getAnswer()
+    {
         return answer;
     }
 
     @Override
-    public Image getImage() {
-        if (!image.isEmpty()) {
-            return new Image(homeDir + image);
-        }
-        return null;
+    public String getQuestionImage()
+    {
+        return questionImage;
     }
 
-    public Media getMedia() {
+    @Override
+    public String getAnsImage()
+    {
+        return ansImage;
+    }
 
-        if (!media.isEmpty()) {
-            return new Media(homeDir + media);
-        }
-        return null;
+    @Override
+    public String getMedia()
+    {
+        return media;
     }
 }

@@ -9,7 +9,6 @@ import java.nio.file.Path;
 
 public interface IQuestionSetService {
 
-    void loadSet(Path file) throws IOException, NoQuestionLeftException;
     //IQuestion getQuestion(int index);
     IQuestion nextQuestion() throws NoQuestionLeftException, MalformedURLException;
 }

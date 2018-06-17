@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Model.Service;
 
+import me.twodee.quizatron.Component.CSVManager;
 import me.twodee.quizatron.Model.Contract.ISequenceMapper;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
 import me.twodee.quizatron.Model.Entity.QuizData;
@@ -37,12 +38,12 @@ public class SequenceServiceTest
     }
 
     @Test
-    public void nextSequenceTest() throws IOException, NonExistentRecordException, SequenceNotSetException
+    public void nextSequenceTest() throws IOException, NonExistentRecordException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
-        sequenceService.initSequence();
         sequenceService.fetchNext();
         Sequence newSequence = sequenceService.fetchSequence();
 
@@ -50,9 +51,10 @@ public class SequenceServiceTest
     }
 
     @Test
-    public void currentSequenceTest() throws IOException, NonExistentRecordException, SequenceNotSetException
+    public void currentSequenceTest() throws IOException, NonExistentRecordException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
         Sequence newSequence = sequenceService.fetchSequence();
@@ -61,29 +63,21 @@ public class SequenceServiceTest
     }
 
     @Test(expected = NonExistentRecordException.class)
-    public void prevNonExistentSequenceTest() throws NonExistentRecordException, IOException, SequenceNotSetException
+    public void prevNonExistentSequenceTest() throws NonExistentRecordException, IOException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
-        sequenceService.initSequence();
         sequenceService.fetchPrevious();
-    }
-
-    @Test(expected = SequenceNotSetException.class)
-    public void uninitializedNextSequenceTest() throws NonExistentRecordException, IOException, SequenceNotSetException
-    {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
-        SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
-
-        sequenceService.fetchNext();
         sequenceService.fetchSequence();
     }
 
     @Test
     public void getSequenceByIndexTest() throws NonExistentRecordException, IOException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
         Sequence result = sequenceService.fetchSequence(4);
@@ -94,7 +88,8 @@ public class SequenceServiceTest
     @Test(expected = SequenceNotSetException.class)
     public void storeSequenceBeforeFetchTest() throws IOException, SequenceNotSetException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         QuizData quizData = new QuizData();
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -104,7 +99,8 @@ public class SequenceServiceTest
     @Test
     public void storeSequenceTest() throws IOException, SequenceNotSetException, NonExistentRecordException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         QuizData quizData = new QuizData();
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -116,12 +112,11 @@ public class SequenceServiceTest
         assertThat(result, is("Subject Round"));
     }
 
-    @Test
     public void getRoundServiceTest() throws IOException
     {
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(quizData.getConfiguration());
+        CSVManager csvManager = new CSVManager();
+        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, quizData.getConfiguration());
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
         sequenceService.getSequenceHandler();
-
     }
 }

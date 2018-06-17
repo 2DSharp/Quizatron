@@ -36,7 +36,8 @@ public class SequenceService
     public Sequence fetchSequence(int index) throws NonExistentRecordException
     {
         sequence = new Sequence();
-        sequence.setIndex(index - 1);
+        curr = index - 1;
+        sequence.setIndex(curr);
         sequenceMapper.fetch(sequence);
 
         return sequence;
@@ -52,6 +53,5 @@ public class SequenceService
 
     public void getSequenceHandler()
     {
-
     }
 }

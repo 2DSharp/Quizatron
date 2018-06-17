@@ -10,14 +10,13 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
-import me.twodee.quizatron.Model.Service.QuestionSetService;
+import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Presentation.IView;
 import me.twodee.quizatron.Presentation.View.HomeView;
@@ -37,7 +36,7 @@ public class PanelPresenter {
     private FXMLLoader fxmlLoader;
     private Mediator mediator;
     private QuizDataService quizDataService;
-    private QuestionSetService questionSetService;
+    private StandardQSet standardQSet;
 
     @FXML
     private JFXToggleButton fullScreenToggleBtn;
@@ -61,13 +60,13 @@ public class PanelPresenter {
                           FXMLLoader fxmlLoader,
                           Mediator mediator,
                           QuizDataService quizDataService,
-                          QuestionSetService questionSetService) throws Exception {
+                          StandardQSet standardQSet) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
         this.mediator = mediator;
         this.quizDataService = quizDataService;
-        this.questionSetService = questionSetService;
+        this.standardQSet = standardQSet;
     }
 
     @FXML
@@ -95,9 +94,9 @@ public class PanelPresenter {
 
         dashboard.getChildren().clear();
         try {
-            Path file = Paths.get(this.getClass().getResource("/rounds/qset1.csv").toURI().getPath());
-            questionSetService.loadSet(file);
-            QuestionConsoleView questionConsoleView = new QuestionConsoleView(questionSetService, presentation);
+            String file = this.getClass().getResource("/rounds/qset1.csv").toURI().getPath();
+            //standardQSet.loadSet(file);
+            QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, presentation);
             dashboard.getChildren().add(questionConsoleView);
         }
         catch (IOException e) {

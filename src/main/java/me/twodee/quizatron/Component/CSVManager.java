@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Model.Mapper;
+package me.twodee.quizatron.Component;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
 
-public abstract class CSVMapper {
+public class CSVManager
+{
 
     private Iterator<CSVRecord> iterator;
 

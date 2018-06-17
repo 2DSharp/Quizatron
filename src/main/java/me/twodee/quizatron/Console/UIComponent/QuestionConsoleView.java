@@ -7,15 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Model.Entity.Question;
-import me.twodee.quizatron.Model.Service.QuestionSetService;
+import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Presentation.View.QuestionDisplay;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -28,7 +26,7 @@ import java.util.List;
 public class QuestionConsoleView extends UIComponent
 {
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
-    private QuestionSetService questionSetService;
+    private StandardQSet standardQSet;
     private FXMLLoader fxmlLoader;
     private Presentation presentation;
     private Player player;
@@ -51,10 +49,10 @@ public class QuestionConsoleView extends UIComponent
     private  List<Question> questionList;
     private int current;
 
-    public QuestionConsoleView(QuestionSetService questionSetService, Presentation presentation) throws IOException
+    public QuestionConsoleView(StandardQSet standardQSet, Presentation presentation) throws IOException
     {
         this.presentation = presentation;
-        this.questionSetService = questionSetService;
+        this.standardQSet = standardQSet;
         this.fxmlLoader = initFXML("questionviewer.fxml");
         this.fxmlLoader.load();
 
@@ -71,9 +69,9 @@ public class QuestionConsoleView extends UIComponent
     private void loadInitialQuestion()
     {
         current = 1;
-        //questionList = questionSetService.toList();
-        Question question = questionSetService.getQuestion(current);
-        displayQuestionData(question);
+        //questionList = standardQSet.toList();
+        //Question question = standardQSet.getQuestion(current);
+        //displayQuestionData(question);
     }
 
     private void displayQuestionPresentation(String question)
@@ -91,7 +89,7 @@ public class QuestionConsoleView extends UIComponent
     private void displayQuestionData(Question question)
     {
         if (question.getMedia() != null) {
-            loadMedia(question.getMedia());
+            //loadMedia(question.getMedia());
         }
         else {
             displayQuestionPresentation(question.getTitle());
@@ -146,9 +144,9 @@ public class QuestionConsoleView extends UIComponent
         setQuestionDataVisibility(mediaDisplayToggleBtn.isSelected());
         if (!mediaDisplayToggleBtn.isSelected()) {
             reset();
-            loadMedia(questionSetService.getQuestion(current).getMedia());
+            //loadMedia(standardQSet.getQuestion(current).getMedia());
         }
-        displayQuestionPresentation(questionSetService.getQuestion(current).getTitle());
+        //displayQuestionPresentation(standardQSet.getQuestion(current).getTitle());
     }
 
     @FXML
@@ -157,8 +155,8 @@ public class QuestionConsoleView extends UIComponent
         if (playerLoaded) {
             reset();
         }
-        Question question = questionSetService.getQuestion(++current);
-        displayQuestionData(question);
+        //Question question = standardQSet.getQuestion(++current);
+        //displayQuestionData(question);
     }
 
     private void reset()
@@ -177,8 +175,8 @@ public class QuestionConsoleView extends UIComponent
         if (playerLoaded) {
             reset();
         }
-        Question question = questionSetService.getQuestion(--current);
-        displayQuestionData(question);
+        //Question question = standardQSet.getQuestion(--current);
+        //displayQuestionData(question);
     }
 
     @FXML
