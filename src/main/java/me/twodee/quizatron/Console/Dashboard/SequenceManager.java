@@ -1,5 +1,7 @@
 package me.twodee.quizatron.Console.Dashboard;
 
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -21,6 +23,7 @@ public class SequenceManager extends UIComponent
     Label seqFile;
     @FXML
     Label seqNextName;
+    Sequence sequence;
 
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class
             .getResource("/Stylesheets/sequence.css")
@@ -50,10 +53,8 @@ public class SequenceManager extends UIComponent
             sequenceService.getSequenceAsStream()
                            .map(e -> e.getName())
                            .forEach(System.out::println);
-            Sequence sequence = sequenceService.fetchSequence(2);
 
-            seqName.setText(sequence.getName());
-            seqFile.setText(sequence.getFilePath());
+            displaySequenceData();
         }
 
         catch (InvocationTargetException e) {
@@ -68,5 +69,25 @@ public class SequenceManager extends UIComponent
         catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void displaySequenceData() throws NonExistentRecordException
+    {
+        sequence = sequenceService.fetchSequence();
+        seqName.setText(sequence.getName());
+        seqFile.setText(sequence.getFilePath());
+    }
+    @FXML
+    private void showNextSeq(ActionEvent event) throws NonExistentRecordException
+    {
+        sequenceService.fetchNext();
+        displaySequenceData();
+    }
+
+    @FXML
+    private void showPrevSeq(ActionEvent event) throws NonExistentRecordException
+    {
+        sequenceService.fetchPrevious();
+        displaySequenceData();
     }
 }

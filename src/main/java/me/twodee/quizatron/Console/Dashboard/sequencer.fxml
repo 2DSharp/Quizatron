@@ -22,9 +22,9 @@
                   <Label fx:id="seqFile" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="SomeRound.csv" textFill="WHITE" />
                </children>
             </VBox>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button mnemonicParsing="false" onAction="#showPrevSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
-                  <FontAwesomeIconView glyphName="STEP_BACKWARD" size="16" styleClass="seqIcons" />
+                  <FontAwesomeIconView fx:id="prevSeq" glyphName="STEP_BACKWARD" size="16" styleClass="seqIcons" />
                </graphic>
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
@@ -54,7 +54,7 @@
                   <FontAwesomeIconView glyphName="FAST_FORWARD" size="16" styleClass="seqIcons" />
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="nextSeq" mnemonicParsing="false" onAction="#showNextSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <FontAwesomeIconView glyphName="STEP_FORWARD" size="16" styleClass="seqIcons" />
                </graphic>
