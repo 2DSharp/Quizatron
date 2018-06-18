@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
+import me.twodee.quizatron.Console.UIComponent.SequenceManager;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
@@ -59,14 +60,14 @@ public class PanelPresenter {
     public PanelPresenter(Presentation presentation,
                           FXMLLoader fxmlLoader,
                           Mediator mediator,
-                          QuizDataService quizDataService,
-                          StandardQSet standardQSet) throws Exception {
+                          QuizDataService quizDataService
+                          ) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
         this.mediator = mediator;
         this.quizDataService = quizDataService;
-        this.standardQSet = standardQSet;
+        //this.standardQSet = standardQSet;
     }
 
     @FXML
@@ -94,18 +95,22 @@ public class PanelPresenter {
 
         dashboard.getChildren().clear();
         try {
+            /*
             String file = this.getClass().getResource("/rounds/qset1.csv").toURI().getPath();
             //standardQSet.loadSet(file);
             QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, presentation);
             dashboard.getChildren().add(questionConsoleView);
+            */
+            SequenceManager sequenceManager = new SequenceManager();
+            AnchorPane.setBottomAnchor(sequenceManager, 0.0);
+            AnchorPane.setLeftAnchor(sequenceManager, 0.0);
+            AnchorPane.setRightAnchor(sequenceManager, 0.0);
+            AnchorPane.setTopAnchor(sequenceManager, 0.0);
+            dashboard.getChildren().add(sequenceManager);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
     }
     private Path getFile(String title) {
 

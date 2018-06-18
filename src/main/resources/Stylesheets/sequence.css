@@ -1,0 +1,43 @@
+.seqActBtns {
+
+}
+
+#bigBtn {
+    -fx-border-color: #fff;
+    -fx-border-radius: 100%;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;}
+
+.seqIcons {
+
+    -fx-fill: white;
+}
+
+#controlPanel .label {
+    -fx-text-fill: #fff;
+    -fx-font-size: 12px;
+}
+
+.scroll-pane {
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #1C2026;
+}

@@ -6,6 +6,8 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Entity.QuizData;
 import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
 
+import java.util.stream.Stream;
+
 public class SequenceService
 {
     private QuizData quizData;
@@ -51,7 +53,12 @@ public class SequenceService
         quizData.setCurrentSequenceIndex(sequence.getIndex() + 1);
     }
 
+    public Stream<Sequence> getSequenceAsStream()
+    {
+        return sequenceMapper.getStream();
+    }
     public void getSequenceHandler()
     {
     }
+
 }

@@ -11,9 +11,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static java.lang.Math.pow;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -129,4 +137,24 @@ public class SequenceMapperTest
 
         assertThat(sequence.getIntro(), is("yellow.mp4"));
     }
+
+    @Test
+    public void streamTest() throws IOException
+    {
+        CSVManager csvManager = new CSVManager();
+        CSVSequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager, configuration);
+
+        Stream<Sequence> sequences = sequenceMapper.getStream();
+
+         List<String> names = sequences.map(Sequence::getName)
+                                       .collect(Collectors.toList());
+
+         assertThat(names, hasItems("Regular Round",
+                             "Audio Visual Round",
+                             "Subject Round",
+                             "Who Am I?",
+                             "Block Round",
+                             "Rapid Fire"));
+    }
+
 }

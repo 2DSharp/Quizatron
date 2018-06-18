@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" style="-fx-border-width: 0px;" stylesheets="@../../../../../../resources/Stylesheets/sequence.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <HBox id="controlPanel" alignment="CENTER" prefHeight="88.0" prefWidth="600.0" style="-fx-background-color: #261330;" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="150.0">
+               <children>
+                  <Label style="-fx-text-fill: gray;" text="Now playing:" textFill="WHITE" />
+                  <Label prefHeight="15.0" prefWidth="84.0" text="Round name" textFill="WHITE" />
+                  <Label text="SomeRound.csv" textFill="WHITE" />
+               </children>
+            </VBox>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+               <graphic>
+                  <FontAwesomeIconView glyphName="STEP_BACKWARD" size="16" styleClass="seqIcons" />
+               </graphic>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+               <graphic>
+                  <FontAwesomeIconView glyphName="FAST_BACKWARD" size="16" styleClass="seqIcons" />
+               </graphic>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Button>
+            <Button id="bigBtn" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+               <graphic>
+                  <MaterialDesignIconView glyphName="PAUSE" size="24" styleClass="seqIcons" />
+               </graphic>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+               <graphic>
+                  <FontAwesomeIconView glyphName="FAST_FORWARD" size="16" styleClass="seqIcons" />
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+               <graphic>
+                  <FontAwesomeIconView glyphName="STEP_FORWARD" size="16" styleClass="seqIcons" />
+               </graphic>
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </Button>
+            <VBox alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="150.0">
+               <children>
+                  <Label text="1/6" textFill="WHITE" />
+                  <Label text="Sequence type" textFill="WHITE" />
+                  <HBox alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="158.0">
+                     <children>
+                        <Label prefHeight="15.0" prefWidth="40.0" style="-fx-text-fill: gray;" text="Next:" textFill="WHITE" />
+                        <Label text="Next Round" textFill="WHITE" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding></HBox>
+   </bottom>
+   <right>
+      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="650.0" maxWidth="1.7976931348623157E308" pannable="true" prefHeight="630.0" prefWidth="242.0" style="-fx-background-color: #39404C;" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+         <content>
+            <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="635.0" prefWidth="223.0" style="-fx-background-color: #39404C;">
+               <children>
+                  <VBox prefHeight="125.0" prefWidth="205.0" style="-fx-background-color: #fff;">
+                     <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </FlowPane.margin>
+                  </VBox>
+                  <VBox prefHeight="127.0" prefWidth="205.0" style="-fx-background-color: #fff;">
+                     <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </FlowPane.margin>
+                  </VBox>
+                  <VBox prefHeight="125.0" prefWidth="205.0" style="-fx-background-color: #fff;">
+                     <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </FlowPane.margin>
+                  </VBox>
+                  <VBox prefHeight="135.0" prefWidth="205.0" style="-fx-background-color: #fff;">
+                     <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </FlowPane.margin>
+                  </VBox>
+                  <VBox prefHeight="135.0" prefWidth="205.0" style="-fx-background-color: #fff;">
+                     <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </FlowPane.margin>
+                  </VBox>
+               </children>
+            </FlowPane>
+         </content>
+      </ScrollPane>
+   </right>
+</fx:root>

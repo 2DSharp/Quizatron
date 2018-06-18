@@ -29,6 +29,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/img/qtron64x64.png")));
         primaryStage.setTitle("Quizatron console");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

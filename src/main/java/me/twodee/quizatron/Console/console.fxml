@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootNode" prefHeight="722.0" prefWidth="1362.0" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.PanelPresenter">
+<AnchorPane fx:id="rootNode" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.PanelPresenter">
    <children>
-      <VBox layoutX="-8.0" layoutY="-7.0" prefHeight="729.0" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css">
+      <VBox layoutX="-8.0" layoutY="-7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <Label prefHeight="80.0" prefWidth="300.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
+            <Label prefHeight="80.0" prefWidth="294.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
                <font>
                   <Font name="Open Sans Light" size="20.0" />
                </font>
@@ -234,7 +234,7 @@
                         <JFXToggleButton fx:id="fullScreenToggleBtn" onAction="#toggleFullScreen" prefHeight="50.0" prefWidth="143.0" text="Full screen" textFill="WHITE" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="120.0" prefWidth="250.0" style="-fx-border-color: #333645; -fx-border-width: 1px;">
+                  <VBox prefHeight="147.0" prefWidth="250.0" style="-fx-border-color: #333645; -fx-border-width: 1px;">
                      <children>
                         <Label text="About:" textFill="#bfbfbf">
                            <VBox.margin>
@@ -285,10 +285,7 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </VBox>
-         </children>
-         <padding>
-            <Insets left="10.0" />
-         </padding></VBox>
-      <AnchorPane fx:id="dashboard" layoutX="273.0" layoutY="1.0" prefHeight="7.0" prefWidth="1093.0" />
+         </children></VBox>
+      <AnchorPane fx:id="dashboard" layoutX="279.0" layoutY="1.0" prefHeight="8.0" prefWidth="1087.0" AnchorPane.leftAnchor="280.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

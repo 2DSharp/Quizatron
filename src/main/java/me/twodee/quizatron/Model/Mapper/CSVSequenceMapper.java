@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class CSVSequenceMapper implements ISequenceMapper, CSVReaderMapper<Sequence>
 {
@@ -79,5 +80,11 @@ public class CSVSequenceMapper implements ISequenceMapper, CSVReaderMapper<Seque
     public int getTotalRecords()
     {
         return sequences.size();
+    }
+
+    @Override
+    public Stream<Sequence> getStream()
+    {
+        return sequences.stream();
     }
 }
