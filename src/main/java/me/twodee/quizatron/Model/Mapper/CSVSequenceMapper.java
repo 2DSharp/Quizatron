@@ -2,12 +2,10 @@ package me.twodee.quizatron.Model.Mapper;
 
 import me.twodee.quizatron.Component.CSVManager;
 import me.twodee.quizatron.Model.Contract.CSVReaderMapper;
-import me.twodee.quizatron.Model.Contract.ISequenceMapper;
-import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
+import me.twodee.quizatron.Model.Contract.IMapper;
 import me.twodee.quizatron.Model.Entity.Sequence;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 
-import me.twodee.quizatron.Model.Service.QuizDataService;
 import org.apache.commons.csv.CSVRecord;
 
 import javax.inject.Inject;
@@ -17,16 +15,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class CSVSequenceMapper implements ISequenceMapper, CSVReaderMapper<Sequence>
+public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Sequence>
 {
     private Iterator<CSVRecord> iterator;
     private List<Sequence> sequences;
     private CSVManager csvManager;
+    private String configuration;
 
     @Inject
-    public CSVSequenceMapper(CSVManager csvManager)
+    public CSVSequenceMapper(CSVManager csvManager, String config)
     {
         this.csvManager = csvManager;
+        this.configuration = config;
     }
     /**
      * Loads the CSV file data into memory for faster access times during sequence load
@@ -34,7 +34,7 @@ public class CSVSequenceMapper implements ISequenceMapper, CSVReaderMapper<Seque
      * Do not lazy load this: Loading while instantiation is affordable due to loading screen.
      * @throws IOException
      */
-    public void init(String configuration) throws IOException
+    public void init() throws IOException
     {
         iterator = csvManager.load(configuration);
         sequences = new ArrayList<>();

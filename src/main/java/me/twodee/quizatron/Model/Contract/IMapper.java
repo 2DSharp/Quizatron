@@ -7,10 +7,10 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public interface ISequenceMapper
+public interface IMapper<T>
 {
-    void fetch(Sequence sequence) throws NonExistentRecordException;
+    void fetch(T sequence) throws NonExistentRecordException;
     int getTotalRecords();
     Stream<Sequence> getStream();
-    void init(String configuration) throws IOException;
+    void init() throws IOException;
 }

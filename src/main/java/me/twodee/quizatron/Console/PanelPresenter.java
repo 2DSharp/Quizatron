@@ -104,7 +104,6 @@ public class PanelPresenter {
             dashboard.getChildren().add(questionConsoleView);
             */
             SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService);
-            sequenceManager.loadService();
             AnchorPane.setBottomAnchor(sequenceManager, 0.0);
             AnchorPane.setLeftAnchor(sequenceManager, 0.0);
             AnchorPane.setRightAnchor(sequenceManager, 0.0);
@@ -114,9 +113,7 @@ public class PanelPresenter {
         catch (IOException e) {
             e.printStackTrace();
         }
-        catch (NonExistentRecordException e) {
-            e.printStackTrace();
-        }
+
     }
     private Path getFile(String title) {
 

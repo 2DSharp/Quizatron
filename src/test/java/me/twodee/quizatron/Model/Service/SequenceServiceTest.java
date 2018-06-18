@@ -1,21 +1,10 @@
 package me.twodee.quizatron.Model.Service;
 
-import me.twodee.quizatron.Component.CSVManager;
-import me.twodee.quizatron.Model.Contract.ISequenceMapper;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
-import me.twodee.quizatron.Model.Entity.QuizData;
-import me.twodee.quizatron.Model.Entity.Sequence;
-import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
-import me.twodee.quizatron.Model.Mapper.CSVSequenceMapper;
-import me.twodee.quizatron.Model.Mapper.ConfigurationMapper;
-import me.twodee.quizatron.Model.Mapper.QuizDataMapper;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
@@ -43,7 +32,7 @@ public class SequenceServiceTest
     public void nextSequenceTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -57,7 +46,7 @@ public class SequenceServiceTest
     public void currentSequenceTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -70,7 +59,7 @@ public class SequenceServiceTest
     public void prevNonExistentSequenceTest() throws NonExistentRecordException, IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -82,7 +71,7 @@ public class SequenceServiceTest
     public void getSequenceByIndexTest() throws NonExistentRecordException, IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
 
@@ -96,7 +85,7 @@ public class SequenceServiceTest
     public void storeSequenceBeforeFetchTest() throws IOException, SequenceNotSetException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         QuizDataMapper quizDataMapper = new QuizDataMapper();
         QuizData quizData = new QuizData();
@@ -111,7 +100,7 @@ public class SequenceServiceTest
     public void storeSequenceTest() throws IOException, SequenceNotSetException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         QuizData quizData = new QuizData();
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
@@ -127,7 +116,7 @@ public class SequenceServiceTest
     public void getRoundServiceTest() throws IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         SequenceService sequenceService = new SequenceService(quizData, sequenceMapper);
         sequenceService.getSequenceHandler();

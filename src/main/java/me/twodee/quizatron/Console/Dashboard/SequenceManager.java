@@ -11,6 +11,7 @@ import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Model.Service.SequenceService;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class SequenceManager extends UIComponent
 {
@@ -36,24 +37,36 @@ public class SequenceManager extends UIComponent
         fxmlLoader.load();
     }
 
-    public void initialize()
+    public void initialize() throws IOException, NonExistentRecordException
     {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
-
+        displayServiceData();
     }
 
-    public void loadService() throws IOException, NonExistentRecordException
+    private void displayServiceData() throws IOException, NonExistentRecordException
     {
-        sequenceService.load(quizDataService);
+        try {
+            sequenceService.load();
+            sequenceService.getSequenceAsStream()
+                           .map(e -> e.getName())
+                           .forEach(System.out::println);
+            Sequence sequence = sequenceService.fetchSequence(2);
 
-        sequenceService.getSequenceAsStream()
-                       .map(e -> e.getName())
-                       .forEach(System.out::println);
+            seqName.setText(sequence.getName());
+            seqFile.setText(sequence.getFilePath());
+        }
 
-        Sequence sequence = sequenceService.fetchSequence(2);
-
-        seqName.setText(sequence.getName());
-        seqFile.setText(sequence.getFilePath());
-
+        catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

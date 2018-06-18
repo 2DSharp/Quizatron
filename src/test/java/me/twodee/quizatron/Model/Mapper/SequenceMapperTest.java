@@ -1,30 +1,12 @@
 package me.twodee.quizatron.Model.Mapper;
 
-import me.twodee.quizatron.Component.CSVManager;
-import me.twodee.quizatron.Model.Contract.ISequenceMapper;
 import me.twodee.quizatron.Model.Entity.Configuration.Configuration;
-import me.twodee.quizatron.Model.Entity.Sequence;
-import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.lang.Math.pow;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
 
 public class SequenceMapperTest
 {
@@ -46,7 +28,7 @@ public class SequenceMapperTest
     public void fetchNonExistentIndexPositive() throws NonExistentRecordException, IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
         sequence.setIndex(10);
@@ -57,7 +39,7 @@ public class SequenceMapperTest
     public void fetchEmptySequenceTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
         sequenceMapper.fetch(sequence);
@@ -70,7 +52,7 @@ public class SequenceMapperTest
     public void fetchFirstRecordTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
 
@@ -84,7 +66,7 @@ public class SequenceMapperTest
     public void fetchSecondRecordTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
 
@@ -98,7 +80,7 @@ public class SequenceMapperTest
     public void totalRecordNumTest() throws IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
 
         int result = sequenceMapper.getTotalRecords();
@@ -110,7 +92,7 @@ public class SequenceMapperTest
     public void fetchTypeTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
 
@@ -124,7 +106,7 @@ public class SequenceMapperTest
     public void fetchFileTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
 
@@ -138,7 +120,7 @@ public class SequenceMapperTest
     public void fetchIntroTest() throws IOException, NonExistentRecordException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
         Sequence sequence = new Sequence();
 
@@ -152,7 +134,7 @@ public class SequenceMapperTest
     public void streamTest() throws IOException
     {
         CSVManager csvManager = new CSVManager();
-        ISequenceMapper sequenceMapper = new CSVSequenceMapper(csvManager);
+        IMapper sequenceMapper = new CSVSequenceMapper(csvManager);
         ((CSVSequenceMapper) sequenceMapper).init(configuration);
 
         Stream<Sequence> sequences = sequenceMapper.getStream();

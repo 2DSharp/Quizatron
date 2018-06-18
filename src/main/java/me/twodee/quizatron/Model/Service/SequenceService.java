@@ -1,32 +1,43 @@
 package me.twodee.quizatron.Model.Service;
 
-import me.twodee.quizatron.Model.Contract.ISequenceMapper;
+import me.twodee.quizatron.Model.Contract.IMapperFactory;
+import me.twodee.quizatron.Model.Contract.IMapper;
 import me.twodee.quizatron.Model.Entity.Sequence;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import me.twodee.quizatron.Model.Entity.QuizData;
 import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
+import me.twodee.quizatron.Model.Mapper.CSVSequenceMapper;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 
+@Singleton
 public class SequenceService
 {
     private QuizDataService quizDataService;
-    private final ISequenceMapper sequenceMapper;
+    private IMapper sequenceMapper;
     private Sequence sequence;
     private int curr;
+    private IMapperFactory<CSVSequenceMapper> factory;
 
     @Inject
-    public SequenceService(ISequenceMapper sequenceMapper)
+    public SequenceService(IMapperFactory<CSVSequenceMapper> factory, QuizDataService quizDataService)
     {
-        this.sequenceMapper = sequenceMapper;
+        this.factory = factory;
+        this.quizDataService = quizDataService;
     }
 
-    public void load(QuizDataService quizDataService) throws IOException
+    public void load()
+    throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
+           IllegalAccessException
     {
-        sequenceMapper.init(quizDataService.getInitialDirectory() + "/"
-                                    + quizDataService.getConfiguration().getSequence());
+        String seqConfig = quizDataService.getInitialDirectory() + "/"
+                + quizDataService.getConfiguration().getSequence();
+
+        sequenceMapper = factory.create(CSVSequenceMapper.class, seqConfig);
+        sequenceMapper.init();
     }
     public void fetchNext()
     {
