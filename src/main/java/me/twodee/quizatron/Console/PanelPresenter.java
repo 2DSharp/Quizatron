@@ -13,12 +13,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
-import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
-import me.twodee.quizatron.Console.UIComponent.SequenceManager;
+import me.twodee.quizatron.Console.Dashboard.SequenceManager;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
+import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.QuizDataService;
+import me.twodee.quizatron.Model.Service.SequenceService;
 import me.twodee.quizatron.Presentation.IView;
 import me.twodee.quizatron.Presentation.View.HomeView;
 
@@ -26,7 +27,6 @@ import javax.inject.Inject;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -37,7 +37,7 @@ public class PanelPresenter {
     private FXMLLoader fxmlLoader;
     private Mediator mediator;
     private QuizDataService quizDataService;
-    private StandardQSet standardQSet;
+    private SequenceService sequenceService;
 
     @FXML
     private JFXToggleButton fullScreenToggleBtn;
@@ -56,17 +56,20 @@ public class PanelPresenter {
     @FXML
     private JFXButton stopBtn;
 
+
     @Inject
     public PanelPresenter(Presentation presentation,
                           FXMLLoader fxmlLoader,
                           Mediator mediator,
-                          QuizDataService quizDataService
+                          QuizDataService quizDataService,
+                          SequenceService sequenceService
                           ) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
         this.presentation = presentation;
         this.mediator = mediator;
         this.quizDataService = quizDataService;
+        this.sequenceService = sequenceService;
         //this.standardQSet = standardQSet;
     }
 
@@ -80,7 +83,6 @@ public class PanelPresenter {
         dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
         dashboard.getChildren().add(mediaPlayerPane);
     }
-
 
     @FXML
     private void loadSavedState(MouseEvent event) {
@@ -101,7 +103,8 @@ public class PanelPresenter {
             QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, presentation);
             dashboard.getChildren().add(questionConsoleView);
             */
-            SequenceManager sequenceManager = new SequenceManager();
+            SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService);
+            sequenceManager.loadService();
             AnchorPane.setBottomAnchor(sequenceManager, 0.0);
             AnchorPane.setLeftAnchor(sequenceManager, 0.0);
             AnchorPane.setRightAnchor(sequenceManager, 0.0);
@@ -109,6 +112,9 @@ public class PanelPresenter {
             dashboard.getChildren().add(sequenceManager);
         }
         catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (NonExistentRecordException e) {
             e.printStackTrace();
         }
     }

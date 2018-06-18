@@ -23,7 +23,7 @@ public class Configuration implements Serializable {
     @Expose
     private String organizer;
 
-    @SerializedName("quiz")
+    @SerializedName("sequence")
     @Expose
     private String sequence;
 

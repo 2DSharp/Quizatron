@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Console.UIComponent;
+package me.twodee.quizatron.Component;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;

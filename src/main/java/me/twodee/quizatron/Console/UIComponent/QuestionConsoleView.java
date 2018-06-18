@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Presentation.View.QuestionDisplay;

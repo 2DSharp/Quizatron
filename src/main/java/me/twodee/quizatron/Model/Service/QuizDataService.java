@@ -7,12 +7,14 @@ import me.twodee.quizatron.Model.Mapper.ConfigurationMapper;
 import me.twodee.quizatron.Model.Mapper.QuizDataMapper;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Singleton
 public class QuizDataService
 {
     QuizData quizData;
@@ -79,5 +81,14 @@ public class QuizDataService
     public boolean quizDataLoaded()
     {
         return quizData.getDirectory() != null;
+    }
+
+    public void setCurrentSequenceIndex(int i)
+    {
+        quizData.setCurrentSequenceIndex(i);
+    }
+
+    public int getCurrentSequenceIndex() {
+        return quizData.getCurrentSequenceIndex();
     }
 }

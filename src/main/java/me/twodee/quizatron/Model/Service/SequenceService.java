@@ -6,19 +6,27 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Entity.QuizData;
 import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.util.stream.Stream;
 
 public class SequenceService
 {
-    private QuizData quizData;
+    private QuizDataService quizDataService;
     private final ISequenceMapper sequenceMapper;
     private Sequence sequence;
     private int curr;
 
-    public SequenceService(QuizData quizData, ISequenceMapper sequenceMapper)
+    @Inject
+    public SequenceService(ISequenceMapper sequenceMapper)
     {
-        this.quizData = quizData;
         this.sequenceMapper = sequenceMapper;
+    }
+
+    public void load(QuizDataService quizDataService) throws IOException
+    {
+        sequenceMapper.init(quizDataService.getInitialDirectory() + "/"
+                                    + quizDataService.getConfiguration().getSequence());
     }
     public void fetchNext()
     {
@@ -50,7 +58,7 @@ public class SequenceService
         if (sequence == null) {
             throw new SequenceNotSetException();
         }
-        quizData.setCurrentSequenceIndex(sequence.getIndex() + 1);
+        quizDataService.setCurrentSequenceIndex(sequence.getIndex() + 1);
     }
 
     public Stream<Sequence> getSequenceAsStream()
