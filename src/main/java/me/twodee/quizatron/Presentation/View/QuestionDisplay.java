@@ -1,9 +1,8 @@
 package me.twodee.quizatron.Presentation.View;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.PathTransition;
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -89,7 +88,7 @@ public class QuestionDisplay extends IView
     }
     public void setTitle(String title)
     {
-        titleLbl.setFont(Font.font(computeFontSize(title)));
+        titleLbl.setStyle("-fx-font-size: " + computeFontSize(title));
         titleLbl.setText(title);
     }
 
@@ -99,7 +98,6 @@ public class QuestionDisplay extends IView
     }
     private void zoomIn(Node node)
     {
-        /*
         ScaleTransition st = new ScaleTransition(Duration.millis(1000), node);
         st.setFromX(0.1f);
         st.setToX(1.0f);
@@ -107,32 +105,54 @@ public class QuestionDisplay extends IView
         st.setToY(1.0f);
 
         st.play();
-        */
-        Path path = new Path();
-        path.getElements().add(new MoveTo(0.0f, 100.0f));
-        path.getElements().add(new LineTo(100.0f, 100.0f));
-
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(1000));
-        pathTransition.setNode(node);
-        pathTransition.setPath(path);
-        //pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-        pathTransition.setCycleCount(4);
-        pathTransition.play();
     }
+
     public void revealAnswer(String answer, Result result)
     {
+        cleanImageView();
         setTitle(answer);
-        zoomIn(titleLbl);
+        fadeIn(titleLbl);
+        signal(result);
+        titleContainer.getChildren().remove(imageView);
+    }
+
+    private void cleanImageView()
+    {
+
+        titleContainer.getChildren().remove(imageView);
+    }
+    private void signal(Result result)
+    {
+        final Animation animation = new Transition() {
+            {
+                setCycleDuration(Duration.millis(2000));
+                setInterpolator(Interpolator.EASE_OUT);
+            }
+
+            @Override
+            protected void interpolate(double frac) {
+                Color vColor;
+                if (result == Result.WRONG) {
+                    vColor = new Color(1, 0, 0, 1 - frac);
+                }
+                else {
+                    vColor = new Color(0, 1, 0, 1 - frac);
+                }
+                root.setBackground(new Background(new BackgroundFill(vColor, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        };
+        animation.play();
     }
     public void revealQuestion(String question)
     {
+        cleanImageView();
         setTitle(question);
         fadeIn(titleLbl);
     }
 
     public void revealQuestion(String question, String qImage)
     {
+        cleanImageView();
         setTitle(question);
         setQImage(qImage);
 
@@ -147,7 +167,7 @@ public class QuestionDisplay extends IView
         imageView = prepareImageView(image);
         titleContainer.getChildren().add(imageView);
         fadeIn(imageView);
-        titleLbl.setFont(Font.font(28));
+        titleLbl.setStyle("-fx-font-size: " + 28);
     }
 
     private ImageView prepareImageView(Image image)
