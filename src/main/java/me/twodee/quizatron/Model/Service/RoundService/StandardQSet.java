@@ -6,6 +6,7 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Mapper.StandardQSetMapper;
 
 import javax.inject.Inject;
+import java.util.stream.Stream;
 
 public class StandardQSet extends QuestionSetService implements IQuestionSetService<Question>
 {
@@ -20,14 +21,14 @@ public class StandardQSet extends QuestionSetService implements IQuestionSetServ
     @Override
     public Question fetch() throws NonExistentRecordException
     {
-        return fetch(curr + 1);
+        return fetch(curr);
     }
 
     @Override
     public Question fetch(int index) throws NonExistentRecordException
     {
         Question question = new Question();
-        curr = index - 1;
+        curr = index;
         question.setIndex(curr);
         standardQSetMapper.fetch(question);
         return question;
@@ -43,4 +44,9 @@ public class StandardQSet extends QuestionSetService implements IQuestionSetServ
     {
         return standardQSetMapper.getTotalRecords();
     }
+
+    public Stream<Question> getStream()
+    {
+        return standardQSetMapper.getStream();
+}
 }

@@ -18,11 +18,11 @@
             <VBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="150.0">
                <children>
                   <Label style="-fx-text-fill: gray;" text="Now playing:" textFill="WHITE" />
-                  <Label fx:id="seqName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Round name" textFill="WHITE" />
-                  <Label fx:id="seqFile" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="SomeRound.csv" textFill="WHITE" />
+                  <Label fx:id="seqName" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" textFill="WHITE" />
+                  <Label fx:id="seqFile" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" textFill="WHITE" />
                </children>
             </VBox>
-            <Button mnemonicParsing="false" onAction="#showPrevSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="prevSeqBtn" disable="true" mnemonicParsing="false" onAction="#showPrevSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <FontAwesomeIconView fx:id="prevSeq" glyphName="STEP_BACKWARD" size="16" styleClass="seqIcons" />
                </graphic>
@@ -30,7 +30,7 @@
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="stepBackwardBtn" disable="true" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <FontAwesomeIconView glyphName="FAST_BACKWARD" size="16" styleClass="seqIcons" />
                </graphic>
@@ -38,7 +38,7 @@
                   <Insets right="10.0" />
                </HBox.margin>
             </Button>
-            <Button id="bigBtn" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button id="bigBtn" fx:id="playPauseBtn" disable="true" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <MaterialDesignIconView glyphName="PAUSE" size="24" styleClass="seqIcons" />
                </graphic>
@@ -46,7 +46,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="stepForwardBtn" disable="true" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>
@@ -54,7 +54,7 @@
                   <FontAwesomeIconView glyphName="FAST_FORWARD" size="16" styleClass="seqIcons" />
                </graphic>
             </Button>
-            <Button fx:id="nextSeq" mnemonicParsing="false" onAction="#showNextSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="nextSeqBtn" disable="true" mnemonicParsing="false" onAction="#showNextSeq" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <FontAwesomeIconView glyphName="STEP_FORWARD" size="16" styleClass="seqIcons" />
                </graphic>
@@ -80,32 +80,9 @@
          </padding></HBox>
    </bottom>
    <right>
-      <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="650.0" maxWidth="1.7976931348623157E308" pannable="true" prefHeight="630.0" prefWidth="242.0" style="-fx-background-color: #39404C;" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="650.0" maxWidth="1.7976931348623157E308" pannable="true" prefHeight="630.0" prefWidth="242.0" style="-fx-background-color: #39404C;" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
-            <FlowPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="635.0" prefWidth="223.0" style="-fx-background-color: #39404C;">
-               <children>
-                  <VBox prefHeight="125.0" prefWidth="205.0" style="-fx-background-color: #fff;">
-                     <FlowPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </FlowPane.margin>
-                  </VBox>
-                  <VBox prefHeight="127.0" prefWidth="205.0" style="-fx-background-color: #fff;">
-                     <FlowPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </FlowPane.margin>
-                  </VBox>
-                  <VBox prefHeight="125.0" prefWidth="205.0" style="-fx-background-color: #fff;">
-                     <FlowPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </FlowPane.margin>
-                  </VBox>
-                  <VBox prefHeight="135.0" prefWidth="205.0" style="-fx-background-color: #fff;">
-                     <FlowPane.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </FlowPane.margin>
-                  </VBox>
-               </children>
-            </FlowPane>
+            <FlowPane fx:id="cardsContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="635.0" prefWidth="223.0" style="-fx-background-color: #39404C;" />
          </content>
       </ScrollPane>
    </right>

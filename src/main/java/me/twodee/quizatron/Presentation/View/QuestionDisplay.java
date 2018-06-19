@@ -1,9 +1,8 @@
 package me.twodee.quizatron.Presentation.View;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.PathTransition;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -12,9 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
-import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Presentation.IView;
 
@@ -34,7 +36,11 @@ public class QuestionDisplay extends IView
     private QuizDataService quizDataService;
     private String logo;
     private String background;
-
+    private ImageView imageView;
+    public enum Result
+    {
+        CORRECT, WRONG;
+    }
     private static final String USER_AGENT_STYLESHEET = QuestionDisplay.class.getResource("/Stylesheets/display-board.css").toExternalForm();
     @Inject
     public QuestionDisplay(QuizDataService quizDataService) throws MalformedURLException
@@ -83,7 +89,6 @@ public class QuestionDisplay extends IView
     }
     public void setTitle(String title)
     {
-        System.out.println(computeFontSize(title));
         titleLbl.setFont(Font.font(computeFontSize(title)));
         titleLbl.setText(title);
     }
@@ -92,13 +97,69 @@ public class QuestionDisplay extends IView
     {
 
     }
+    private void zoomIn(Node node)
+    {
+        /*
+        ScaleTransition st = new ScaleTransition(Duration.millis(1000), node);
+        st.setFromX(0.1f);
+        st.setToX(1.0f);
+        st.setFromY(0.1f);
+        st.setToY(1.0f);
 
+        st.play();
+        */
+        Path path = new Path();
+        path.getElements().add(new MoveTo(0.0f, 100.0f));
+        path.getElements().add(new LineTo(100.0f, 100.0f));
+
+        PathTransition pathTransition = new PathTransition();
+        pathTransition.setDuration(Duration.millis(1000));
+        pathTransition.setNode(node);
+        pathTransition.setPath(path);
+        //pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+        pathTransition.setCycleCount(4);
+        pathTransition.play();
+    }
+    public void revealAnswer(String answer, Result result)
+    {
+        setTitle(answer);
+        zoomIn(titleLbl);
+    }
     public void revealQuestion(String question)
     {
         setTitle(question);
         fadeIn(titleLbl);
     }
 
+    public void revealQuestion(String question, String qImage)
+    {
+        setTitle(question);
+        setQImage(qImage);
+
+        fadeIn(titleLbl);
+        fadeIn(imageView);
+    }
+
+
+    private void setQImage(String url)
+    {
+        Image image = new Image(url);
+        imageView = prepareImageView(image);
+        titleContainer.getChildren().add(imageView);
+        fadeIn(imageView);
+        titleLbl.setFont(Font.font(28));
+    }
+
+    private ImageView prepareImageView(Image image)
+    {
+        ImageView imageView = new ImageView(image);
+        imageView.setStyle("-fx-border-color: #000; -fx-border-width: 5px");
+        imageView.setFitHeight(500);
+        imageView.setFitWidth(950);
+        imageView.setPreserveRatio(true);
+
+        return imageView;
+    }
     private void fadeIn(Node node)
     {
         FadeTransition ft = new FadeTransition(Duration.millis(3000), node);
@@ -111,10 +172,10 @@ public class QuestionDisplay extends IView
     {
         int size = 44;
         int textLength = text.length();
-        return size - foo(textLength, 4, 100, 200, 300, 350);
+        return size - getDecrement(textLength, 4, 100, 200, 300, 350);
     }
 
-    private int foo(int length, int factor, int... breakPoints)
+    private int getDecrement(int length, int factor, int... breakPoints)
     {
         int total = 0;
 

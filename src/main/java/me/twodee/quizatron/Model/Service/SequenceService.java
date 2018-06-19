@@ -51,13 +51,13 @@ public class SequenceService
 
     public Sequence fetchSequence() throws NonExistentRecordException
     {
-        return fetchSequence(curr + 1);
+        return fetchSequence(curr);
     }
 
     public Sequence fetchSequence(int index) throws NonExistentRecordException
     {
         sequence = new Sequence();
-        curr = index - 1;
+        curr = index;
         sequence.setIndex(curr);
         sequenceMapper.fetch(sequence);
 
@@ -69,9 +69,18 @@ public class SequenceService
         if (sequence == null) {
             throw new SequenceNotSetException();
         }
-        quizDataService.setCurrentSequenceIndex(sequence.getIndex() + 1);
+        quizDataService.setCurrentSequenceIndex(sequence.getIndex());
     }
 
+    public boolean hasNext()
+    {
+        return curr < (sequenceMapper.getTotalRecords() - 1);
+    }
+
+    public boolean hasPrev()
+    {
+        return curr > 0;
+    }
     public Stream<Sequence> getSequenceAsStream()
     {
         return sequenceMapper.getStream();

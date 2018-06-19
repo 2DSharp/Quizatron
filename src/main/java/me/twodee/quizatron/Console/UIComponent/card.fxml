@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #fff; -fx-cursor: hand;" styleClass="body" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="133.0" prefWidth="160.0" style="-fx-background-color: #fff;" stylesheets="@../../../../../../resources/Stylesheets/card.css" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="nameBox" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="small">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" top="40.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="fileNameBox" text="roundfile.csv">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </Label>
+            <FontAwesomeIconView fx:id="icon" size="24">
+               <VBox.margin>
+                  <Insets bottom="40.0" />
+               </VBox.margin>
+            </FontAwesomeIconView>
+         </children>
+      </VBox>
+   </center>
+</fx:root>

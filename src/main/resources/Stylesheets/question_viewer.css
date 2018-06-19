@@ -8,10 +8,24 @@
 }
 
 .decisionBtns {
-
     -fx-cursor: hand;
     -fx-padding: 10px;
     -fx-text-fill: #ffffff;
     -fx-font-size: 16px;
 }
 
+.selectorBtns {
+    -fx-border-radius: 100%;
+    -fx-background-radius: 100%;
+    -fx-font-weight: bold;
+    -fx-background-color: #FAC536;
+    -fx-cursor: hand;
+}
+
+.selectorBtns:hover {
+    -fx-background-color: #F25056;
+}
+
+.selectorBtns:selected {
+    -fx-background-color: #39EA49;
+}

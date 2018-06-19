@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 public class StandardQSetMapper implements CSVReaderMapper<Question>
@@ -69,5 +70,10 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
     public int getTotalRecords()
     {
         return questions.size();
+    }
+
+    public Stream<Question> getStream()
+    {
+        return questions.stream();
     }
 }

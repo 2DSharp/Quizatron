@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="rootNode" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.PanelPresenter">
    <children>
-      <VBox layoutX="-8.0" layoutY="-7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+      <VBox layoutX="-8.0" layoutY="-7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label prefHeight="80.0" prefWidth="294.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
                <font>
@@ -27,7 +27,7 @@
             <HBox alignment="CENTER_LEFT" onMouseReleased="#openSlideShow" styleClass="btns">
                <children>
                   <FontAwesomeIconView fill="WHITE" glyphName="DASHBOARD" glyphStyle="-fx-fill:#7c8184" size="16px" />
-                  <Label fx:id="panelList" text="Control Panel" textFill="#7c8184">
+                  <Label fx:id="panelList" text="Sequence Manager" textFill="#7c8184">
                      <font>
                         <Font name="Open Sans Regular" size="15.0" />
                      </font>
@@ -286,6 +286,6 @@
                </padding>
             </VBox>
          </children></VBox>
-      <AnchorPane fx:id="dashboard" layoutX="279.0" layoutY="1.0" prefHeight="8.0" prefWidth="1087.0" AnchorPane.leftAnchor="280.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="dashboard" layoutX="279.0" layoutY="1.0" prefHeight="8.0" prefWidth="1087.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="280.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

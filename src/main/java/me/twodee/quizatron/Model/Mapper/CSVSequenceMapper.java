@@ -39,9 +39,11 @@ public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Seq
         iterator = csvManager.load(configuration);
         sequences = new ArrayList<>();
 
+        int i = 0;
         while (iterator.hasNext()) {
             CSVRecord record = iterator.next();
             Sequence sequence = loadSequenceFromRecord(record);
+            sequence.setIndex(i++);
             sequences.add(sequence);
         }
     }

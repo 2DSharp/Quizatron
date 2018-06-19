@@ -15,6 +15,7 @@ import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.Dashboard.SequenceManager;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
+import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
@@ -38,6 +39,7 @@ public class PanelPresenter {
     private Mediator mediator;
     private QuizDataService quizDataService;
     private SequenceService sequenceService;
+    private StandardQSetFactory standardQSetFactory;
 
     @FXML
     private JFXToggleButton fullScreenToggleBtn;
@@ -62,7 +64,8 @@ public class PanelPresenter {
                           FXMLLoader fxmlLoader,
                           Mediator mediator,
                           QuizDataService quizDataService,
-                          SequenceService sequenceService
+                          SequenceService sequenceService,
+                          StandardQSetFactory standardQSetFactory
                           ) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
@@ -70,6 +73,7 @@ public class PanelPresenter {
         this.mediator = mediator;
         this.quizDataService = quizDataService;
         this.sequenceService = sequenceService;
+        this.standardQSetFactory = standardQSetFactory;
         //this.standardQSet = standardQSet;
     }
 
@@ -103,7 +107,9 @@ public class PanelPresenter {
             QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, presentation);
             dashboard.getChildren().add(questionConsoleView);
             */
-            SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService);
+
+            SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
+                                                                  standardQSetFactory, presentation);
             AnchorPane.setBottomAnchor(sequenceManager, 0.0);
             AnchorPane.setLeftAnchor(sequenceManager, 0.0);
             AnchorPane.setRightAnchor(sequenceManager, 0.0);

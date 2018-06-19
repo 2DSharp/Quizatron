@@ -1,7 +1,13 @@
 .seqActBtns {
 
 }
-
+.button {
+    -fx-cursor: hand;
+}
+.button:disabled {
+    -fx-opacity: 0.4;
+    -fx-cursor: default;
+}
 #bigBtn {
     -fx-border-color: #fff;
     -fx-border-radius: 100%;

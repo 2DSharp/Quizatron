@@ -1,0 +1,13 @@
+
+.body {
+    -fx-cursor: hand;
+    -fx-background-color: #fff;
+    -fx-border-width: 3px;
+}
+.body:selected {
+    -fx-border-width: 5px;
+    -fx-border-color: #7AB12F;
+}
+.body:hover {
+    -fx-border-color: #00B5FF;
+}
