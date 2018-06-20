@@ -26,6 +26,7 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.SequenceService;
+import me.twodee.quizatron.Presentation.View.HomeView;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -146,8 +147,9 @@ public class SequenceManager extends UIComponent
         return yFactor / cardsContainer.getHeight();
     }
 
-    private void displayCurrentSequence() throws NonExistentRecordException
+    private void displayCurrentSequence() throws NonExistentRecordException, IOException
     {
+        pause();
         sequence = sequenceService.fetchSequence();
         currStep = 0;
         displaySeqMetaData(sequence);
@@ -175,7 +177,7 @@ public class SequenceManager extends UIComponent
             sequenceService.fetchSequence(id);
             displayCurrentSequence();
         }
-        catch (NonExistentRecordException e) {
+        catch (NonExistentRecordException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -262,14 +264,14 @@ public class SequenceManager extends UIComponent
 
     }
     @FXML
-    private void showNextSeq(ActionEvent event) throws NonExistentRecordException
+    private void showNextSeq(ActionEvent event) throws NonExistentRecordException, IOException
     {
         sequenceService.fetchNext();
         displayCurrentSequence();
     }
 
     @FXML
-    private void showPrevSeq(ActionEvent event) throws NonExistentRecordException
+    private void showPrevSeq(ActionEvent event) throws NonExistentRecordException, IOException
     {
         sequenceService.fetchPrevious();
         displayCurrentSequence();
@@ -295,5 +297,18 @@ public class SequenceManager extends UIComponent
         defaultText.setFont(Font.font("Open Sans"));
         defaultText.setStyle("-fx-font-size: 20; -fx-padding: 20px");
         this.setCenter(defaultText);
+    }
+
+    private void pause() throws IOException
+    {
+        presentation.changeView("home");
+        HomeView homeView = presentation.getView();
+        homeView.decorate(quizDataService);
+    }
+
+    @FXML
+    private void pause(ActionEvent event) throws IOException
+    {
+        pause();
     }
 }

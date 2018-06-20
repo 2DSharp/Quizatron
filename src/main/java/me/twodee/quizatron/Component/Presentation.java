@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import me.twodee.quizatron.Factory.FXMLLoaderProvider;
 import me.twodee.quizatron.Presentation.IView;
 
+import java.io.IOException;
+
 public class Presentation
 {
     private Stage stage;
@@ -41,7 +43,7 @@ public class Presentation
         return (T) view;
     }
 
-    public void changeView(String viewFile) throws Exception
+    public void changeView(String viewFile) throws IOException
     {
         FXMLLoader loader = FXMLLoaderProvider.get();
         loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml"));

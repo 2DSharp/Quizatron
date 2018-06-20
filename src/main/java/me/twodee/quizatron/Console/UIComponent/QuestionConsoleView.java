@@ -25,7 +25,6 @@ import me.twodee.quizatron.Presentation.View.QuestionDisplay;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +38,14 @@ import java.util.List;
 public class QuestionConsoleView extends UIComponent
 {
     private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
+    ImageView imageView;
     private StandardQSet standardQSet;
     private FXMLLoader fxmlLoader;
     private Presentation presentation;
     private Player player;
     private boolean playerLoaded;
-
-    @FXML private JFXToggleButton showToggler;
+    @FXML
+    private JFXToggleButton showToggler;
     @FXML
     private Button nextBtn;
     @FXML
@@ -60,19 +60,18 @@ public class QuestionConsoleView extends UIComponent
     private JFXToggleButton mediaDisplayToggleBtn;
     @FXML
     private VBox topBox;
-
-    @FXML private BorderPane questionContainer;
-    @FXML private HBox bottomHBox;
-    @FXML private Button correctBtn;
-    @FXML private Button wrongBtn;
-
+    @FXML
+    private BorderPane questionContainer;
+    @FXML
+    private HBox bottomHBox;
+    @FXML
+    private Button correctBtn;
+    @FXML
+    private Button wrongBtn;
     private int current;
     private QuizDataService quizDataService;
     private List<Button> buttons = new ArrayList<>();
     private QuestionDisplay questionDisplay;
-    private boolean show;
-
-    ImageView imageView;
 
     public QuestionConsoleView(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation)
     throws IOException
@@ -84,102 +83,55 @@ public class QuestionConsoleView extends UIComponent
         this.fxmlLoader.load();
     }
 
-    public void initialize() throws NonExistentRecordException, MalformedURLException
+    public void initialize() throws NonExistentRecordException, IOException
     {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         answerLbl.managedProperty().bind(answerLbl.visibleProperty());
         questionLbl.managedProperty().bind(questionLbl.visibleProperty());
-        standardQSet.getStream()
-                    .forEach(this::createButton);
+        standardQSet.getStream().forEach(this::createButton);
         loadInitialQuestion();
     }
 
-    private void loadInitialQuestion() throws NonExistentRecordException, MalformedURLException
+    private void loadInitialQuestion() throws NonExistentRecordException, IOException
     {
         standardQSet.toStart();
         Question question = standardQSet.fetch();
         displayQuestionData(question);
     }
 
-
-    private void displayQuestionPresentation(Question question)
+    private void displayQuestionData(Question question) throws IOException
     {
-        if (!showToggler.isSelected() || mediaDisplayToggleBtn.isSelected()) {
-            return;
-        }
-        try {
-            getQuestionDisplayControl();
+        disableAnswerBtns(false);
 
-            if (!question.getQuestionImage().isEmpty()) {
-                questionDisplay.revealQuestion(question.getTitle(), quizDataService.constructURL(question.getQuestionImage()));
-            }
-            else {
-                questionDisplay.revealQuestion(question.getTitle());
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        displayImage(question.getQuestionImage());
+        displayMedia(question.getMedia());
+        displayQnA(question);
 
-    private void getQuestionDisplayControl() throws Exception
-    {
-        if (questionDisplay == null) {
-            presentation.changeView("questionview");
-            questionDisplay = presentation.getView();
-        }
-    }
-
-    private void displayQuestionData(Question question) throws MalformedURLException
-    {
-        hardReset();
-        if (!question.getQuestionImage().isEmpty()) {
-            displayImage(question.getQuestionImage());
-        }
-        else {
-            resetImageBox();
-        }
-        if (!question.getMedia().isEmpty()) {
-            Media media = new Media(quizDataService.constructURL(question.getMedia()));
-            mediaDisplayToggleBtn.setSelected(true);
-            loadMedia(media);
-        }
-        else {
-            reset();
-        }
-        questionLbl.setText(question.getTitle());
-        answerLbl.setText(question.getAnswer());
+        setFocusOnIndicator(question.getIndex());
+        updateNavBtns();
 
         displayQuestionPresentation(question);
-        setFocusOnBtn(question.getIndex());
-        updateBtns();
     }
 
-    private void updateBtns()
+    private void displayImage(String file) throws MalformedURLException
     {
-        nextBtn.setDisable(!standardQSet.hasNext());
-        prevBtn.setDisable(!standardQSet.hasPrevious());
+        if (file.isEmpty()) {
+            resetImageBox();
+            return;
+        }
+        String url = quizDataService.constructURL(file);
+        Image image = new Image(url);
+        addImageToDisplay(image);
     }
+
     private void resetImageBox()
     {
         imageView.setImage(null);
         imageView = null;
         questionContainer.setCenter(null);
     }
-    private void displayImage(String file)
-    {
-        try {
-            String url = quizDataService.constructURL(file);
-            Image image = new Image(url);
-            positionImage(image);
-        }
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
 
-
-    private void positionImage(Image image)
+    private void addImageToDisplay(Image image)
     {
         if (imageView == null) {
             imageView = new ImageView(image);
@@ -192,24 +144,38 @@ public class QuestionConsoleView extends UIComponent
             imageView.setImage(image);
         }
     }
-    private void loadMedia(Media media)
+
+    private void displayMedia(String file) throws IOException
+    {
+        if (file.isEmpty()) {
+            resetMediaBox();
+            return;
+        }
+        Media media = new Media(quizDataService.constructURL(file));
+        mediaDisplayToggleBtn.setSelected(true);
+        loadMedia(media);
+    }
+
+    private void resetMediaBox()
+    {
+        questionContainer.setCenter(imageView);
+        mediaDisplayToggleBtn.setSelected(false);
+        playerLoaded = false;
+        player = null;
+    }
+
+    private void loadMedia(Media media) throws IOException
     {
         playerLoaded = true;
-        try {
-            player = new Player(presentation);
-            initPlayer(player, media);
-            addPlayerToDisplay(player);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        player = new Player(presentation);
+        initPlayer(player, media);
+        addPlayerToDisplay(player);
     }
 
     private void initPlayer(Player player, Media media)
     {
         player.loadMedia(media);
-        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty()
-                                                          .and(mediaDisplayToggleBtn.disabledProperty().not());
+        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty().and(mediaDisplayToggleBtn.disabledProperty().not());
         player.visibleProperty().bind(toggleState);
         player.managedProperty().bind(player.visibleProperty());
     }
@@ -217,73 +183,100 @@ public class QuestionConsoleView extends UIComponent
     private void addPlayerToDisplay(Player player)
     {
         mediaDisplayToggleBtn.setDisable(false);
-
         questionContainer.setCenter(player);
     }
 
-
-    @FXML
-    private void toggleMediaDisplay(ActionEvent event) throws NonExistentRecordException, MalformedURLException
+    private void displayQnA(Question question)
     {
-        if (!mediaDisplayToggleBtn.isSelected()) {
-            reset();
-            questionDisplay = null;
-            displayQuestionPresentation(standardQSet.fetch());
+        questionLbl.setText(question.getTitle());
+        answerLbl.setText(question.getAnswer());
+    }
+
+    private void displayQuestionPresentation(Question question) throws IOException
+    {
+        if (!showToggler.isSelected() || mediaDisplayToggleBtn.isSelected()) {
+            return;
+        }
+        getDisplay();
+        revealQuestion(question);
+    }
+
+    private void getDisplay() throws IOException
+    {
+        if (questionDisplay == null || presentation.getView() != questionDisplay) {
+            presentation.changeView("questionview");
+            questionDisplay = presentation.getView();
+        }
+    }
+
+    private void revealQuestion(Question question) throws MalformedURLException
+    {
+        if (!question.getQuestionImage().isEmpty()) {
+            questionDisplay.revealQuestion(question.getTitle(), quizDataService.constructURL(question.getQuestionImage()));
         }
         else {
+            questionDisplay.revealQuestion(question.getTitle());
+        }
+    }
+
+    private void updateNavBtns()
+    {
+        nextBtn.setDisable(!standardQSet.hasNext());
+        prevBtn.setDisable(!standardQSet.hasPrevious());
+    }
+
+    @FXML
+    private void toggleMediaDisplay(ActionEvent event) throws NonExistentRecordException, IOException
+    {
+        if (mediaDisplayToggleBtn.isSelected()) {
             Media media = new Media(quizDataService.constructURL(standardQSet.fetch().getMedia()));
             loadMedia(media);
         }
+        else {
+            resetMediaBox();
+            questionDisplay = null;
+            displayQuestionPresentation(standardQSet.fetch());
+        }
     }
 
     @FXML
-    private void getNextAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
+    private void getNextAction(ActionEvent event) throws NonExistentRecordException, IOException
     {
-        if (playerLoaded) {
-            reset();
-        }
         standardQSet.next();
-        Question question = standardQSet.fetch();
-        displayQuestionData(question);
-    }
-
-    private void reset()
-    {
-        if (imageView != null) {
-            questionContainer.setCenter(imageView);
-        }
-        mediaDisplayToggleBtn.setSelected(false);
-        mediaDisplayToggleBtn.setDisable(true);
-        playerLoaded = false;
-        player = null;
+        displayCurrentQuestion();
     }
 
     @FXML
-    private void getPreviousAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
+    private void getPreviousAction(ActionEvent event) throws NonExistentRecordException, IOException
     {
-        if (playerLoaded) {
-            reset();
-        }
         standardQSet.previous();
+        displayCurrentQuestion();
+    }
+
+    private void displayCurrentQuestion() throws NonExistentRecordException, IOException
+    {
+        mediaDisplayToggleBtn.setDisable(true);
+        resetMediaBox();
         Question question = standardQSet.fetch();
         displayQuestionData(question);
     }
-
     @FXML
     private void setCorrectAction(ActionEvent event) throws NonExistentRecordException
     {
-        if (showToggler.isSelected()) {
-            disableAnswerBtns(true);
-            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.CORRECT);
-        }
+        revealAnswer(QuestionDisplay.Result.CORRECT);
     }
 
     @FXML
     private void setWrongAction(ActionEvent event) throws NonExistentRecordException
     {
+        revealAnswer(QuestionDisplay.Result.WRONG);
+    }
+
+    private void revealAnswer(QuestionDisplay.Result result) throws NonExistentRecordException
+    {
         if (showToggler.isSelected()) {
             disableAnswerBtns(true);
-            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.WRONG);
+            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), result);
         }
     }
 
@@ -293,13 +286,8 @@ public class QuestionConsoleView extends UIComponent
         wrongBtn.setDisable(result);
     }
 
-    private void hardReset()
-    {
-        disableAnswerBtns(false);
-    }
-
     @FXML
-    private void togglePresentationView(ActionEvent event) throws NonExistentRecordException
+    private void togglePresentationView(ActionEvent event) throws NonExistentRecordException, IOException
     {
         Question question = standardQSet.fetch();
         displayQuestionPresentation(question);
@@ -322,17 +310,13 @@ public class QuestionConsoleView extends UIComponent
         try {
             Question question = standardQSet.fetch(index);
             displayQuestionData(question);
-            setFocusOnBtn(index);
         }
-        catch (NonExistentRecordException e) {
-            e.printStackTrace();
-        }
-        catch (MalformedURLException e) {
+        catch (NonExistentRecordException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void setFocusOnBtn(int index)
+    private void setFocusOnIndicator(int index)
     {
         buttons.get(current).pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
         current = index;

@@ -101,13 +101,6 @@ public class PanelPresenter {
 
         dashboard.getChildren().clear();
         try {
-            /*
-            String file = this.getClass().getResource("/rounds/qset1.csv").toURI().getPath();
-            //standardQSet.loadSet(file);
-            QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, presentation);
-            dashboard.getChildren().add(questionConsoleView);
-            */
-
             SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
                                                                   standardQSetFactory, presentation);
             AnchorPane.setBottomAnchor(sequenceManager, 0.0);
@@ -210,14 +203,9 @@ public class PanelPresenter {
 
         try {
             presentation.show();
+            HomeView homeView = presentation.getView();
+            homeView.decorate(quizDataService);
             presentation.getScene().setCursor(Cursor.NONE);
-            HomeView view = (HomeView) presentation.getView();
-            Appearance appearance = quizDataService.getConfiguration().getAppearance();
-            String bgImage = makeAbsURL(appearance.getDefaultBackground());
-            String logo = makeAbsURL(appearance.getLogo());
-
-            view.setLogo(logo);
-            view.setBackground(bgImage);
         }
         catch (Exception e) {
             e.printStackTrace();

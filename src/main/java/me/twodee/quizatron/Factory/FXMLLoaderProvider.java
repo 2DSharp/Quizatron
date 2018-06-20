@@ -26,8 +26,8 @@ public class FXMLLoaderProvider implements Provider<FXMLLoader> {
 
     public FXMLLoader build(String viewFile) {
 
-        loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(this.getClass().getResource("../Presentation/View/" + viewFile + ".fxml" ));
         loader.setControllerFactory(injector::getInstance);
         return loader;
     }
