@@ -11,11 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Presentation.IView;
@@ -111,13 +106,15 @@ public class QuestionDisplay extends IView
 
     public void revealAnswer(String answer, Result result)
     {
-        cleanImageView();
-        setTitle(answer);
-        fadeIn(titleLbl);
+        revealQuestion(answer);
         signal(result);
-        titleContainer.getChildren().remove(imageView);
     }
 
+    public void revealAnswer(String answer, String url, Result result)
+    {
+        revealQuestion(answer, url);
+        signal(result);
+    }
     private void cleanImageView()
     {
         titleContainer.getChildren().remove(imageView);

@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Console.UIComponent;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +40,17 @@ public class Card extends UIComponent
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         nameBox.setText(name);
         fileNameBox.setText(fileName);
-        //icon.setIcon();
+
+        FontAwesomeIcon target;
+        switch (fileType.toLowerCase()) {
+            case "video" :
+                target = FontAwesomeIcon.PLAY_CIRCLE_ALT;
+                break;
+            case "round" :
+                target = FontAwesomeIcon.BOLT;
+                break;
+            default: target = FontAwesomeIcon.CODEPEN;
+        }
+        icon.setIcon(target);
     }
 }

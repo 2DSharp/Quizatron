@@ -72,7 +72,7 @@ public class QuestionConsoleView extends UIComponent
     private QuizDataService quizDataService;
     private List<Button> buttons = new ArrayList<>();
     private QuestionDisplay questionDisplay;
-    private String extension;
+    private String mediaName;
 
     public QuestionConsoleView(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation)
     throws IOException
@@ -127,9 +127,11 @@ public class QuestionConsoleView extends UIComponent
 
     private void resetImageBox()
     {
-        imageView.setImage(null);
-        imageView = null;
-        questionContainer.setCenter(null);
+        if (imageView != null) {
+            imageView.setImage(null);
+            imageView = null;
+            questionContainer.setCenter(null);
+        }
     }
 
     private void addImageToDisplay(Image image)
@@ -153,9 +155,10 @@ public class QuestionConsoleView extends UIComponent
             return;
         }
         Media media = new Media(quizDataService.constructURL(file));
+        mediaDisplayToggleBtn.setDisable(false);
         mediaDisplayToggleBtn.setSelected(true);
-        extension = player.getExtension(file);
-        loadMedia(media, extension);
+        mediaName = file;
+        loadMedia(media, file);
     }
 
     private void resetMediaBox()
@@ -166,12 +169,13 @@ public class QuestionConsoleView extends UIComponent
         player = null;
     }
 
-    private void loadMedia(Media media, String extension) throws IOException
+    private void loadMedia(Media media, String file) throws IOException
     {
-        playerLoaded = true;
         player = new Player(presentation);
+        String extension = player.getExtension(file);
         initPlayer(player, media, extension);
         addPlayerToDisplay(player);
+        playerLoaded = true;
     }
 
     private void initPlayer(Player player, Media media, String extension)
@@ -232,7 +236,7 @@ public class QuestionConsoleView extends UIComponent
     {
         if (mediaDisplayToggleBtn.isSelected()) {
             Media media = new Media(quizDataService.constructURL(standardQSet.fetch().getMedia()));
-            loadMedia(media, extension);
+            loadMedia(media, mediaName);
         }
         else {
             resetMediaBox();
@@ -263,22 +267,28 @@ public class QuestionConsoleView extends UIComponent
         displayQuestionData(question);
     }
     @FXML
-    private void setCorrectAction(ActionEvent event) throws NonExistentRecordException
+    private void setCorrectAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
         revealAnswer(QuestionDisplay.Result.CORRECT);
     }
 
     @FXML
-    private void setWrongAction(ActionEvent event) throws NonExistentRecordException
+    private void setWrongAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
         revealAnswer(QuestionDisplay.Result.WRONG);
     }
 
-    private void revealAnswer(QuestionDisplay.Result result) throws NonExistentRecordException
+    private void revealAnswer(QuestionDisplay.Result result) throws NonExistentRecordException, MalformedURLException
     {
         if (showToggler.isSelected()) {
             disableAnswerBtns(true);
-            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), result);
+            Question question = standardQSet.fetch();
+            if (question.getAnsImage().isEmpty()) {
+                questionDisplay.revealAnswer(question.getAnswer(), result);
+            }
+            else {
+                questionDisplay.revealAnswer(question.getAnswer(), quizDataService.constructURL(question.getAnsImage()), result);
+            }
         }
     }
 

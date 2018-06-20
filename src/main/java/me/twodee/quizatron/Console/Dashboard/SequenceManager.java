@@ -198,11 +198,8 @@ public class SequenceManager extends UIComponent
     }
     private void runSteps(String type)
     {
-        stepBackwardBtn.setDisable(false);
-
-        if (currStep < 1) {
-            stepBackwardBtn.setDisable(true);
-        }
+        stepBackwardBtn.setDisable(currStep < 1);
+        stepForwardBtn.setDisable(currStep >= 1);
 
         switch (type) {
             case "round":
