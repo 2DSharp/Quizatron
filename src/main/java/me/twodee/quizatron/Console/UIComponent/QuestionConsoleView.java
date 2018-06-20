@@ -84,7 +84,7 @@ public class QuestionConsoleView extends UIComponent
         this.fxmlLoader.load();
     }
 
-    public void initialize() throws NonExistentRecordException
+    public void initialize() throws NonExistentRecordException, MalformedURLException
     {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         answerLbl.managedProperty().bind(answerLbl.visibleProperty());
@@ -94,48 +94,17 @@ public class QuestionConsoleView extends UIComponent
         loadInitialQuestion();
     }
 
-    private void loadInitialQuestion() throws NonExistentRecordException
+    private void loadInitialQuestion() throws NonExistentRecordException, MalformedURLException
     {
         standardQSet.toStart();
         Question question = standardQSet.fetch();
         displayQuestionData(question);
     }
 
-    private void createButton(Question question)
-    {
-        Button button = new Button("" + (question.getId()));
-
-        button.getStyleClass().add("selectorBtns");
-        button.setOnAction(e -> selectQuestion(question.getIndex()));
-        HBox.setMargin(button, new Insets(5));
-
-        buttons.add(question.getIndex(), button);
-        bottomHBox.getChildren().add(button);
-    }
-
-    private void selectQuestion(int index)
-    {
-        try {
-            Question question = standardQSet.fetch(index);
-            displayQuestionData(question);
-            setFocusOnBtn(index);
-        }
-        catch (NonExistentRecordException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setFocusOnBtn(int index)
-    {
-        buttons.get(current).pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
-        current = index;
-        Button button = buttons.get(index);
-        button.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
-    }
 
     private void displayQuestionPresentation(Question question)
     {
-        if (!showToggler.isSelected()) {
+        if (!showToggler.isSelected() || mediaDisplayToggleBtn.isSelected()) {
             return;
         }
         try {
@@ -161,7 +130,7 @@ public class QuestionConsoleView extends UIComponent
         }
     }
 
-    private void displayQuestionData(Question question)
+    private void displayQuestionData(Question question) throws MalformedURLException
     {
         hardReset();
         if (!question.getQuestionImage().isEmpty()) {
@@ -169,6 +138,14 @@ public class QuestionConsoleView extends UIComponent
         }
         else {
             resetImageBox();
+        }
+        if (!question.getMedia().isEmpty()) {
+            Media media = new Media(quizDataService.constructURL(question.getMedia()));
+            mediaDisplayToggleBtn.setSelected(true);
+            loadMedia(media);
+        }
+        else {
+            reset();
         }
         questionLbl.setText(question.getTitle());
         answerLbl.setText(question.getAnswer());
@@ -231,7 +208,7 @@ public class QuestionConsoleView extends UIComponent
     private void initPlayer(Player player, Media media)
     {
         player.loadMedia(media);
-        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty().not()
+        BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty()
                                                           .and(mediaDisplayToggleBtn.disabledProperty().not());
         player.visibleProperty().bind(toggleState);
         player.managedProperty().bind(player.visibleProperty());
@@ -240,29 +217,27 @@ public class QuestionConsoleView extends UIComponent
     private void addPlayerToDisplay(Player player)
     {
         mediaDisplayToggleBtn.setDisable(false);
-        topBox.getChildren().add(player);
-        setQuestionDataVisibility(false);
+        //topBox.getChildren().add(player);
+        questionContainer.setCenter(player);
     }
 
-    private void setQuestionDataVisibility(boolean status)
-    {
-        answerLbl.setVisible(status);
-        questionLbl.setVisible(status);
-    }
 
     @FXML
-    private void toggleMediaDisplay(ActionEvent event) throws NonExistentRecordException
+    private void toggleMediaDisplay(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
-        setQuestionDataVisibility(mediaDisplayToggleBtn.isSelected());
         if (!mediaDisplayToggleBtn.isSelected()) {
             reset();
-            //loadMedia(standardQSet.fetch(current).getMedia());
+            questionDisplay = null;
+            displayQuestionPresentation(standardQSet.fetch());
         }
-        displayQuestionPresentation(standardQSet.fetch());
+        else {
+            Media media = new Media(quizDataService.constructURL(standardQSet.fetch().getMedia()));
+            loadMedia(media);
+        }
     }
 
     @FXML
-    private void getNextAction(ActionEvent event) throws NonExistentRecordException
+    private void getNextAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
         if (playerLoaded) {
             reset();
@@ -274,9 +249,9 @@ public class QuestionConsoleView extends UIComponent
 
     private void reset()
     {
-        topBox.getChildren().remove(imageView);
-        topBox.getChildren().remove(player);
-        setQuestionDataVisibility(true);
+        if (imageView != null) {
+            questionContainer.setCenter(imageView);
+        }
         mediaDisplayToggleBtn.setSelected(false);
         mediaDisplayToggleBtn.setDisable(true);
         playerLoaded = false;
@@ -284,7 +259,7 @@ public class QuestionConsoleView extends UIComponent
     }
 
     @FXML
-    private void getPreviousAction(ActionEvent event) throws NonExistentRecordException
+    private void getPreviousAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
         if (playerLoaded) {
             reset();
@@ -329,4 +304,40 @@ public class QuestionConsoleView extends UIComponent
         Question question = standardQSet.fetch();
         displayQuestionPresentation(question);
     }
+
+    private void createButton(Question question)
+    {
+        Button button = new Button("" + (question.getId()));
+
+        button.getStyleClass().add("selectorBtns");
+        button.setOnAction(e -> selectQuestion(question.getIndex()));
+        HBox.setMargin(button, new Insets(5));
+
+        buttons.add(question.getIndex(), button);
+        bottomHBox.getChildren().add(button);
+    }
+
+    private void selectQuestion(int index)
+    {
+        try {
+            Question question = standardQSet.fetch(index);
+            displayQuestionData(question);
+            setFocusOnBtn(index);
+        }
+        catch (NonExistentRecordException e) {
+            e.printStackTrace();
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setFocusOnBtn(int index)
+    {
+        buttons.get(current).pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
+        current = index;
+        Button button = buttons.get(index);
+        button.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
+    }
+
 }

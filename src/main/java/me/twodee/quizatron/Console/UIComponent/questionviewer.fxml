@@ -51,7 +51,7 @@
             </HBox>
             <HBox fx:id="bottomHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXToggleButton fx:id="mediaDisplayToggleBtn" disable="true" onAction="#toggleMediaDisplay" text="Display question" textFill="WHITE" />
+                  <JFXToggleButton fx:id="mediaDisplayToggleBtn" disable="true" onAction="#toggleMediaDisplay" text="Display media" textFill="WHITE" />
                </children>
             </HBox>
          </children>
