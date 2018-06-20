@@ -217,7 +217,7 @@ public class QuestionConsoleView extends UIComponent
     private void addPlayerToDisplay(Player player)
     {
         mediaDisplayToggleBtn.setDisable(false);
-        //topBox.getChildren().add(player);
+
         questionContainer.setCenter(player);
     }
 
