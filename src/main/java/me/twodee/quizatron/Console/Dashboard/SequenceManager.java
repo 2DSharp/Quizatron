@@ -241,7 +241,7 @@ public class SequenceManager extends UIComponent
         try {
             Player player = new Player(presentation);
             if (media != null) {
-                player.loadMedia(media);
+                player.loadMedia(media, player.getExtension(intro));
             }
             this.setCenter(player);
         }

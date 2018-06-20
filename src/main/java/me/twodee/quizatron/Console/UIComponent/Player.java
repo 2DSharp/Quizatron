@@ -20,6 +20,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
+import me.twodee.quizatron.Presentation.View.HomeView;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import java.io.File;
@@ -43,6 +44,8 @@ public class Player extends UIComponent
     private MediaView mediaView;
     private MediaPlayer mediaPlayer;
     private Presentation presentation;
+    private String extension;
+
     @FXML
     private AnchorPane playerNode;
     @FXML
@@ -110,14 +113,26 @@ public class Player extends UIComponent
     {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3"),
+                new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv"));
         File file = fileChooser.showOpenDialog(playerNode.getScene().getWindow());
 
         if (file != null) {
             String source = file.toURI().toURL().toExternalForm();
             Media media = new Media(source);
-            loadMedia(media);
+
+            String fileName = file.getName();
+
+            String fileExtension = getExtension(fileName);
+            loadMedia(media, fileExtension);
             playLoadedMedia();
         }
+    }
+
+    public String getExtension(String fileName)
+    {
+        return fileName.substring(fileName.indexOf(".") + 1, fileName.length());
     }
 
     /**
@@ -125,8 +140,9 @@ public class Player extends UIComponent
      *
      * @param media Media - source media to be played
      */
-    public void loadMedia(Media media)
+    public void loadMedia(Media media, String extension)
     {
+        this.extension = extension;
         initPlayer(media);
         timeSlider.setValue(this.mediaPlayer.getCurrentTime().toSeconds());
         mediaPlayer.setOnReady(this::displayMetaData);
@@ -316,8 +332,12 @@ public class Player extends UIComponent
                 presentation.changeView("media-view");
             }
 
+            String format = extension.toLowerCase();
+
             MediaPresentationView mediaViewController = presentation.getView();
-            mediaViewController.embedMediaView(mediaView);
+            if (format.equals("mp4") || format.equals("flv")) {
+                mediaViewController.embedMediaView(mediaView);
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

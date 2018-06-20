@@ -72,6 +72,7 @@ public class QuestionConsoleView extends UIComponent
     private QuizDataService quizDataService;
     private List<Button> buttons = new ArrayList<>();
     private QuestionDisplay questionDisplay;
+    private String extension;
 
     public QuestionConsoleView(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation)
     throws IOException
@@ -153,7 +154,8 @@ public class QuestionConsoleView extends UIComponent
         }
         Media media = new Media(quizDataService.constructURL(file));
         mediaDisplayToggleBtn.setSelected(true);
-        loadMedia(media);
+        extension = player.getExtension(file);
+        loadMedia(media, extension);
     }
 
     private void resetMediaBox()
@@ -164,17 +166,17 @@ public class QuestionConsoleView extends UIComponent
         player = null;
     }
 
-    private void loadMedia(Media media) throws IOException
+    private void loadMedia(Media media, String extension) throws IOException
     {
         playerLoaded = true;
         player = new Player(presentation);
-        initPlayer(player, media);
+        initPlayer(player, media, extension);
         addPlayerToDisplay(player);
     }
 
-    private void initPlayer(Player player, Media media)
+    private void initPlayer(Player player, Media media, String extension)
     {
-        player.loadMedia(media);
+        player.loadMedia(media, extension);
         BooleanBinding toggleState = mediaDisplayToggleBtn.selectedProperty().and(mediaDisplayToggleBtn.disabledProperty().not());
         player.visibleProperty().bind(toggleState);
         player.managedProperty().bind(player.visibleProperty());
@@ -230,7 +232,7 @@ public class QuestionConsoleView extends UIComponent
     {
         if (mediaDisplayToggleBtn.isSelected()) {
             Media media = new Media(quizDataService.constructURL(standardQSet.fetch().getMedia()));
-            loadMedia(media);
+            loadMedia(media, extension);
         }
         else {
             resetMediaBox();
