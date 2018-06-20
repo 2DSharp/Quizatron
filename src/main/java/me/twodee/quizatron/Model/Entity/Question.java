@@ -10,15 +10,16 @@ public class Question implements IQuestion {
     private String questionImage;
     private String ansImage;
     private String media;
+    private String id;
     private int index;
 
     public Question()
     {
 
     }
-    public Question(String title, String questionImage, String answer, String ansImage, String media)
+    public Question(String id, String title, String questionImage, String answer, String ansImage, String media)
     {
-
+        this.id = id;
         this.title = title;
         this.questionImage = questionImage;
         this.answer = answer;
@@ -29,6 +30,7 @@ public class Question implements IQuestion {
     public void setQuestion(Question question)
     {
         this.index = question.index;
+        this.id = question.id;
         this.title = question.title;
         this.questionImage = question.questionImage;
         this.ansImage = question.ansImage;
@@ -73,5 +75,10 @@ public class Question implements IQuestion {
     public String getMedia()
     {
         return media;
+    }
+
+    public String getId()
+    {
+        return id;
     }
 }

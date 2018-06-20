@@ -10,10 +10,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
+import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.UIComponent.Card;
+import me.twodee.quizatron.Console.UIComponent.Player;
 import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
 import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
@@ -25,6 +29,7 @@ import me.twodee.quizatron.Model.Service.SequenceService;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +57,9 @@ public class SequenceManager extends UIComponent
     private QuizDataService quizDataService;
     private List<Card> cards = new ArrayList<>();
     private int current;
+    private int steps;
+    private int currStep;
+
     private StandardQSetFactory standardQSetFactory;
     private Presentation presentation;
 
@@ -141,18 +149,11 @@ public class SequenceManager extends UIComponent
     private void displayCurrentSequence() throws NonExistentRecordException
     {
         sequence = sequenceService.fetchSequence();
-        try {
-            StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory()
-                                                                   + "/" + sequence.getFilePath());
-            QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, quizDataService, presentation);
-            this.setCenter(questionConsoleView);
-            displaySeqMetaData(sequence);
-            focusCard(sequence.getIndex());
-            updateNavBtns();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        currStep = 0;
+        displaySeqMetaData(sequence);
+        focusCard(sequence.getIndex());
+        updateNavBtns();
+        runSteps(sequence.getType());
     }
 
     private void displaySeqMetaData(Sequence sequence)
@@ -180,6 +181,87 @@ public class SequenceManager extends UIComponent
     }
 
     @FXML
+    private void stepForward(ActionEvent event)
+    {
+        currStep++;
+        System.out.println(currStep);;
+        runSteps(sequence.getType());
+    }
+
+    @FXML
+    private void stepBackward(ActionEvent event)
+    {
+        currStep--;
+        runSteps(sequence.getType());
+    }
+    private void runSteps(String type)
+    {
+        stepBackwardBtn.setDisable(false);
+
+        if (currStep < 1) {
+            stepBackwardBtn.setDisable(true);
+        }
+
+        switch (type) {
+            case "round":
+                displayRound(sequence);
+                break;
+            case "video":
+                displayVideo(sequence.getIntro());
+                stepForwardBtn.setDisable(true);
+                break;
+        }
+    }
+
+    private void displayRound(Sequence sequence)
+    {
+        switch (currStep)
+        {
+            case 0:
+                displayVideo(sequence.getIntro());
+                break;
+            case 1:
+                displayQuestionView();
+                break;
+        }
+    }
+
+    private void displayVideo(String intro)
+    {
+        Media media = null;
+        try {
+             media = new Media(quizDataService.constructURL(intro));
+        }
+        catch (MalformedURLException e) {
+
+        }
+
+        try {
+            Player player = new Player(presentation);
+            if (media != null) {
+                player.loadMedia(media);
+            }
+            this.setCenter(player);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displayQuestionView()
+    {
+        try {
+            StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
+            QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, quizDataService, presentation);
+            this.setCenter(questionConsoleView);
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
     private void showNextSeq(ActionEvent event) throws NonExistentRecordException
     {
         sequenceService.fetchNext();
@@ -198,6 +280,8 @@ public class SequenceManager extends UIComponent
             playPauseBtn.setDisable(false);
             nextSeqBtn.setDisable(!sequenceService.hasNext());
             prevSeqBtn.setDisable(!sequenceService.hasPrev());
+            stepBackwardBtn.setDisable(false);
+            stepForwardBtn.setDisable(false);
         }
     }
 

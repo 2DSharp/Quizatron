@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -36,6 +37,7 @@ public class QuestionDisplay extends IView
     private String logo;
     private String background;
     private ImageView imageView;
+
     public enum Result
     {
         CORRECT, WRONG;
@@ -118,12 +120,12 @@ public class QuestionDisplay extends IView
 
     private void cleanImageView()
     {
-
         titleContainer.getChildren().remove(imageView);
     }
     private void signal(Result result)
     {
-        final Animation animation = new Transition() {
+        final Animation animation = new Transition()
+        {
             {
                 setCycleDuration(Duration.millis(2000));
                 setInterpolator(Interpolator.EASE_OUT);
@@ -172,12 +174,12 @@ public class QuestionDisplay extends IView
 
     private ImageView prepareImageView(Image image)
     {
+        DropShadow ds = new DropShadow(20, Color.BLACK );
         ImageView imageView = new ImageView(image);
-        imageView.setStyle("-fx-border-color: #000; -fx-border-width: 5px");
+        imageView.setEffect(ds);
         imageView.setFitHeight(500);
         imageView.setFitWidth(950);
         imageView.setPreserveRatio(true);
-
         return imageView;
     }
     private void fadeIn(Node node)

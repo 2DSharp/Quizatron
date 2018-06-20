@@ -45,6 +45,7 @@ public class QuestionConsoleView extends UIComponent
     private Player player;
     private boolean playerLoaded;
 
+    @FXML private JFXToggleButton showToggler;
     @FXML
     private Button nextBtn;
     @FXML
@@ -62,37 +63,39 @@ public class QuestionConsoleView extends UIComponent
 
     @FXML private BorderPane questionContainer;
     @FXML private HBox bottomHBox;
+    @FXML private Button correctBtn;
+    @FXML private Button wrongBtn;
 
     private int current;
     private QuizDataService quizDataService;
     private List<Button> buttons = new ArrayList<>();
     private QuestionDisplay questionDisplay;
+    private boolean show;
 
     ImageView imageView;
 
     public QuestionConsoleView(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation)
-    throws IOException, NonExistentRecordException
+    throws IOException
     {
         this.presentation = presentation;
         this.quizDataService = quizDataService;
         this.standardQSet = standardQSet;
         this.fxmlLoader = initFXML("questionviewer.fxml");
         this.fxmlLoader.load();
-
-        loadInitialQuestion();
     }
 
-    public void initialize()
+    public void initialize() throws NonExistentRecordException
     {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
         answerLbl.managedProperty().bind(answerLbl.visibleProperty());
         questionLbl.managedProperty().bind(questionLbl.visibleProperty());
+        standardQSet.getStream()
+                    .forEach(this::createButton);
+        loadInitialQuestion();
     }
 
     private void loadInitialQuestion() throws NonExistentRecordException
     {
-        standardQSet.getStream()
-                    .forEach(this::createButton);
         standardQSet.toStart();
         Question question = standardQSet.fetch();
         displayQuestionData(question);
@@ -100,7 +103,7 @@ public class QuestionConsoleView extends UIComponent
 
     private void createButton(Question question)
     {
-        Button button = new Button("" + (question.getIndex() + 1));
+        Button button = new Button("" + (question.getId()));
 
         button.getStyleClass().add("selectorBtns");
         button.setOnAction(e -> selectQuestion(question.getIndex()));
@@ -132,11 +135,14 @@ public class QuestionConsoleView extends UIComponent
 
     private void displayQuestionPresentation(Question question)
     {
+        if (!showToggler.isSelected()) {
+            return;
+        }
         try {
             getQuestionDisplayControl();
 
             if (!question.getQuestionImage().isEmpty()) {
-                questionDisplay.revealQuestion(question.getTitle(), constructURL(question.getQuestionImage()));
+                questionDisplay.revealQuestion(question.getTitle(), quizDataService.constructURL(question.getQuestionImage()));
             }
             else {
                 questionDisplay.revealQuestion(question.getTitle());
@@ -157,6 +163,7 @@ public class QuestionConsoleView extends UIComponent
 
     private void displayQuestionData(Question question)
     {
+        hardReset();
         if (!question.getQuestionImage().isEmpty()) {
             displayImage(question.getQuestionImage());
         }
@@ -185,7 +192,7 @@ public class QuestionConsoleView extends UIComponent
     private void displayImage(String file)
     {
         try {
-            String url = constructURL(file);
+            String url = quizDataService.constructURL(file);
             Image image = new Image(url);
             positionImage(image);
         }
@@ -194,11 +201,6 @@ public class QuestionConsoleView extends UIComponent
         }
     }
 
-    private String constructURL(String file) throws MalformedURLException
-    {
-        String path = quizDataService.getInitialDirectory() + "/" + file;
-        return Paths.get(path).toUri().toURL().toExternalForm();
-    }
 
     private void positionImage(Image image)
     {
@@ -295,13 +297,36 @@ public class QuestionConsoleView extends UIComponent
     @FXML
     private void setCorrectAction(ActionEvent event) throws NonExistentRecordException
     {
-
-        questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.CORRECT);
+        if (showToggler.isSelected()) {
+            disableAnswerBtns(true);
+            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.CORRECT);
+        }
     }
 
     @FXML
     private void setWrongAction(ActionEvent event) throws NonExistentRecordException
     {
-        questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.WRONG);
+        if (showToggler.isSelected()) {
+            disableAnswerBtns(true);
+            questionDisplay.revealAnswer(standardQSet.fetch().getAnswer(), QuestionDisplay.Result.WRONG);
+        }
+    }
+
+    private void disableAnswerBtns(boolean result)
+    {
+        correctBtn.setDisable(result);
+        wrongBtn.setDisable(result);
+    }
+
+    private void hardReset()
+    {
+        disableAnswerBtns(false);
+    }
+
+    @FXML
+    private void togglePresentationView(ActionEvent event) throws NonExistentRecordException
+    {
+        Question question = standardQSet.fetch();
+        displayQuestionPresentation(question);
     }
 }

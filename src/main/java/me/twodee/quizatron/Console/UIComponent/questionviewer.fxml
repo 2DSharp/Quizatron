@@ -30,6 +30,7 @@
                         <Insets left="20.0" right="10.0" />
                      </HBox.margin>
                   </JFXButton>
+                  <JFXToggleButton fx:id="showToggler" onAction="#togglePresentationView" styleClass="showToggler" text="SHOW" />
                   <JFXButton fx:id="correctBtn" onAction="#setCorrectAction" style="-fx-background-color: #91CC41;" styleClass="decisionBtns" text="Correct">
                      <graphic>
                         <MaterialDesignIconView fill="WHITE" glyphName="CHECKBOX_MARKED_CIRCLE_OUTLINE" size="18.0" />

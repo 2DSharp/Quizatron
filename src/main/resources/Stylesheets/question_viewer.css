@@ -29,3 +29,7 @@
 .selectorBtns:selected {
     -fx-background-color: #39EA49;
 }
+
+.showToggler {
+    -fx-text-fill: white;
+}

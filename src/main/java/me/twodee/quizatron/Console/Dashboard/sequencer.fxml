@@ -30,7 +30,7 @@
                   <Insets left="10.0" right="10.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="stepBackwardBtn" disable="true" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="stepBackwardBtn" mnemonicParsing="false" onAction="#stepBackward" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <graphic>
                   <FontAwesomeIconView glyphName="FAST_BACKWARD" size="16" styleClass="seqIcons" />
                </graphic>
@@ -46,7 +46,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="stepForwardBtn" disable="true" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="seqActBtns">
+            <Button fx:id="stepForwardBtn" mnemonicParsing="false" onAction="#stepForward" style="-fx-background-color: transparent;" styleClass="seqActBtns">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin>

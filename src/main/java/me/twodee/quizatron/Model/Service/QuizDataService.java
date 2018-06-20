@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,6 +49,11 @@ public class QuizDataService
         quizData = quizDataMapper.load(file.toAbsolutePath().toString());
     }
 
+    public  String constructURL(String relativePath) throws MalformedURLException
+    {
+        String path = getInitialDirectory() + "/" + relativePath;
+        return Paths.get(path).toUri().toURL().toExternalForm();
+    }
     public String saveData() throws IOException
     {
         // Autosave should be only one file

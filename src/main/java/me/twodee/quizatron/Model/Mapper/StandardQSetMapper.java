@@ -59,12 +59,13 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
 
     private Question loadQuestionFromRecord(CSVRecord record)
     {
+        String id = record.get("ID");
         String title = record.get("Title");
         String qImage = record.get("Image");
         String answer = record.get("Answer");
         String ansImage = record.get("AnsImage");
         String media = record.get("Media");
-        return new Question(title, qImage, answer, ansImage, media);
+        return new Question(id, title, qImage, answer, ansImage, media);
     }
 
     public int getTotalRecords()

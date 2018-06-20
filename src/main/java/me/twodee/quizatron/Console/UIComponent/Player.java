@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -43,7 +44,7 @@ public class Player extends UIComponent
     private MediaPlayer mediaPlayer;
     private Presentation presentation;
     @FXML
-    private BorderPane playerNode;
+    private AnchorPane playerNode;
     @FXML
     private Button playBtn;
     @FXML
