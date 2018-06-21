@@ -26,6 +26,7 @@ import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.SequenceService;
+import me.twodee.quizatron.Presentation.View.Default;
 import me.twodee.quizatron.Presentation.View.HomeView;
 
 import java.io.IOException;
@@ -298,9 +299,7 @@ public class SequenceManager extends UIComponent
 
     private void pause() throws IOException
     {
-        presentation.changeView("home");
-        HomeView homeView = presentation.getView();
-        homeView.decorate(quizDataService);
+        presentation.changeView("default");
     }
 
     @FXML

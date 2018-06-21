@@ -59,11 +59,17 @@ public class QuestionDisplay extends IView
         generateBg();
     }
 
+    private String getColor()
+    {
+        return quizDataService.getConfiguration().getAppearance().getTextColor();
+    }
+
     private void generateBg() throws MalformedURLException
     {
-        leftBar.setStyle("-fx-background-color:" + getBackground(quizDataService));
+        leftBar.setStyle("-fx-background-color:" + getLeftBg(quizDataService));
         leftBar.setAlignment(Pos.BOTTOM_CENTER);
         leftBar.getChildren().add(getLogoView());
+        root.setStyle("-fx-background-color: " + getBackground());
     }
 
     private ImageView getLogoView() throws MalformedURLException
@@ -79,13 +85,18 @@ public class QuestionDisplay extends IView
         return quizDataService.getInitialDirectory().toUri().toURL().toExternalForm() +
                 quizDataService.getConfiguration().getAppearance().getLogo();
     }
-    private String getBackground(QuizDataService quizDataService)
+    private String getLeftBg(QuizDataService quizDataService)
     {
-        return quizDataService.getConfiguration().getAppearance().getThemeColor();
+        return quizDataService.getConfiguration().getAppearance().getTextColor();
+    }
+
+    private String getBackground()
+    {
+        return quizDataService.getConfiguration().getAppearance().getThemeBgColor();
     }
     public void setTitle(String title)
     {
-        titleLbl.setStyle("-fx-font-size: " + computeFontSize(title));
+        titleLbl.setStyle("-fx-font-size: " + computeFontSize(title) + ";" + "-fx-text-fill: " + getColor());
         titleLbl.setText(title);
     }
 
@@ -107,19 +118,44 @@ public class QuestionDisplay extends IView
     public void revealAnswer(String answer, Result result)
     {
         revealQuestion(answer);
-        signal(result);
+        flash(result);
     }
 
     public void revealAnswer(String answer, String url, Result result)
     {
         revealQuestion(answer, url);
-        signal(result);
+        flash(result);
     }
     private void cleanImageView()
     {
         titleContainer.getChildren().remove(imageView);
     }
-    private void signal(Result result)
+    private void flash(Result result)
+    {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.2),
+                                                      evt -> root.setStyle("-fx-background-color: " + getFlashColor(result))),
+                                         new KeyFrame(Duration.seconds(1),
+                                                      evt -> root.setStyle("-fx-background-color: " + getBackground())));
+        timeline.play();
+    }
+
+    private String getFlashColor(Result result)
+    {
+        String color;
+        switch (result) {
+            case WRONG:
+                color = "#F25056";
+            break;
+            case CORRECT:
+                color = "#39EA49";
+            break;
+            default:
+                color = getColor();
+        }
+        return color;
+    }
+
+    private void somethingElse(Result result)
     {
         final Animation animation = new Transition()
         {
@@ -166,7 +202,7 @@ public class QuestionDisplay extends IView
         imageView = prepareImageView(image);
         titleContainer.getChildren().add(imageView);
         fadeIn(imageView);
-        titleLbl.setStyle("-fx-font-size: " + 28);
+        titleLbl.setStyle("-fx-font-size: 28; -fx-text-fill: " + getColor());
     }
 
     private ImageView prepareImageView(Image image)
@@ -175,7 +211,7 @@ public class QuestionDisplay extends IView
         ImageView imageView = new ImageView(image);
         imageView.setEffect(ds);
         imageView.setFitHeight(500);
-        imageView.setFitWidth(950);
+        imageView.setFitWidth(1000);
         imageView.setPreserveRatio(true);
         return imageView;
     }

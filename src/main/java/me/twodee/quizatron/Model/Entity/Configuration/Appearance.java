@@ -22,6 +22,12 @@ public class Appearance implements Serializable {
     @SerializedName("default-background")
     @Expose
     private String defaultBackground;
+    @SerializedName("theme-bg-color")
+    @Expose
+    private String themeBgColor;
+    @SerializedName("text-color")
+    @Expose
+    private String textColor;
     @SerializedName("theme-color")
     @Expose
     private String themeColor;
@@ -46,7 +52,17 @@ public class Appearance implements Serializable {
         return defaultBackground;
     }
 
-    public String getThemeColor() {
+    public String getThemeBgColor() {
+        return themeBgColor;
+    }
+
+    public String getTextColor()
+    {
+        return textColor;
+    }
+
+    public String getThemeColor()
+    {
         return themeColor;
     }
 }

@@ -15,8 +15,7 @@
 }
 
 .selectorBtns {
-    -fx-border-radius: 100%;
-    -fx-background-radius: 100%;
+    -fx-background-radius: 5px;
     -fx-font-weight: bold;
     -fx-background-color: #FAC536;
     -fx-cursor: hand;
