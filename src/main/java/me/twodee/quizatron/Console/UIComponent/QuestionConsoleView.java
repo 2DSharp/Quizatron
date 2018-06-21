@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -68,6 +69,8 @@ public class QuestionConsoleView extends UIComponent
     private Button correctBtn;
     @FXML
     private Button wrongBtn;
+    @FXML private FlowPane switchContainer;
+
     private int current;
     private QuizDataService quizDataService;
     private List<Button> buttons = new ArrayList<>();
@@ -311,10 +314,10 @@ public class QuestionConsoleView extends UIComponent
 
         button.getStyleClass().add("selectorBtns");
         button.setOnAction(e -> selectQuestion(question.getIndex()));
-        HBox.setMargin(button, new Insets(5));
+        FlowPane.setMargin(button, new Insets(5));
 
         buttons.add(question.getIndex(), button);
-        bottomHBox.getChildren().add(button);
+        switchContainer.getChildren().add(button);
     }
 
     private void selectQuestion(int index)

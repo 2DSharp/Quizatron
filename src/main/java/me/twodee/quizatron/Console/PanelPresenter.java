@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +15,7 @@ import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.Dashboard.SequenceManager;
+import me.twodee.quizatron.Console.UIComponent.Player;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
@@ -77,15 +79,20 @@ public class PanelPresenter {
         //this.standardQSet = standardQSet;
     }
 
+    private void fitToAnchorPane(Node node)
+    {
+        AnchorPane.setBottomAnchor(node, 0.0);
+        AnchorPane.setLeftAnchor(node, 0.0);
+        AnchorPane.setRightAnchor(node, 0.0);
+        AnchorPane.setTopAnchor(node, 0.0);
+    }
     @FXML
     public void openMediaTabAction(MouseEvent event) throws Exception {
 
         dashboard.getChildren().clear();
-        FXMLLoader loader = this.fxmlLoader;
-        loader.setLocation(getClass().getResource("Dashboard/media-player.fxml"));
-        AnchorPane mediaPlayerPane = loader.load();
-        dashboard.getScene().getStylesheets().add(getClass().getResource("/Stylesheets/media.css").toExternalForm());
-        dashboard.getChildren().add(mediaPlayerPane);
+        Player player = new Player(presentation);
+        fitToAnchorPane(player);
+        dashboard.getChildren().add(player);
     }
 
     @FXML
@@ -103,10 +110,7 @@ public class PanelPresenter {
         try {
             SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
                                                                   standardQSetFactory, presentation);
-            AnchorPane.setBottomAnchor(sequenceManager, 0.0);
-            AnchorPane.setLeftAnchor(sequenceManager, 0.0);
-            AnchorPane.setRightAnchor(sequenceManager, 0.0);
-            AnchorPane.setTopAnchor(sequenceManager, 0.0);
+            fitToAnchorPane(sequenceManager);
             dashboard.getChildren().add(sequenceManager);
         }
         catch (IOException e) {
@@ -221,12 +225,8 @@ public class PanelPresenter {
 
     @FXML
     public void toggleFullScreen(ActionEvent event) {
-        if (fullScreenToggleBtn.isSelected()) {
-            presentation.getStage().setFullScreenExitHint("");
-            presentation.getStage().setFullScreen(true);
-        } else {
-            presentation.getStage().setFullScreen(false);
-        }
+        presentation.getStage().setFullScreenExitHint("");
+        presentation.getStage().setFullScreen(fullScreenToggleBtn.isSelected());
     }
 
     private void saveStateToFile() {
