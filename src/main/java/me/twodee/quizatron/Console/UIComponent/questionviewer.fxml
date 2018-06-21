@@ -81,7 +81,7 @@
                <children>
                   <Label fx:id="questionLbl" text="What is the question?" wrapText="true">
                      <font>
-                        <Font name="Open Sans Light" size="24.0" />
+                        <Font name="Open Sans Light" size="20.0" />
                      </font>
                      <VBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" />

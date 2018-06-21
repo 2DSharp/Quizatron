@@ -17,11 +17,17 @@ public class MediaPresentationView extends IView {
     public MediaPresentationView() {
 
     }
-    public void initialize() {
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/img/audio-icon.gif")));
-        rootNode.setCenter(imageView);
-    }
+
     public void embedMediaView(MediaView mediaView) {
         rootNode.setCenter(mediaView);
+    }
+
+    public void showFallBack()
+    {
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/img/audio-icon.gif")));
+        imageView.fitWidthProperty().bind(rootNode.widthProperty());
+        imageView.fitHeightProperty().bind(rootNode.heightProperty());
+        imageView.setPreserveRatio(true);
+        rootNode.setCenter(imageView);
     }
 }

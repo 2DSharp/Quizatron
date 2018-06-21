@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
@@ -60,7 +62,8 @@ public class Player extends UIComponent
     private Label mediaInfo;
     @FXML
     private Label sourceFileLbl;
-
+    @FXML
+    private BorderPane viewPort;
     /**
      * Media player component constructor.
      *
@@ -335,8 +338,15 @@ public class Player extends UIComponent
             String format = extension.toLowerCase();
 
             MediaPresentationView mediaViewController = presentation.getView();
+
+            ImageView fallBackView = getFallBackAudioIcon();
+            viewPort.setCenter(fallBackView);
+            mediaViewController.showFallBack();
+
             if (format.equals("mp4") || format.equals("flv")) {
                 mediaViewController.embedMediaView(mediaView);
+                MediaView mediaViewSec = getMediaViewPort();
+                viewPort.setCenter(mediaViewSec);
             }
         }
         catch (Exception e) {
@@ -344,6 +354,22 @@ public class Player extends UIComponent
         }
     }
 
+    private ImageView getFallBackAudioIcon()
+    {
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/img/audio-icon.gif")));
+        imageView.fitWidthProperty().bind(viewPort.widthProperty());
+        imageView.fitHeightProperty().bind(viewPort.heightProperty());
+        imageView.setPreserveRatio(true);
+        return imageView;
+    }
+    private MediaView getMediaViewPort()
+    {
+        MediaView mediaViewSec = new MediaView(mediaPlayer);
+        mediaViewSec.fitWidthProperty().bind(viewPort.widthProperty());
+        mediaViewSec.fitHeightProperty().bind(viewPort.heightProperty());
+        mediaViewSec.setPreserveRatio(true);
+        return mediaViewSec;
+    }
     /**
      * User action to loadMedia the media
      *
