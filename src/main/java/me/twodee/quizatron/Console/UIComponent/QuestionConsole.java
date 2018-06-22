@@ -280,14 +280,15 @@ public class QuestionConsole extends UIComponent
     @FXML
     private void setCorrectAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
-        standardQSet.fetch().setResult(Question.Result.CORRECT);
+        standardQSet.setResult(StandardQSet.Result.CORRECT);
+        System.out.println(standardQSet.getResult());
         revealAnswer(QuestionDisplay.Result.CORRECT);
     }
 
     @FXML
     private void setWrongAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
-        standardQSet.fetch().setResult(Question.Result.WRONG);
+        standardQSet.setResult(StandardQSet.Result.WRONG);
         revealAnswer(QuestionDisplay.Result.WRONG);
     }
 

@@ -11,7 +11,10 @@ import java.util.stream.Stream;
 public class StandardQSet extends QuestionSetService implements IQuestionSetService<Question>
 {
     private StandardQSetMapper standardQSetMapper;
-
+    public enum Result {
+        CORRECT, WRONG
+    }
+    Result result;
     @Inject
     public StandardQSet(StandardQSetMapper standardQSetMapper)
     {
@@ -49,4 +52,14 @@ public class StandardQSet extends QuestionSetService implements IQuestionSetServ
     {
         return standardQSetMapper.getStream();
 }
+
+    public void setResult(Result result)
+    {
+        this.result = result;
+    }
+
+    public Result getResult()
+    {
+        return result;
+    }
 }

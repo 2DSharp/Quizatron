@@ -6,16 +6,18 @@ public class Group
     private String file;
     private String image;
     private String answer;
+    private String blockFile;
 
     public Group()
     {
 
     }
-    public Group(String fileName, String image, String answer)
+    public Group(String fileName, String image, String answer, String blockFile)
     {
         this.file = fileName;
         this.image = image;
         this.answer = answer;
+        this.blockFile = blockFile;
     }
 
     public void setGroup(Group group)
@@ -24,6 +26,7 @@ public class Group
         this.image = group.image;
         this.file = group.file;
         this.answer = group.answer;
+        this.blockFile = group.blockFile;
     }
     public int getIndex()
     {
@@ -58,5 +61,10 @@ public class Group
     public String getAnswer()
     {
         return answer;
+    }
+
+    public String getBlockFile()
+    {
+        return blockFile;
     }
 }

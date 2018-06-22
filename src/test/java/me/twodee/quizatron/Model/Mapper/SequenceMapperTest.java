@@ -146,7 +146,7 @@ public class SequenceMapperTest
                              "Audio Visual Round",
                              "Subject Round",
                              "Who Am I?",
-                             "Block Round",
+                             "BlockStage Round",
                              "Rapid Fire"));
     }
 */

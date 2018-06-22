@@ -62,7 +62,8 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
         String fileName = csvRecord.get("File");
         String image = csvRecord.get("Image");
         String answer = csvRecord.get("Answer");
-        return new Group(fileName, image, answer);
+        String blockFile = csvRecord.get("BlockFile");
+        return new Group(fileName, image, answer, blockFile);
     }
 
     public int getTotalRecords()
