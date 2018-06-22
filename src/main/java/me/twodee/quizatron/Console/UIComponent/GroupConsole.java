@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Console.UIComponent;
 
+import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,10 +12,8 @@ import javafx.scene.shape.Rectangle;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
-import me.twodee.quizatron.Model.Entity.Block;
 import me.twodee.quizatron.Model.Entity.BlockSet;
 import me.twodee.quizatron.Model.Entity.Group;
-import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Exception.UninitializedGroupException;
 import me.twodee.quizatron.Model.Service.QuizDataService;
@@ -44,6 +43,7 @@ public class GroupConsole extends UIComponent
     private StandardQSet standardQSet;
     private BlockSet blockSet;
     List<Button> buttons = new ArrayList<>();
+    int current;
     private  QuestionConsole questionConsole;
     List<StackPane> blockList;
     List<Rectangle> blockBoxes;
@@ -74,7 +74,7 @@ public class GroupConsole extends UIComponent
 
     private void createSwitch(Group group)
     {
-        Button button = new Button("" + (group.getIndex()));
+        Button button = new Button("" + (group.getIndex() + 1));
 
         button.getStyleClass().add("selectorBtns");
         button.setOnAction(e -> selectBlockSet(group.getIndex()));
@@ -89,6 +89,7 @@ public class GroupConsole extends UIComponent
         try {
             Group group = groupSet.fetch(index);
             getBlockData(group);
+            updateBtns();
         }
         catch (NonExistentRecordException | IOException e) {
             e.printStackTrace();
@@ -103,6 +104,8 @@ public class GroupConsole extends UIComponent
         standardQSet = groupSet.getService();
         questionConsole = new QuestionConsole(standardQSet, quizDataService, presentation, false);
         this.setTop(questionConsole);
+        setFocusOnIndicator(group.getIndex());
+        blockList = null;
     }
     @FXML
     private void showBlockAction(ActionEvent event)
@@ -132,8 +135,6 @@ public class GroupConsole extends UIComponent
         switch (standardQSet.getResult()) {
             case CORRECT:
                 blockList.set(index, null);
-                //blockStage.remove();
-                //blockSet.setBlock(standardQSet.fetch().getIndex(), null);
                 break;
             case WRONG:
                 Rectangle rectangle = blockStage.disable(blockStage.disable(blockBoxes.get(index)));
@@ -193,4 +194,11 @@ public class GroupConsole extends UIComponent
         backBtn.setDisable(!groupSet.hasPrevious());
     }
 
+    private void setFocusOnIndicator(int index)
+    {
+        buttons.get(current).pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), false);
+        current = index;
+        Button button = buttons.get(index);
+        button.pseudoClassStateChanged(PseudoClass.getPseudoClass("selected"), true);
+    }
 }
