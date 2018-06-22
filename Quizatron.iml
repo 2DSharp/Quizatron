@@ -29,6 +29,7 @@
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Maven: com.jfoenix:jfoenix:8.0.3" level="project" />
+    <orderEntry type="library" name="Maven: de.jensd:fontawesomefx:8.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.h2database:h2:1.4.197" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-csv:1.5" level="project" />

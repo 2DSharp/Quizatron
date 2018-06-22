@@ -11,7 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 
 public class Main extends Application {
 
@@ -27,6 +30,11 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/img/qtron64x64.png")));
+        Font.loadFont(
+                getClass().getResource("/fonts/OpenSans-Light.ttf").toExternalForm(), 24);
+        Font.loadFont(
+                getClass().getResource("/fonts/OpenSans-Regular.ttf").toExternalForm(),
+                24);
         primaryStage.setTitle("Quizatron console");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);

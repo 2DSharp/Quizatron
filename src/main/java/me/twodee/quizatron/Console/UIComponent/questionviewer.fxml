@@ -60,7 +60,7 @@
       </VBox>
    </bottom>
    <center>
-      <BorderPane fx:id="questionContainer" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane fx:id="questionContainer" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #F3F3F3;" BorderPane.alignment="CENTER">
          <bottom>
             <VBox fx:id="bottomBox" alignment="CENTER" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>

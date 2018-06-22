@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import me.twodee.quizatron.Component.State.ObjectSerializationIOStrategy;
 import me.twodee.quizatron.Component.State.SerializationIOStrategy;
 import me.twodee.quizatron.Factory.FXMLLoaderProvider;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Factory.PresentationProvider;
 import me.twodee.quizatron.Model.Contract.IMapper;
 import me.twodee.quizatron.Model.Mapper.CSVSequenceMapper;

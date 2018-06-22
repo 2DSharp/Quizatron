@@ -13,15 +13,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import me.twodee.quizatron.Component.Mediator;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Console.Dashboard.SequenceManager;
 import me.twodee.quizatron.Console.UIComponent.Player;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
 import me.twodee.quizatron.Factory.GroupQSetFactory;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
-import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
-import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
-import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Model.Service.SequenceService;
 import me.twodee.quizatron.Presentation.IView;
@@ -80,9 +77,12 @@ public class PanelPresenter {
         this.sequenceService = sequenceService;
         this.standardQSetFactory = standardQSetFactory;
         this.groupQSetFactory = groupQSetFactory;
-        //this.standardQSet = standardQSet;
     }
 
+    private void initialize()
+    {
+
+    }
     private void fitToAnchorPane(Node node)
     {
         AnchorPane.setBottomAnchor(node, 0.0);
@@ -109,18 +109,22 @@ public class PanelPresenter {
 
     @FXML
     private void openSlideShow(MouseEvent event) {
-
-        dashboard.getChildren().clear();
         try {
-            SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
-                                                                  standardQSetFactory, groupQSetFactory, presentation);
-            fitToAnchorPane(sequenceManager);
-            dashboard.getChildren().add(sequenceManager);
+            loadSequence();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void loadSequence() throws IOException
+    {
+        dashboard.getChildren().clear();
+        SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
+                                                              standardQSetFactory, groupQSetFactory, presentation);
+        fitToAnchorPane(sequenceManager);
+        dashboard.getChildren().add(sequenceManager);
     }
     private Path getFile(String title) {
 
@@ -150,11 +154,17 @@ public class PanelPresenter {
         }
     }
 
-    private void loadFeedBack() {
-
-        ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, quizDataService);
-        configLoaderView.setOutput(loadedQuizNameLbl, startBtn, pauseBtn, stopBtn);
-        mediator.respond(configLoaderView);
+    private void loadFeedBack()
+    {
+        try {
+            ConfigLoaderView configLoaderView = new ConfigLoaderView(mediator, quizDataService);
+            configLoaderView.setOutput(loadedQuizNameLbl, startBtn, pauseBtn, stopBtn);
+            mediator.respond(configLoaderView);
+            loadSequence();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -170,6 +180,18 @@ public class PanelPresenter {
         Path file = Paths.get(location);
         loadFromConfigFile(file);
         loadFeedBack();
+    }
+
+    @FXML
+    private void pausePresentation(ActionEvent event) throws IOException
+    {
+        presentation.changeView("default");
+    }
+
+    @FXML
+    private void stopPresentation(ActionEvent event)
+    {
+
     }
 
     private void loadFromConfigFile(Path file) {

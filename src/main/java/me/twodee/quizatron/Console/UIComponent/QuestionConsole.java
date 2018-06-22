@@ -16,7 +16,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Model.Entity.Question;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;

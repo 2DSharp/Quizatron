@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -25,7 +25,7 @@ public class PresentationProvider implements Provider<Presentation> {
 
         try {
             FXMLLoader fxmlLoader = FXMLLoaderProvider.get();
-            fxmlLoader.setLocation(getClass().getResource("../Presentation/View/home.fxml" ));
+            fxmlLoader.setLocation(getClass().getResource("home.fxml" ));
 
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root, 800, 600);

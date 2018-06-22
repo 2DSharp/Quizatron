@@ -13,7 +13,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.media.Media;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Console.UIComponent.Card;
 import me.twodee.quizatron.Console.UIComponent.GroupConsole;
 import me.twodee.quizatron.Console.UIComponent.Player;
@@ -23,6 +23,7 @@ import me.twodee.quizatron.Factory.GroupQSetFactory;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.Sequence;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
+import me.twodee.quizatron.Model.Exception.SequenceNotSetException;
 import me.twodee.quizatron.Model.Service.QuizDataService;
 import me.twodee.quizatron.Model.Service.RoundService.GroupQSet;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
@@ -98,10 +99,7 @@ public class SequenceManager extends UIComponent
             displayErrorMessage();
             e.printStackTrace();
         }
-        catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e) {
+        catch (InvocationTargetException | NoSuchMethodException | SequenceNotSetException e) {
             e.printStackTrace();
         }
         catch (InstantiationException e) {
@@ -150,11 +148,13 @@ public class SequenceManager extends UIComponent
         return yFactor / cardsContainer.getHeight();
     }
 
-    private void displayCurrentSequence() throws NonExistentRecordException, IOException
+    private void displayCurrentSequence() throws NonExistentRecordException, IOException, SequenceNotSetException
     {
         pause();
         sequence = sequenceService.fetchSequence();
         currStep = 0;
+        System.out.println(quizDataService.constructURL(sequence.getIntro()));
+        sequenceService.rememberCurrent();
         displaySeqMetaData(sequence);
         focusCard(sequence.getIndex());
         updateNavBtns();
@@ -181,6 +181,9 @@ public class SequenceManager extends UIComponent
             displayCurrentSequence();
         }
         catch (NonExistentRecordException | IOException e) {
+            e.printStackTrace();
+        }
+        catch (SequenceNotSetException e) {
             e.printStackTrace();
         }
     }
@@ -255,7 +258,8 @@ public class SequenceManager extends UIComponent
     {
         Media media = null;
         try {
-             media = new Media(quizDataService.constructURL(intro));
+            System.out.println();
+            media = new Media(quizDataService.constructURL(intro));
         }
         catch (MalformedURLException e) {
 
@@ -287,14 +291,14 @@ public class SequenceManager extends UIComponent
 
     }
     @FXML
-    private void showNextSeq(ActionEvent event) throws NonExistentRecordException, IOException
+    private void showNextSeq(ActionEvent event) throws NonExistentRecordException, IOException, SequenceNotSetException
     {
         sequenceService.fetchNext();
         displayCurrentSequence();
     }
 
     @FXML
-    private void showPrevSeq(ActionEvent event) throws NonExistentRecordException, IOException
+    private void showPrevSeq(ActionEvent event) throws NonExistentRecordException, IOException, SequenceNotSetException
     {
         sequenceService.fetchPrevious();
         displayCurrentSequence();

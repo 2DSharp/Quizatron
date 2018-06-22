@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import me.twodee.quizatron.Component.Presentation;
+import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.BlockSet;

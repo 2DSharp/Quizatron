@@ -1,4 +1,4 @@
-package me.twodee.quizatron.Component;
+package me.twodee.quizatron.Presentation;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -46,7 +46,7 @@ public class Presentation
     public void changeView(String viewFile) throws IOException
     {
         FXMLLoader loader = FXMLLoaderProvider.get();
-        loader.setLocation(getClass().getResource("../Presentation/View/" + viewFile + ".fxml"));
+        loader.setLocation(getClass().getResource("View/" + viewFile + ".fxml"));
         scene.setRoot(loader.load());
         view = loader.getController();
     }
