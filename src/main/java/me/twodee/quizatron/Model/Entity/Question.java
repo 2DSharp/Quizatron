@@ -12,6 +12,11 @@ public class Question implements IQuestion {
     private String media;
     private String id;
     private int index;
+    public enum Result
+    {
+        CORRECT, WRONG;
+    }
+    Result result;
 
     public Question()
     {
@@ -80,5 +85,15 @@ public class Question implements IQuestion {
     public String getId()
     {
         return id;
+    }
+
+    public void setResult(Result result)
+    {
+        this.result = result;
+    }
+
+    public Result getResult()
+    {
+        return result;
     }
 }

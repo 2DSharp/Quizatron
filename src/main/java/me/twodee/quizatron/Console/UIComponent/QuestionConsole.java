@@ -36,15 +36,16 @@ import java.util.List;
  * @version 1.0.18.1
  * @since 1.0.18.1
  */
-public class QuestionConsoleView extends UIComponent
+public class QuestionConsole extends UIComponent
 {
-    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
+    private static final String USER_AGENT_STYLESHEET = QuestionConsole.class.getResource("/Stylesheets/question_viewer.css").toExternalForm();
     ImageView imageView;
     private StandardQSet standardQSet;
     private FXMLLoader fxmlLoader;
     private Presentation presentation;
     private Player player;
     private boolean playerLoaded;
+    private boolean showPreview = true;
     @FXML
     private JFXToggleButton showToggler;
     @FXML
@@ -77,12 +78,13 @@ public class QuestionConsoleView extends UIComponent
     private QuestionDisplay questionDisplay;
     private String mediaName;
 
-    public QuestionConsoleView(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation)
+    public QuestionConsole(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation,boolean showPreview)
     throws IOException
     {
         this.presentation = presentation;
         this.quizDataService = quizDataService;
         this.standardQSet = standardQSet;
+        setShowPreview(showPreview);
         this.fxmlLoader = initFXML("questionviewer.fxml");
         this.fxmlLoader.load();
     }
@@ -96,6 +98,10 @@ public class QuestionConsoleView extends UIComponent
         loadInitialQuestion();
     }
 
+    public void setShowPreview(boolean status)
+    {
+        showPreview = status;
+    }
     private void loadInitialQuestion() throws NonExistentRecordException, IOException
     {
         standardQSet.toStart();
@@ -119,13 +125,15 @@ public class QuestionConsoleView extends UIComponent
 
     private void displayImage(String file) throws MalformedURLException
     {
-        if (file.isEmpty()) {
-            resetImageBox();
-            return;
+        if (showPreview ) {
+            if (file.isEmpty()) {
+                resetImageBox();
+                return;
+            }
+            String url = quizDataService.constructURL(file);
+            Image image = new Image(url);
+            addImageToDisplay(image);
         }
-        String url = quizDataService.constructURL(file);
-        Image image = new Image(url);
-        addImageToDisplay(image);
     }
 
     private void resetImageBox()
@@ -272,12 +280,14 @@ public class QuestionConsoleView extends UIComponent
     @FXML
     private void setCorrectAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
+        standardQSet.fetch().setResult(Question.Result.CORRECT);
         revealAnswer(QuestionDisplay.Result.CORRECT);
     }
 
     @FXML
     private void setWrongAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
+        standardQSet.fetch().setResult(Question.Result.WRONG);
         revealAnswer(QuestionDisplay.Result.WRONG);
     }
 

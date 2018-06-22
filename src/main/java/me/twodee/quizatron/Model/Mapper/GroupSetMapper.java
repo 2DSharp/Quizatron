@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class GroupSetMapper implements CSVReaderMapper<Group>
 {
@@ -59,11 +60,18 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
     private Group loadGroupFromRecord(CSVRecord csvRecord)
     {
         String fileName = csvRecord.get("File");
-        return new Group(fileName);
+        String image = csvRecord.get("Image");
+        String answer = csvRecord.get("Answer");
+        return new Group(fileName, image, answer);
     }
 
     public int getTotalRecords()
     {
         return groups.size();
+    }
+
+    public Stream<Group> getStream()
+    {
+        return groups.stream();
     }
 }

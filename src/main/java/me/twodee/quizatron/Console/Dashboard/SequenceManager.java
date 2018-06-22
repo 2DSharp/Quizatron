@@ -11,23 +11,22 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
-import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.UIComponent.Card;
+import me.twodee.quizatron.Console.UIComponent.GroupConsole;
 import me.twodee.quizatron.Console.UIComponent.Player;
-import me.twodee.quizatron.Console.UIComponent.QuestionConsoleView;
+import me.twodee.quizatron.Console.UIComponent.QuestionConsole;
 import me.twodee.quizatron.Component.UIComponent;
+import me.twodee.quizatron.Factory.GroupQSetFactory;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.Sequence;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
 import me.twodee.quizatron.Model.Service.QuizDataService;
+import me.twodee.quizatron.Model.Service.RoundService.GroupQSet;
 import me.twodee.quizatron.Model.Service.RoundService.StandardQSet;
 import me.twodee.quizatron.Model.Service.SequenceService;
-import me.twodee.quizatron.Presentation.View.Default;
-import me.twodee.quizatron.Presentation.View.HomeView;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -50,7 +49,7 @@ public class SequenceManager extends UIComponent
 
     Sequence sequence;
 
-    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class
+    private static final String USER_AGENT_STYLESHEET = QuestionConsole.class
             .getResource("/Stylesheets/sequence.css")
             .toExternalForm();
 
@@ -62,17 +61,20 @@ public class SequenceManager extends UIComponent
     private int steps;
     private int currStep;
 
+    private GroupQSetFactory groupQSetFactory;
     private StandardQSetFactory standardQSetFactory;
     private Presentation presentation;
 
     public SequenceManager(SequenceService sequenceService,
                            QuizDataService quizDataService,
                            StandardQSetFactory standardQSetFactory,
+                           GroupQSetFactory groupQSetFactory,
                            Presentation presentation) throws IOException
     {
         this.quizDataService = quizDataService;
         this.sequenceService = sequenceService;
         this.standardQSetFactory = standardQSetFactory;
+        this.groupQSetFactory = groupQSetFactory;
         this.presentation = presentation;
         fxmlLoader = initFXML("sequencer.fxml");
         fxmlLoader.load();
@@ -221,8 +223,31 @@ public class SequenceManager extends UIComponent
                 displayVideo(sequence.getIntro());
                 break;
             case 1:
-                displayQuestionView();
+                displayRoundView(sequence.getRoundType());
                 break;
+        }
+    }
+
+    private void displayRoundView(String roundType)
+    {
+        if (roundType.equals("std")) {
+            displayQuestionView();
+        }
+        else {
+            displayGroupView();
+        }
+    }
+
+    private void displayGroupView()
+    {
+        try {
+            GroupQSet groupQSet = groupQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
+            GroupConsole groupConsole = new GroupConsole(quizDataService, groupQSet, presentation);
+            this.setCenter(groupConsole);
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -252,8 +277,8 @@ public class SequenceManager extends UIComponent
     {
         try {
             StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
-            QuestionConsoleView questionConsoleView = new QuestionConsoleView(standardQSet, quizDataService, presentation);
-            this.setCenter(questionConsoleView);
+            QuestionConsole questionConsole = new QuestionConsole(standardQSet, quizDataService, presentation, true);
+            this.setCenter(questionConsole);
         }
 
         catch (IOException e) {

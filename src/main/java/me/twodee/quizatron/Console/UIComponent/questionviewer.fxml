@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root fx:id="rootNode" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../../../../resources/Stylesheets/question_viewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="rootNode" prefHeight="530.0" prefWidth="600.0" stylesheets="@../../../../../../resources/Stylesheets/question_viewer.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <VBox prefHeight="112.0" prefWidth="600.0" style="-fx-background-color: #282828;" BorderPane.alignment="CENTER">
          <children>

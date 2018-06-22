@@ -22,7 +22,6 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
-import me.twodee.quizatron.Presentation.View.HomeView;
 import me.twodee.quizatron.Presentation.View.MediaPresentationView;
 
 import java.io.File;
@@ -40,7 +39,7 @@ import static java.lang.Math.abs;
 public class Player extends UIComponent
 {
 
-    private static final String USER_AGENT_STYLESHEET = QuestionConsoleView.class
+    private static final String USER_AGENT_STYLESHEET = QuestionConsole.class
             .getResource("/Stylesheets/media.css")
             .toExternalForm();
     private MediaView mediaView;

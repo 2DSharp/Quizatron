@@ -1,0 +1,19 @@
+.navBtn {
+    -fx-background-color: #0066FF;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px;
+}
+.selectorBtns {
+    -fx-background-radius: 5px;
+    -fx-font-weight: bold;
+    -fx-background-color: #FAC536;
+    -fx-cursor: hand;
+}
+
+.selectorBtns:hover {
+    -fx-background-color: #F25056;
+}
+
+.selectorBtns:selected {
+    -fx-background-color: #39EA49;
+}

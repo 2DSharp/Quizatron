@@ -10,6 +10,7 @@ import me.twodee.quizatron.Model.Mapper.GroupSetMapper;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class GroupQSet extends QuestionSetService implements IQuestionSetService<Group>
 {
@@ -25,13 +26,13 @@ public class GroupQSet extends QuestionSetService implements IQuestionSetService
     }
     public Group fetch() throws NonExistentRecordException
     {
-        return fetch(curr + 1);
+        return fetch(curr);
     }
 
     public Group fetch(int index) throws NonExistentRecordException
     {
         group = new Group();
-        curr = index - 1;
+        curr = index;
         group.setIndex(curr);
         groupSetMapper.fetch(group);
         return group;
@@ -56,5 +57,10 @@ public class GroupQSet extends QuestionSetService implements IQuestionSetService
         String dir = Paths.get(groupSetMapper.getFile()).getParent().toAbsolutePath().toString();
         dir = dir + "/";
         return dir;
+    }
+
+    public Stream<Group> getStream()
+    {
+        return groupSetMapper.getStream();
     }
 }

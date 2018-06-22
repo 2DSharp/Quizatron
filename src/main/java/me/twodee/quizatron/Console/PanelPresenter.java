@@ -17,6 +17,7 @@ import me.twodee.quizatron.Component.Presentation;
 import me.twodee.quizatron.Console.Dashboard.SequenceManager;
 import me.twodee.quizatron.Console.UIComponent.Player;
 import me.twodee.quizatron.Console.View.ConfigLoaderView;
+import me.twodee.quizatron.Factory.GroupQSetFactory;
 import me.twodee.quizatron.Factory.StandardQSetFactory;
 import me.twodee.quizatron.Model.Entity.Configuration.Appearance;
 import me.twodee.quizatron.Model.Exception.NonExistentRecordException;
@@ -42,6 +43,7 @@ public class PanelPresenter {
     private QuizDataService quizDataService;
     private SequenceService sequenceService;
     private StandardQSetFactory standardQSetFactory;
+    private GroupQSetFactory groupQSetFactory;
 
     @FXML
     private JFXToggleButton fullScreenToggleBtn;
@@ -67,7 +69,8 @@ public class PanelPresenter {
                           Mediator mediator,
                           QuizDataService quizDataService,
                           SequenceService sequenceService,
-                          StandardQSetFactory standardQSetFactory
+                          StandardQSetFactory standardQSetFactory,
+                          GroupQSetFactory groupQSetFactory
                           ) throws Exception {
 
         this.fxmlLoader = fxmlLoader;
@@ -76,6 +79,7 @@ public class PanelPresenter {
         this.quizDataService = quizDataService;
         this.sequenceService = sequenceService;
         this.standardQSetFactory = standardQSetFactory;
+        this.groupQSetFactory = groupQSetFactory;
         //this.standardQSet = standardQSet;
     }
 
@@ -109,7 +113,7 @@ public class PanelPresenter {
         dashboard.getChildren().clear();
         try {
             SequenceManager sequenceManager = new SequenceManager(sequenceService, quizDataService,
-                                                                  standardQSetFactory, presentation);
+                                                                  standardQSetFactory, groupQSetFactory, presentation);
             fitToAnchorPane(sequenceManager);
             dashboard.getChildren().add(sequenceManager);
         }

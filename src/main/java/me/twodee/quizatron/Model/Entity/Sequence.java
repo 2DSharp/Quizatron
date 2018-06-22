@@ -8,6 +8,7 @@ public class Sequence
     private String filePath;
     private String design;
     private String intro;
+    private String roundType;
     private int index;
 
     public Sequence()
@@ -19,15 +20,17 @@ public class Sequence
         this.id = sequence.id;
         this.name = sequence.name;
         this.type = sequence.type;
+        this.roundType = sequence.roundType;
         this.filePath = sequence.filePath;
         this.design = sequence.design;
         this.intro = sequence.intro;
     }
-    public Sequence(int id, String name, String type, String filePath, String design, String intro)
+    public Sequence(int id, String name, String type, String roundType, String filePath, String design, String intro)
     {
         this.id = id;
         this.name = name;
         this.type = type;
+        this.roundType = roundType;
         this.filePath = filePath;
         this.design = design;
         this.intro = intro;
@@ -76,5 +79,10 @@ public class Sequence
     public String getIntro()
     {
         return intro;
+    }
+
+    public String getRoundType()
+    {
+        return roundType;
     }
 }
