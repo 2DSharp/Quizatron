@@ -77,6 +77,7 @@ public class QuestionConsole extends UIComponent
     private List<Button> buttons = new ArrayList<>();
     private QuestionDisplay questionDisplay;
     private String mediaName;
+    private String secImage;
 
     public QuestionConsole(StandardQSet standardQSet, QuizDataService quizDataService, Presentation presentation,boolean showPreview)
     throws IOException
@@ -89,6 +90,10 @@ public class QuestionConsole extends UIComponent
         this.fxmlLoader.load();
     }
 
+    public void setSecondaryImage(String image)
+    {
+        secImage = image;
+    }
     public void initialize() throws NonExistentRecordException, IOException
     {
         this.getStylesheets().add(USER_AGENT_STYLESHEET);
@@ -228,6 +233,9 @@ public class QuestionConsole extends UIComponent
 
     private void revealQuestion(Question question) throws MalformedURLException
     {
+        if (secImage != null) {
+            questionDisplay.displaySecondaryImg(secImage);
+        }
         if (!question.getQuestionImage().isEmpty()) {
             questionDisplay.revealQuestion(question.getTitle(), quizDataService.constructURL(question.getQuestionImage()));
         }
@@ -280,17 +288,24 @@ public class QuestionConsole extends UIComponent
     @FXML
     private void setCorrectAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
+        playMusicFX(StandardQSet.Result.CORRECT);
         standardQSet.setResult(StandardQSet.Result.CORRECT);
-        System.out.println(standardQSet.getResult());
         revealAnswer(QuestionDisplay.Result.CORRECT);
     }
 
     @FXML
     private void setWrongAction(ActionEvent event) throws NonExistentRecordException, MalformedURLException
     {
+        playMusicFX(StandardQSet.Result.WRONG);
         standardQSet.setResult(StandardQSet.Result.WRONG);
         revealAnswer(QuestionDisplay.Result.WRONG);
     }
+
+    private void playMusicFX(StandardQSet.Result result)
+    {
+
+    }
+
 
     private void revealAnswer(QuestionDisplay.Result result) throws NonExistentRecordException, MalformedURLException
     {

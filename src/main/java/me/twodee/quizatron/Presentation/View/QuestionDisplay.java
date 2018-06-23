@@ -20,14 +20,16 @@ import java.net.MalformedURLException;
 
 public class QuestionDisplay extends IView
 {
+    @FXML VBox secLogoBox;
     @FXML
     private Label titleLbl;
     @FXML
     private VBox leftBar;
     @FXML
     BorderPane root;
-    @FXML
-    private  VBox titleContainer;
+    @FXML BorderPane leftContainer;
+    @FXML private  VBox titleContainer;
+    @FXML private VBox logoViewBox;
     private QuizDataService quizDataService;
     private String logo;
     private String background;
@@ -73,9 +75,8 @@ public class QuestionDisplay extends IView
                                                     bgSize);
         leftBar.setBackground(new Background(bgImg));
 
-        //leftBar.setStyle("-fx-background-color:" + getLeftBg(quizDataService));
-        leftBar.setAlignment(Pos.BOTTOM_CENTER);
-        leftBar.getChildren().add(getLogoView());
+        logoViewBox.setAlignment(Pos.BOTTOM_CENTER);
+        logoViewBox.getChildren().add(getLogoView());
         root.setStyle("-fx-background-color: " + getBackground());
     }
 
@@ -95,6 +96,16 @@ public class QuestionDisplay extends IView
     private String getLeftBg(QuizDataService quizDataService)
     {
         return quizDataService.getConfiguration().getAppearance().getThemeLeftBg();
+    }
+
+    public void displaySecondaryImg(String imageUrl)
+    {
+        Image secLogo = new Image(imageUrl);
+        ImageView imageView = new ImageView(secLogo);
+        imageView.setFitWidth(150);
+        imageView.setPreserveRatio(true);
+        leftContainer.setTop(imageView);
+
     }
 
     private String getBackground()

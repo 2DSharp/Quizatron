@@ -62,8 +62,9 @@ public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Seq
         String file = record.get("File");
         String design = record.get("Design");
         String intro = record.get("Intro");
+        String secImage = record.get("SecImage");
 
-        return new Sequence(id, name, type, roundType, file, design, intro);
+        return new Sequence(id, name, type, roundType, file, design, intro, secImage);
     }
 
     @Override

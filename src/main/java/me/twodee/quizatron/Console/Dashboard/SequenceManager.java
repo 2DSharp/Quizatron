@@ -258,13 +258,17 @@ public class SequenceManager extends UIComponent
         try {
             StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
             QuestionConsole questionConsole = new QuestionConsole(standardQSet, quizDataService, presentation, true);
+
+            if (!sequence.getSecImage().isEmpty()) {
+
+                questionConsole.setSecondaryImage(quizDataService.constructURL(sequence.getSecImage()));
+            }
             this.setCenter(questionConsole);
         }
 
         catch (IOException e) {
             e.printStackTrace();
         }
-
     }
     private void displayVideo(String intro)
     {
