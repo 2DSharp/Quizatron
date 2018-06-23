@@ -151,14 +151,16 @@ public class SequenceManager extends UIComponent
     private void displayCurrentSequence() throws NonExistentRecordException, IOException, SequenceNotSetException
     {
         pause();
+        // init
         sequence = sequenceService.fetchSequence();
         currStep = 0;
-        System.out.println(quizDataService.constructURL(sequence.getIntro()));
         sequenceService.rememberCurrent();
+        // feedback
         displaySeqMetaData(sequence);
         focusCard(sequence.getIndex());
         updateNavBtns();
-        runSteps(sequence.getType());
+
+        runSequence(sequence.getType());
     }
 
     private void displaySeqMetaData(Sequence sequence)
@@ -180,10 +182,7 @@ public class SequenceManager extends UIComponent
             sequenceService.fetchSequence(id);
             displayCurrentSequence();
         }
-        catch (NonExistentRecordException | IOException e) {
-            e.printStackTrace();
-        }
-        catch (SequenceNotSetException e) {
+        catch (NonExistentRecordException | IOException | SequenceNotSetException e) {
             e.printStackTrace();
         }
     }
@@ -193,23 +192,23 @@ public class SequenceManager extends UIComponent
     {
         currStep++;
         System.out.println(currStep);;
-        runSteps(sequence.getType());
+        runSequence(sequence.getType());
     }
 
     @FXML
     private void stepBackward(ActionEvent event)
     {
         currStep--;
-        runSteps(sequence.getType());
+        runSequence(sequence.getType());
     }
-    private void runSteps(String type)
+    private void runSequence(String type)
     {
         stepBackwardBtn.setDisable(currStep < 1);
         stepForwardBtn.setDisable(currStep >= 1);
 
         switch (type) {
             case "round":
-                displayRound(sequence);
+                displaySequenceContent(sequence);
                 break;
             case "video":
                 displayVideo(sequence.getIntro());
@@ -218,7 +217,7 @@ public class SequenceManager extends UIComponent
         }
     }
 
-    private void displayRound(Sequence sequence)
+    private void displaySequenceContent(Sequence sequence)
     {
         switch (currStep)
         {
@@ -226,12 +225,12 @@ public class SequenceManager extends UIComponent
                 displayVideo(sequence.getIntro());
                 break;
             case 1:
-                displayRoundView(sequence.getRoundType());
+                displayRound(sequence.getRoundType());
                 break;
         }
     }
 
-    private void displayRoundView(String roundType)
+    private void displayRound(String roundType)
     {
         if (roundType.equals("std")) {
             displayQuestionView();
@@ -254,6 +253,19 @@ public class SequenceManager extends UIComponent
         }
     }
 
+    private void displayQuestionView()
+    {
+        try {
+            StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
+            QuestionConsole questionConsole = new QuestionConsole(standardQSet, quizDataService, presentation, true);
+            this.setCenter(questionConsole);
+        }
+
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     private void displayVideo(String intro)
     {
         Media media = null;
@@ -262,7 +274,7 @@ public class SequenceManager extends UIComponent
             media = new Media(quizDataService.constructURL(intro));
         }
         catch (MalformedURLException e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -277,19 +289,6 @@ public class SequenceManager extends UIComponent
         }
     }
 
-    private void displayQuestionView()
-    {
-        try {
-            StandardQSet standardQSet = standardQSetFactory.create(quizDataService.getInitialDirectory() + "/" + sequence.getFilePath());
-            QuestionConsole questionConsole = new QuestionConsole(standardQSet, quizDataService, presentation, true);
-            this.setCenter(questionConsole);
-        }
-
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
     @FXML
     private void showNextSeq(ActionEvent event) throws NonExistentRecordException, IOException, SequenceNotSetException
     {

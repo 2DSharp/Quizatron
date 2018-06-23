@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Appearance implements Serializable {
+public class Appearance implements Serializable
+{
 
     @SerializedName("logo")
     @Expose
@@ -31,28 +32,38 @@ public class Appearance implements Serializable {
     @SerializedName("theme-color")
     @Expose
     private String themeColor;
+    @SerializedName("theme-left-bg")
+    @Expose
+    private String themeLeftBg;
 
-    public String getLogo() {
+
+    public String getLogo()
+    {
         return logo;
     }
 
-    public String getLogoAnimated() {
+    public String getLogoAnimated()
+    {
         return logoAnimated;
     }
 
-    public String getSecondaryAnimation() {
+    public String getSecondaryAnimation()
+    {
         return secondaryAnimation;
     }
 
-    public String getThemeMusic() {
+    public String getThemeMusic()
+    {
         return themeMusic;
     }
 
-    public String getDefaultBackground() {
+    public String getDefaultBackground()
+    {
         return defaultBackground;
     }
 
-    public String getThemeBgColor() {
+    public String getThemeBgColor()
+    {
         return themeBgColor;
     }
 
@@ -64,5 +75,10 @@ public class Appearance implements Serializable {
     public String getThemeColor()
     {
         return themeColor;
+    }
+
+    public String getThemeLeftBg()
+    {
+        return themeLeftBg;
     }
 }

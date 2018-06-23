@@ -47,16 +47,9 @@ public class QuestionDisplay extends IView
     public void initialize() throws MalformedURLException
     {
         root.getStylesheets().add(USER_AGENT_STYLESHEET);
-        /*
-        Image img = new Image(background);
-        BackgroundImage bgImg = new BackgroundImage(img,
-                                                    BackgroundRepeat.NO_REPEAT,
-                                                    BackgroundRepeat.NO_REPEAT,
-                                                    BackgroundPosition.DEFAULT,
-                                                    BackgroundSize.DEFAULT);
-        leftBar.setBackground(new Background(bgImg));
-        */
-        generateBg();
+
+
+        prepareLeftBar();
     }
 
     private String getColor()
@@ -64,9 +57,23 @@ public class QuestionDisplay extends IView
         return quizDataService.getConfiguration().getAppearance().getTextColor();
     }
 
-    private void generateBg() throws MalformedURLException
+    private void prepareLeftBar() throws MalformedURLException
     {
-        leftBar.setStyle("-fx-background-color:" + getLeftBg(quizDataService));
+        Image img = new Image(quizDataService.constructURL(getLeftBg(quizDataService)));
+        BackgroundSize bgSize = new BackgroundSize(BackgroundSize.AUTO,
+                                                   BackgroundSize.AUTO,
+                                                   false,
+                                                   false,
+                                                   true,
+                                                   false);
+        BackgroundImage bgImg = new BackgroundImage(img,
+                                                    BackgroundRepeat.REPEAT,
+                                                    BackgroundRepeat.REPEAT,
+                                                    BackgroundPosition.DEFAULT,
+                                                    bgSize);
+        leftBar.setBackground(new Background(bgImg));
+
+        //leftBar.setStyle("-fx-background-color:" + getLeftBg(quizDataService));
         leftBar.setAlignment(Pos.BOTTOM_CENTER);
         leftBar.getChildren().add(getLogoView());
         root.setStyle("-fx-background-color: " + getBackground());
@@ -87,7 +94,7 @@ public class QuestionDisplay extends IView
     }
     private String getLeftBg(QuizDataService quizDataService)
     {
-        return quizDataService.getConfiguration().getAppearance().getTextColor();
+        return quizDataService.getConfiguration().getAppearance().getThemeLeftBg();
     }
 
     private String getBackground()
