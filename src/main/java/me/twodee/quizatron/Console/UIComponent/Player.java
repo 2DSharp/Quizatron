@@ -115,9 +115,7 @@ public class Player extends UIComponent
     {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3"),
-                new FileChooser.ExtensionFilter("Video Files", "*.mp4", "*.flv"));
+
         File file = fileChooser.showOpenDialog(playerNode.getScene().getWindow());
 
         if (file != null) {
@@ -398,6 +396,13 @@ public class Player extends UIComponent
     {
         mediaPlayer.stop();
     }
+
+    @FXML
+    private void repeat(ActionEvent event)
+    {
+        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+    }
+
 
     public void openPlaylist()
     {

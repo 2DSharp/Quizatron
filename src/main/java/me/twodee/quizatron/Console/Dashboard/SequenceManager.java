@@ -274,7 +274,7 @@ public class SequenceManager extends UIComponent
     {
         Media media = null;
         try {
-            System.out.println();
+
             media = new Media(quizDataService.constructURL(intro));
         }
         catch (MalformedURLException e) {

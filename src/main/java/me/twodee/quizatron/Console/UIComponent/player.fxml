@@ -57,9 +57,9 @@
                               <FontAwesomeIconView glyphName="FILE" size="16" styleClass="trackBtnIcon" />
                            </graphic>
                         </Button>
-                        <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#openPlaylist" styleClass="trackBtn">
+                        <Button fx:id="playlistBtn" mnemonicParsing="false" onAction="#repeat" styleClass="trackBtn">
                            <graphic>
-                              <MaterialDesignIconView glyphName="PLAYLIST_PLAY" size="24" styleClass="trackBtnIcon" />
+                              <MaterialDesignIconView fx:id="repeat" glyphName="REPEAT" size="24" styleClass="trackBtnIcon" />
                            </graphic>
                         </Button>
                         <Button mnemonicParsing="false" onAction="#back" styleClass="trackBtn">

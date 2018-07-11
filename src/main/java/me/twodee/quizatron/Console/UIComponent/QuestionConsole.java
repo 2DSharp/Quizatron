@@ -16,6 +16,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import me.twodee.quizatron.Presentation.Presentation;
 import me.twodee.quizatron.Component.UIComponent;
 import me.twodee.quizatron.Model.Entity.Question;
@@ -301,9 +302,22 @@ public class QuestionConsole extends UIComponent
         revealAnswer(QuestionDisplay.Result.WRONG);
     }
 
-    private void playMusicFX(StandardQSet.Result result)
+    private void playMusicFX(StandardQSet.Result result) throws MalformedURLException
     {
+        String url;
 
+        switch (result) {
+            case CORRECT:
+                url = "/sounds/correct.mp3";
+                break;
+            default:
+                url = "/sounds/wrong.mp3";
+                break;
+        }
+
+        Media media = new Media(quizDataService.constructURL( url));
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
     }
 
 

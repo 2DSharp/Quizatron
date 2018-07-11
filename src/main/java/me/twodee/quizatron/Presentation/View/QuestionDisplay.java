@@ -91,7 +91,7 @@ public class QuestionDisplay extends IView
     private String getLogo(QuizDataService quizDataService) throws MalformedURLException
     {
         return quizDataService.getInitialDirectory().toUri().toURL().toExternalForm() +
-                quizDataService.getConfiguration().getAppearance().getLogo();
+                quizDataService.getConfiguration().getAppearance().getLogoAnimated();
     }
     private String getLeftBg(QuizDataService quizDataService)
     {
@@ -220,7 +220,7 @@ public class QuestionDisplay extends IView
         imageView = prepareImageView(image);
         titleContainer.getChildren().add(imageView);
         fadeIn(imageView);
-        titleLbl.setStyle("-fx-font-size: 28; -fx-text-fill: " + getColor());
+        titleLbl.setStyle("-fx-font-size: 36; -fx-text-fill: " + getColor());
     }
 
     private ImageView prepareImageView(Image image)
@@ -243,9 +243,9 @@ public class QuestionDisplay extends IView
     }
     private int computeFontSize(String text)
     {
-        int size = 44;
+        int size = 48;
         int textLength = text.length();
-        return size - getDecrement(textLength, 4, 100, 200, 300, 350);
+        return size - getDecrement(textLength, 3, 100, 200, 300, 350);
     }
 
     private int getDecrement(int length, int factor, int... breakPoints)
