@@ -14,9 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
+import java.util.logging.Logger;
 
 public class Main extends Application {
+
+    private static final Logger log = Logger.getLogger(Main.class.getName());
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -30,17 +32,22 @@ public class Main extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/img/qtron64x64.png")));
-        Font.loadFont(
-                getClass().getResource("/fonts/OpenSans-Light.ttf").toExternalForm(), 24);
-        Font.loadFont(
-                getClass().getResource("/fonts/OpenSans-Regular.ttf").toExternalForm(),
-                24);
+        loadFont("/fonts/OpenSans-Light.ttf");
+        loadFont("/fonts/OpenSans-Regular.ttf");
+
         primaryStage.setTitle("Quizatron console");
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
+    private void loadFont(String path) {
+        try {
+            Font.loadFont(getClass().getResource(path).toExternalForm(), 24);
+        } catch (Exception e) {
+            log.warning("Cannot load: " + path);
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);
