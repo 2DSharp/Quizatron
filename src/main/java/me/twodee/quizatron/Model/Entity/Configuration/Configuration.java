@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Model.Entity.Configuration;
 
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -53,5 +54,17 @@ public class Configuration implements Serializable {
 
     public Appearance getAppearance() {
         return appearance;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("name", name)
+                .add("alias", alias)
+                .add("description", description)
+                .add("organizer", organizer)
+                .add("sequence", sequence)
+                .add("appearance", appearance)
+                .toString();
     }
 }

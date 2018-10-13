@@ -1,26 +1,36 @@
 package me.twodee.quizatron.Model.Mapper;
 
+import javax.inject.Inject;
 import me.twodee.quizatron.Model.Contract.ProjectDataMapper;
 import me.twodee.quizatron.Model.Entity.QuizData;
 
 import java.io.*;
 
+import com.google.gson.Gson;
+
 public class QuizDataMapper implements ProjectDataMapper<QuizData> {
 
-    public QuizData load(String saveFile) throws IOException, ClassNotFoundException {
+    private final Gson gson;
 
-        FileInputStream inputStream = new FileInputStream(saveFile);
-        ObjectInput objectInput = new ObjectInputStream(inputStream);
-        return (QuizData) objectInput.readObject();
+    @Inject
+    public QuizDataMapper(Gson gson) {
+        this.gson = gson.newBuilder()
+                .setPrettyPrinting()
+                .create();
+    }
+
+    public QuizData load(String location) throws IOException, ClassNotFoundException {
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(location))) {
+            return gson.fromJson(bufferedReader, QuizData.class);
+        }
     }
 
     @Override
     public void save(QuizData quizData, String location) throws IOException {
 
-        FileOutputStream outputStream = new FileOutputStream(location);
-        ObjectOutput objectOutput = new ObjectOutputStream(outputStream);
-        objectOutput.writeObject(quizData);
-        objectOutput.flush();
-        objectOutput.close();
+        try (Writer writer = new FileWriter(location)) {
+            gson.toJson(quizData, writer);
+        }
     }
 }

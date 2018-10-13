@@ -44,9 +44,10 @@ public class QuizDataService
         return quizData.getConfiguration();
     }
 
-    public void loadSavedData(Path file) throws IOException, ClassNotFoundException
+    public QuizData loadSavedData(Path file) throws IOException, ClassNotFoundException
     {
         quizData = quizDataMapper.load(file.toAbsolutePath().toString());
+        return quizData;
     }
 
     public  String constructURL(String relativePath) throws MalformedURLException

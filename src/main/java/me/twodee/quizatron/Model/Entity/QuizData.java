@@ -1,5 +1,6 @@
 package me.twodee.quizatron.Model.Entity;
 
+import com.google.common.base.MoreObjects;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.inject.Singleton;
@@ -47,5 +48,14 @@ public class QuizData implements Serializable  {
     public void setCurrentSequenceIndex(int currentSequence)
     {
         this.currentSequence = currentSequence;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("configuration", configuration)
+                .add("directory", directory)
+                .add("currentSequence", currentSequence)
+                .toString();
     }
 }
