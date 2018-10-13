@@ -18,9 +18,13 @@ Platform specific binaries will be available soon.
 Quizatron also has a JAR file available which has to be run by the Oracle JDK 8 runtime.
 
 To build the project from source:
-`git clone https://github.com/2DSharp/Quizatron.git `
 
-Detailed information on building the project will be out soon.
+```
+git clone https://github.com/2DSharp/Quizatron.git
+cd Quizatron
+mvn package
+java -jar target/Quizatron-1.0-SNAPSHOT.jar 
+```
 
 ### Running a Quiz
 

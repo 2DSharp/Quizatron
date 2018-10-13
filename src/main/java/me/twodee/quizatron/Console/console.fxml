@@ -16,7 +16,7 @@
 
 <AnchorPane fx:id="rootNode" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../../../../../resources/Stylesheets/main_console.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.twodee.quizatron.Console.PanelPresenter">
    <children>
-      <VBox layoutX="-8.0" layoutY="-7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" styleClass="sidebar" stylesheets="@/Stylesheets/main_console.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="-8.0" layoutY="-7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="280.0" styleClass="sidebar" stylesheets="@../../../../../resources/Stylesheets/main_console.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label prefHeight="80.0" prefWidth="294.0" styleClass="masthead" text="Quizatron 1.0" textFill="WHITE">
                <font>
