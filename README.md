@@ -1,4 +1,6 @@
 # Quizatron
+[![Build Status](https://travis-ci.com/2DSharp/Quizatron.svg?branch=master)](https://travis-ci.com/2DSharp/Quizatron)
+
 A cross platfrom Quiz presentation application designed to run on long quiz shows that require a dedicated display screen and a console.
 
 ## Motivation
