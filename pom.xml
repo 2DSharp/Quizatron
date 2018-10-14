@@ -145,11 +145,7 @@
             </resource>
             <resource>
                 <filtering>true</filtering>
-                <directory>src/main</directory>
-                <includes>
-                    <include>resources/Stylesheets/*.css</include>
-                    <include>resources/img/*</include>
-                </includes>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
     </build>
