@@ -1,4 +1,2 @@
 
-dist: trusty
-
-language: php
+language: java
