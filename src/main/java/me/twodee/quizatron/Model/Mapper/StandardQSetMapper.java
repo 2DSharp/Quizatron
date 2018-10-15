@@ -15,7 +15,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-
+/**
+ * Standard Question Set Mapper
+ */
 public class StandardQSetMapper implements CSVReaderMapper<Question>
 {
 
@@ -23,14 +25,23 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
     private CSVManager csvManager;
     private String setFile;
     List<Question> questions;
-
+    /**
+     * Initialize the mapper
+     * @param csvManager
+     * @param setFile
+     * @throws IOException
+     */
     public StandardQSetMapper(CSVManager csvManager, String setFile) throws IOException
     {
         this.csvManager = csvManager;
         this.setFile = setFile;
         init();
     }
-
+    /**
+     * Fetch a question from the mapper and store the target
+     * @param question
+     * @throws NonExistentRecordException
+     */
     public void fetch(Question question) throws NonExistentRecordException
     {
         try {
@@ -42,6 +53,11 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
         }
     }
 
+    /**
+     * Read the records and store them in memory
+     * Allows for forward and backward iteration
+     * @throws IOException
+     */
     private void init() throws IOException
     {
         iterator = csvManager.load(setFile);
@@ -57,6 +73,11 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
         }
     }
 
+    /**
+     * Read from a record and store in Value Object
+     * @param record
+     * @return Question
+     */
     private Question loadQuestionFromRecord(CSVRecord record)
     {
         String id = record.get("ID");
@@ -68,11 +89,19 @@ public class StandardQSetMapper implements CSVReaderMapper<Question>
         return new Question(id, title, qImage, answer, ansImage, media);
     }
 
+    /**
+     * Get the number of questions
+     * @return size of question list.
+     */
     public int getTotalRecords()
     {
         return questions.size();
     }
 
+    /**
+     * FP Magic
+     * @return stream of questions.
+     */
     public Stream<Question> getStream()
     {
         return questions.stream();

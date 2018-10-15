@@ -20,6 +20,12 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
     private Iterator<CSVRecord> iterator;
     private List<Group> groups;
 
+    /**
+     * Initialize the grouped question set mapper
+     * @param csvManager
+     * @param file
+     * @throws IOException
+     */
     @Inject
     public GroupSetMapper(CSVManager csvManager, String file) throws IOException
     {
@@ -27,11 +33,20 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
         this.file = file;
         init();
     }
-
+    /**
+     * File getter
+     * @return file
+     */
     public String getFile()
     {
         return file;
     }
+
+    /**
+     * Fetch the group and store it in a target group
+     * @param group
+     * @throws NonExistentRecordException
+     */
     public void fetch(Group group) throws NonExistentRecordException
     {
         try {
@@ -42,7 +57,11 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
             throw new NonExistentRecordException();
         }
     }
-
+    /**
+     * Get the csv mapper initialized
+     * Store the records in memory.
+     * @throws IOException
+     */
     private void init() throws IOException
     {
         iterator = csvManager.load(file);
@@ -56,7 +75,11 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
             groups.add(group);
         }
     }
-
+    /**
+     * Create a new group based on a csv record, value object store
+     * @param csvRecord
+     * @return group
+     */
     private Group loadGroupFromRecord(CSVRecord csvRecord)
     {
         String fileName = csvRecord.get("File");
@@ -65,12 +88,18 @@ public class GroupSetMapper implements CSVReaderMapper<Group>
         String blockFile = csvRecord.get("BlockFile");
         return new Group(fileName, image, answer, blockFile);
     }
-
+    /**
+     * Gets total number of groups
+     * @return
+     */
     public int getTotalRecords()
     {
         return groups.size();
     }
-
+    /**
+     * For FP magic
+     * @return
+     */
     public Stream<Group> getStream()
     {
         return groups.stream();

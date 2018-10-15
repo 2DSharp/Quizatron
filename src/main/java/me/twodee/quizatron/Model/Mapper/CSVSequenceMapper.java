@@ -15,6 +15,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * The quiz sequence mapper for the main csv file
+ */
 public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Sequence>
 {
     private Iterator<CSVRecord> iterator;
@@ -22,6 +25,10 @@ public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Seq
     private CSVManager csvManager;
     private String configuration;
 
+    /**
+     * @param csvManager
+     * @param config
+     */
     @Inject
     public CSVSequenceMapper(CSVManager csvManager, String config)
     {
@@ -67,6 +74,11 @@ public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Seq
         return new Sequence(id, name, type, roundType, file, design, intro, secImage);
     }
 
+    /**
+     * Fetches the sequence and stores it in a target sequence
+     * @param sequence
+     * @throws NonExistentRecordException
+     */
     @Override
     public void fetch(Sequence sequence) throws NonExistentRecordException
     {
@@ -78,13 +90,20 @@ public class CSVSequenceMapper implements IMapper<Sequence>, CSVReaderMapper<Seq
             throw new NonExistentRecordException();
         }
     }
-
+    /**
+     * Gets the total number of records
+     * @return sequence size
+     */
     @Override
     public int getTotalRecords()
     {
         return sequences.size();
     }
 
+    /**
+     * Get the stream for some FP magic
+     * @return sequence stream
+     */
     @Override
     public Stream<Sequence> getStream()
     {

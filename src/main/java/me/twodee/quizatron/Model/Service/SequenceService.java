@@ -30,8 +30,8 @@ public class SequenceService
     }
 
     public void load()
-    throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
-           IllegalAccessException
+            throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException
     {
         String seqConfig = quizDataService.getInitialDirectory() + "/"
                 + quizDataService.getConfiguration().getSequence();
@@ -39,6 +39,7 @@ public class SequenceService
         sequenceMapper = factory.create(CSVSequenceMapper.class, seqConfig);
         sequenceMapper.init();
     }
+
     public void fetchNext()
     {
         curr += 1;
@@ -81,12 +82,12 @@ public class SequenceService
     {
         return curr > 0;
     }
+
     public Stream<Sequence> getSequenceAsStream()
     {
         return sequenceMapper.getStream();
-    }
-    public void getSequenceHandler()
-    {
-    }
 
+
+    }
+    // TODO: A sequence Handler
 }
