@@ -12,12 +12,16 @@ Quizatron delivers a perfect quiz show and a console to have full control of the
 
 ## Getting started
 
+### Pre-requisites
+
+- [Oracle Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html) 8 or higher
+- Quizatron is a maven project. To build from source download [maven](https://maven.apache.org/).
+
+
 ### Installation
 
 Written in Java, Quizatron can run everywhere with a JVM. The easiest way to get started is by downloading a packaged binary.
-Platform specific binaries will be available soon.
-
-Quizatron also has a JAR file available which has to be run by the Oracle JDK 8 runtime.
+Binaries are available in the [binaries directory](https://github.com/2DSharp/Quizatron/tree/master/binaries).
 
 To build the project from source:
 
@@ -38,7 +42,7 @@ If you are having trouble running Quizatron, send a mail at 2D@twodee.me.
 
 ## Contributors
 
-To contribute to Quizatron, fork the repo, create a new branch and send us a pull request. Make sure you read the [CONTRIBUTING.md] before sending us PRs. We welcome all sorts of contribution ranging from documentation to bug fixes. If you can find any bugs or want us to implement a feature, raise an issue. 
+To contribute to Quizatron, fork the repo, create a new branch and send us a pull request. Make sure you read the [CONTRIBUTING.md](https://github.com/2DSharp/Quizatron/blob/master/CONTRIBUTING.md) before sending us PRs. We welcome all sorts of contribution ranging from documentation to bug fixes. If you can find any bugs or want us to implement a feature, raise an issue. 
 
 ## License
 
