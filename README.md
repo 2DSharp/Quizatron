@@ -25,12 +25,12 @@ Binaries are available in the [binaries directory](https://github.com/2DSharp/Qu
 
 To build the project from source:
 
-```
+````
 git clone https://github.com/2DSharp/Quizatron.git
 cd Quizatron
 mvn package
 java -jar target/Quizatron-1.0-SNAPSHOT.jar 
-```
+````
 
 ### Running a Quiz
 
