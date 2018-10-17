@@ -1,11 +1,13 @@
 package me.twodee.quizatron.Presentation.View;
 
-import javafx.event.ActionEvent;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -14,24 +16,30 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import me.twodee.quizatron.Model.Entity.Block;
 import me.twodee.quizatron.Model.Entity.BlockSet;
+import me.twodee.quizatron.Model.Entity.QuizData;
 import me.twodee.quizatron.Presentation.IView;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockStage extends IView
-{
+public class BlockStage extends IView {
+
     @FXML
     AnchorPane root;
     List<StackPane> blocks = new ArrayList<>();
     List<Rectangle> blockBoxes = new ArrayList<>();
 
-    public void loadImage(String fileName)
-    {
+    private static final ObjectReader objectReader;
+
+    static {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectReader = objectMapper.reader().forType(BlockSet.class);
+    }
+
+    public void loadImage(String fileName) {
         StackPane stackPane = new StackPane();
         Image image = new Image(fileName);
         ImageView imageView = new ImageView(image);
@@ -41,13 +49,13 @@ public class BlockStage extends IView
         imageView.setPreserveRatio(true);
         double ratio = image.getHeight() / 560;
 
-        canvas.setWidth(image.getWidth()/ratio);
-        root.setMaxWidth(image.getWidth()/ratio);
+        canvas.setWidth(image.getWidth() / ratio);
+        root.setMaxWidth(image.getWidth() / ratio);
         canvas.setHeight(560);
         stackPane.getChildren().addAll(imageView, canvas);
 
         root.getChildren().addAll(stackPane);
-        root.setPrefWidth(image.getWidth()/ratio);
+        root.setPrefWidth(image.getWidth() / ratio);
 
         root.setMaxHeight(560);
         root.setVisible(true);
@@ -60,8 +68,7 @@ public class BlockStage extends IView
         return blockSet;
     }
 
-    public void loadInitialBlocks(BlockSet blockSet)
-    {
+    public void loadInitialBlocks(BlockSet blockSet) {
         for (int i = 0; i < 5; i++) {
             Block block = blockSet.getBlock(i);
             Rectangle rectangle = new Rectangle();
@@ -80,8 +87,7 @@ public class BlockStage extends IView
         }
     }
 
-    public void loadBlocks(List<StackPane> blockList, List<Rectangle> blockBoxes)
-    {
+    public void loadBlocks(List<StackPane> blockList, List<Rectangle> blockBoxes) {
         for (int i = 0; i < 5; i++) {
 
             if (blockList.get(i) != null) {
@@ -94,8 +100,8 @@ public class BlockStage extends IView
             }
         }
     }
-    private void decorateRect(Rectangle rectangle, Block block)
-    {
+
+    private void decorateRect(Rectangle rectangle, Block block) {
         rectangle.setHeight(block.getHeight());
         rectangle.setWidth(block.getWidth());
         rectangle.setX(block.getX());
@@ -105,31 +111,27 @@ public class BlockStage extends IView
         rectangle.setStrokeWidth(8);
 
     }
-    public BlockSet readBlockset(String fileName) throws IOException, ClassNotFoundException
-    {
-        FileInputStream fin = new FileInputStream(fileName);
-        ObjectInputStream ois = new ObjectInputStream(fin);
-        BlockSet canvasDat= (BlockSet) ois.readObject();
-        ois.close();
-        return canvasDat;
+
+    public BlockSet readBlockset(String fileName) throws IOException {
+        FileInputStream inputStream = new FileInputStream(fileName);
+        BlockSet blockSet = objectReader.readValue(inputStream);
+        inputStream.close();
+        return blockSet;
     }
 
-    public List<StackPane> getBlocks()
-    {
+    public List<StackPane> getBlocks() {
         return blocks;
     }
 
-    public List<Rectangle> getBlockBoxes()
-    {
+    public List<Rectangle> getBlockBoxes() {
         return blockBoxes;
     }
-    public void remove(int i)
-    {
+
+    public void remove(int i) {
         root.getChildren().remove(blocks.get(i));
     }
 
-    public Rectangle disable(Rectangle rectangle)
-    {
+    public Rectangle disable(Rectangle rectangle) {
         rectangle.setFill(Color.GRAY);
         return rectangle;
     }
