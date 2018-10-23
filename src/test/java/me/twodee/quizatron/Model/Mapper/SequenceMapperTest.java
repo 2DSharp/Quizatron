@@ -85,33 +85,13 @@ public class SequenceMapperTest {
     }
 
     @Test
-    public void fetchTypeTest() throws NonExistentRecordException {
-        Sequence sequence = new Sequence();
-
-        sequence.setIndex(3);
-        sequenceMapper.fetch(sequence);
-
-        assertThat(sequence.getType(), is("block"));
-    }
-
-    @Test
     public void fetchFileTest() throws NonExistentRecordException {
         Sequence sequence = new Sequence();
-
         sequence.setIndex(5);
         sequenceMapper.fetch(sequence);
-
         assertThat(sequence.getFilePath(), is("rapidfire.csv"));
-    }
-
-    @Test
-    public void fetchIntroTest() throws NonExistentRecordException {
-        Sequence sequence = new Sequence();
-
-        sequence.setIndex(3);
-        sequenceMapper.fetch(sequence);
-
-        assertThat(sequence.getIntro(), is("yellow.mp4"));
+        assertThat(sequence.getIntro(), is("red.mp4"));
+        assertThat(sequence.getType(), is("block"));
     }
 
     @Test

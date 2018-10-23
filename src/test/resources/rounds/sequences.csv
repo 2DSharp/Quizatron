@@ -4,4 +4,4 @@ ID,Name,Type,RoundType,File,Design,Intro,SecImage
 3,Who Am I?,block,block,whoami.csv,Design,Intro,SecImage
 4,Subject Round,block,block,subject.csv,Design,yellow.mp4,SecImage
 5,BlockStage Round,block,block,blockStage.csv,Design,Intro,SecImage
-6,Rapid Fire,block,block,rapidfire.csv,Design,Intro,SecImage
+6,Rapid Fire,block,block,rapidfire.csv,Design,red.mp4,SecImage
