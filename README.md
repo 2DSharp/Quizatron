@@ -3,12 +3,16 @@
 
 A cross platfrom Quiz presentation application designed to run on long quiz shows that require a dedicated display screen and a console.
 
-![Quizatron](https://i.ibb.co/wQV2qcj/qtron.png)
+**Console:**
+![Quizatron Console](https://i.ibb.co/wQV2qcj/qtron.png)
 
+**Question display example:**
+![Quizatron Question Display Example](https://i.ibb.co/q0PvVzm/qtron-question-Display.png)
 ## Motivation
 Designing and running quizzes in powerpoint is a pain and confusing. Especially because of the lack of conditional manipulation of the quiz states and the ability to take control of the quiz.
 Quizatron was built specifically for running long quiz shows in front of a large audience without having to display the file explorer and run how a quiz program should run. Equipped with a media player, a score board display and 5 quiz round types,
 Quizatron delivers a perfect quiz show and a console to have full control of the program, even if something goes wrong.
+
 
 **Quizatron** has been used to run [Inquizzitive 15](http://facebook.com/inquizzitive15/) flawlessly. 
 
